@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: nom035-mysql
+    environment:
+      MYSQL_DATABASE: nom035
+      MYSQL_ROOT_PASSWORD: your_mysql_password
+      MYSQL_USER: nom035user
+      MYSQL_PASSWORD: nom035pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  app:
+    build: .
+    container_name: nom035-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/nom035?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: your_mysql_password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+volumes:
+  db_data:
