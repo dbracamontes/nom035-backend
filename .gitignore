@@ -1,0 +1,13 @@
+# Ignorar configuración de Eclipse
+.metadata/
+.project
+.classpath
+.settings/
+.sonarlint
+
+# Ignorar carpeta de compilación de Maven
+target/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

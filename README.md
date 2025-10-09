@@ -16,8 +16,9 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
    ```
 
 2. **Build and Run with Docker Compose**
-
-   ```bash
+   At project root folder run below commands in the terminal
+   ```
+   mvn clean install
    docker-compose up --build
    ```
 

@@ -1,45 +1,54 @@
 package com.example.nom035.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.time.LocalDate;
+import lombok.*;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	 	@Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Long id;
 
-    @NotBlank
-    private String name;
+	    @ManyToOne(fetch = FetchType.LAZY)
+	    @JoinColumn(name = "company_id", nullable = false)
+	    @JsonBackReference
+	    private Company company;
 
-    @NotBlank
-    private String department;
+	    @Column(nullable = false)
+	    private String name;
 
-    private String position;
+	    @Column(unique = true)
+	    private String email;
 
-    @Email
-    @NotBlank
-    private String email;
+	    private String position;
 
-    private LocalDate hireDate;
+	    private String department;
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+	    private Integer seniorityYears;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+	    @Enumerated(EnumType.STRING)
+	    private Gender gender;
 
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+	    private Integer age;
 
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
+	    @Enumerated(EnumType.STRING)
+	    private EmployeeStatus status;
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+	    @OneToMany(mappedBy = "employee")
+	    private List<SurveyApplication> surveyApplications;
 
-    public LocalDate getHireDate() { return hireDate; }
-    public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
+    public enum Gender {
+        M, F, Other
+    }
+    
+    public enum EmployeeStatus {
+        activo, inactivo
+    }
 }

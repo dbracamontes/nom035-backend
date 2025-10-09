@@ -1,33 +1,46 @@
 package com.example.nom035.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import lombok.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String title; // e.g., "Cuestionario I"
+    @Column(length = 200, nullable = false)
+    private String title;
 
     private String description;
 
-    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private GuideType guideType = GuideType.Custom;
+
+    private Boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "base_survey_id")
+    private Survey baseSurvey;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "survey")
+    @JsonManagedReference
     private List<Question> questions;
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @OneToMany(mappedBy = "survey")
+    private List<CompanySurvey> companySurveys;
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public List<Question> getQuestions() { return questions; }
-    public void setQuestions(List<Question> questions) { this.questions = questions; }
+    public enum GuideType {
+        I, II, III, Custom
+    }
 }
