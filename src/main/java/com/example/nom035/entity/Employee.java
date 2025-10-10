@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ public class Employee {
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "company_id", nullable = false)
-	    @JsonBackReference
+	    @JsonIgnore
 	    private Company company;
 
 	    @Column(nullable = false)

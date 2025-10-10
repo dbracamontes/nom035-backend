@@ -5,6 +5,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,10 +19,12 @@ public class SurveyApplication {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_survey_id", nullable = false)
+    @JsonIgnore 
     private CompanySurvey companySurvey;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnore
     private Employee employee;
 
     private LocalDateTime startedAt;

@@ -18,7 +18,7 @@ public class SurveyService {
         return surveyRepository.findAll();
     }
 
-    public Optional<Survey> getSurveyById(Integer id) {
+    public Optional<Survey> getSurveyById(Long id) {
         return surveyRepository.findById(id);
     }
 
@@ -26,7 +26,7 @@ public class SurveyService {
         return surveyRepository.save(survey);
     }
 
-    public void deleteSurvey(Integer id) {
+    public void deleteSurvey(Long id) {
         surveyRepository.deleteById(id);
     }
 }

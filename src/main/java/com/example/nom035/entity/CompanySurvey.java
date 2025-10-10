@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,6 +21,7 @@ public class CompanySurvey {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
+    @JsonIgnore
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,9 +42,10 @@ public class CompanySurvey {
     private String notes;
 
     @OneToMany(mappedBy = "companySurvey")
+    @JsonIgnore
     private List<SurveyApplication> surveyApplications;
 
     public enum SurveyStatus  {
-        active, inactive
+        activo, inactivo
     }
 }

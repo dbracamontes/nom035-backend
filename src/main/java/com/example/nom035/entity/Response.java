@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class Response {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_application_id", nullable = false)
+    @JsonIgnore
     private SurveyApplication surveyApplication;
 
     @ManyToOne(fetch = FetchType.LAZY)

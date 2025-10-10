@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.nom035.dto.CompanySurveyDto;
+import com.example.nom035.dto.EmployeeDto;
 import com.example.nom035.entity.CompanySurvey;
 import com.example.nom035.entity.Employee;
 import com.example.nom035.entity.Response;
@@ -47,15 +49,17 @@ public class DashboardController {
     // -----------------------------
     @GetMapping("/company/{companyId}")
     public ResponseEntity<?> getCompanyDashboard(@PathVariable Long companyId) {
+        List<EmployeeDto> employees = employeeRepository.findByCompanyId(companyId)
+            .stream()
+            .map(EmployeeDto::fromEntity)
+            .collect(Collectors.toList());
 
-        // Lista de empleados y encuestas completadas
-        List<Employee> employees = employeeRepository.findByCompanyId(companyId);
-
-        // Conteo de encuestas por estado
         List<Object[]> statusCounts = surveyAppRepository.countByStatusAndCompanyId(companyId);
 
-        // Porcentaje de participación por encuesta
-        List<CompanySurvey> surveys = companySurveyRepository.findByCompanyId(companyId);
+        List<CompanySurveyDto> surveys = companySurveyRepository.findByCompanyId(companyId)
+            .stream()
+            .map(CompanySurveyDto::fromEntity)
+            .collect(Collectors.toList());
 
         Map<String, Object> result = new HashMap<>();
         result.put("employees", employees);

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.*;
@@ -26,10 +27,10 @@ public class Company {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "company")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Employee> employees;
 
     @OneToMany(mappedBy = "company")
-    @JsonManagedReference
+    @JsonIgnore
     private List<CompanySurvey> companySurveys;
 }
