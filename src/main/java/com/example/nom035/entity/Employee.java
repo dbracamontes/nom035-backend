@@ -19,7 +19,6 @@ public class Employee {
 
 	    @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "company_id", nullable = false)
-	    @JsonIgnore
 	    private Company company;
 
 	    @Column(nullable = false)

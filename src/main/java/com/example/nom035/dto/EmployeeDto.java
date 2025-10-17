@@ -13,6 +13,7 @@ public class EmployeeDto {
     private Integer age;
     private String status;
     private Long companyId;
+    private String companyName;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -34,6 +35,8 @@ public class EmployeeDto {
     public void setStatus(String status) { this.status = status; }
     public Long getCompanyId() { return companyId; }
     public void setCompanyId(Long companyId) { this.companyId = companyId; }
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 
     public static EmployeeDto fromEntity(Employee employee) {
         EmployeeDto dto = new EmployeeDto();
@@ -47,6 +50,7 @@ public class EmployeeDto {
         dto.setAge(employee.getAge());
         dto.setStatus(employee.getStatus() != null ? employee.getStatus().name() : null);
         dto.setCompanyId(employee.getCompany() != null ? employee.getCompany().getId() : null);
+        dto.setCompanyName(employee.getCompany() != null ? employee.getCompany().getName() : null);
         return dto;
     }
 }

@@ -23,7 +23,7 @@ public class Survey {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private GuideType guideType = GuideType.Custom;
+    private GuideType guideType = GuideType.Personalizado;
 
     private Boolean active = true;
 
@@ -41,6 +41,6 @@ public class Survey {
     private List<CompanySurvey> companySurveys;
 
     public enum GuideType {
-        I, II, III, Custom
+        I, II, III, Personalizado
     }
 }
