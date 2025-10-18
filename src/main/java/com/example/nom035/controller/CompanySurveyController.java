@@ -6,7 +6,6 @@ import com.example.nom035.dto.CompanySurveyDto;
 import com.example.nom035.dto.CompanySurveyCreateDto;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,7 +17,7 @@ public class CompanySurveyController {
         this.companySurveyService = companySurveyService;
     }
 
-    @GetMapping
+    @GetMapping("/company-surveys")
     public List<CompanySurveyDto> getAll() {
         return companySurveyService.getAllCompanySurveys()
             .stream()
@@ -26,7 +25,7 @@ public class CompanySurveyController {
             .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/company-surveys/{id}")
     public CompanySurveyDto getById(@PathVariable Long id) {
         return companySurveyService.getCompanySurveyById(id)
             .map(CompanySurveyDto::fromEntity)
