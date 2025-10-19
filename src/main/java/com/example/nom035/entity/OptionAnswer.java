@@ -3,10 +3,10 @@ package com.example.nom035.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "option_answer") // Mantengo el nombre de tabla actual
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,17 +15,17 @@ public class OptionAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "question_id")
     @JsonIgnore
     private Question question;
 
-    private String text;
-
     private Integer value;
+    private String text;
 
     private Integer sortOrder;
 
     @OneToMany(mappedBy = "optionAnswer")
+    @JsonIgnore
     private List<Response> responses;
 }

@@ -17,7 +17,7 @@ public class CompanySurveyController {
         this.companySurveyService = companySurveyService;
     }
 
-    @GetMapping("/company-surveys")
+    @GetMapping
     public List<CompanySurveyDto> getAll() {
         return companySurveyService.getAllCompanySurveys()
             .stream()
@@ -25,7 +25,7 @@ public class CompanySurveyController {
             .collect(Collectors.toList());
     }
 
-    @GetMapping("/company-surveys/{id}")
+    @GetMapping("/{id}")
     public CompanySurveyDto getById(@PathVariable Long id) {
         return companySurveyService.getCompanySurveyById(id)
             .map(CompanySurveyDto::fromEntity)
