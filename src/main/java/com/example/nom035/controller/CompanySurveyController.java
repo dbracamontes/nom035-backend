@@ -3,9 +3,9 @@ package com.example.nom035.controller;
 import com.example.nom035.entity.CompanySurvey;
 import com.example.nom035.service.CompanySurveyService;
 import com.example.nom035.dto.CompanySurveyDto;
+import com.example.nom035.dto.CompanySurveyCreateDto;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,9 +48,10 @@ public class CompanySurveyController {
             .collect(Collectors.toList());
     }
 
-    @PostMapping
-    public CompanySurveyDto create(@RequestBody CompanySurvey companySurvey) {
-        return CompanySurveyDto.fromEntity(companySurveyService.saveCompanySurvey(companySurvey));
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
+    public CompanySurveyDto create(@RequestBody CompanySurveyCreateDto createDto) {
+        return CompanySurveyDto.fromEntity(companySurveyService.createCompanySurvey(createDto));
     }
 
     @PutMapping("/{id}")
