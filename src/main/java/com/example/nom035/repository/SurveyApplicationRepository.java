@@ -15,4 +15,7 @@ public interface SurveyApplicationRepository extends JpaRepository<SurveyApplica
      List<Object[]> countByStatusAndCompanyId(@Param("companyId") Long companyId);
 
      List<SurveyApplication> findByCompanySurvey_CompanyId(Long companyId);
+
+     @Query("SELECT sa FROM SurveyApplication sa WHERE sa.employee.id = :employeeId AND sa.companySurvey.survey.id = :surveyId ORDER BY sa.id DESC")
+     List<SurveyApplication> findByEmployeeIdAndSurveyIdOrderByIdDesc(@Param("employeeId") Long employeeId, @Param("surveyId") Long surveyId);
 }

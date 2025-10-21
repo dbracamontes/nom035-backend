@@ -16,7 +16,7 @@ CREATE TABLE company (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
     tax_id VARCHAR(20),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -46,7 +46,7 @@ CREATE TABLE survey (
     active BOOLEAN DEFAULT TRUE,
     version VARCHAR(20),
     base_survey_id BIGINT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id),
     CONSTRAINT fk_survey_base FOREIGN KEY (base_survey_id)
         REFERENCES survey(id) ON DELETE SET NULL
@@ -57,7 +57,7 @@ CREATE TABLE company_survey (
     id BIGINT NOT NULL AUTO_INCREMENT,
     company_id BIGINT NOT NULL,
     survey_id BIGINT NOT NULL,
-    assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     due_date DATE,
     company_version VARCHAR(20),
     status ENUM('activo','inactivo') DEFAULT 'activo',
@@ -103,7 +103,7 @@ CREATE TABLE survey_application (
     id BIGINT NOT NULL AUTO_INCREMENT,
     company_survey_id BIGINT NOT NULL,
     employee_id BIGINT NOT NULL,
-    started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    started_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     completed_at DATETIME,
     status ENUM('pendiente','en_progreso','completado') DEFAULT 'pendiente',
     score INT DEFAULT 0,
@@ -123,12 +123,13 @@ CREATE TABLE response (
     option_answer_id BIGINT NULL,
     free_text VARCHAR(500),
     value INT,
-    answered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    answered_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id),
     CONSTRAINT fk_response_survey_application FOREIGN KEY (survey_application_id)
         REFERENCES survey_application(id) ON DELETE CASCADE,
     CONSTRAINT fk_response_question FOREIGN KEY (question_id)
         REFERENCES question(id) ON DELETE CASCADE,
     CONSTRAINT fk_response_option FOREIGN KEY (option_answer_id)
-        REFERENCES option_answer(id) ON DELETE SET NULL
+        REFERENCES option_answer(id) ON DELETE SET NULL,
+    UNIQUE KEY uq_response_surveyapp_question (survey_application_id, question_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
