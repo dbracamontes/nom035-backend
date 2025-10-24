@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.annotation.Secured;
+
 @RestController
 @RequestMapping("/api/survey-applications")
 @CrossOrigin(origins = "*")
@@ -24,11 +26,13 @@ public class SurveyApplicationController {
     }
 
     @GetMapping
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public List<SurveyApplicationDto> list() {
         return service.getAll().stream().map(SurveyApplicationDto::fromEntity).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<SurveyApplicationDto> get(@PathVariable Long id) {
         SurveyApplication sa = service.getById(id);
         if (sa == null) return ResponseEntity.notFound().build();
@@ -36,6 +40,7 @@ public class SurveyApplicationController {
     }
 
     @GetMapping("/check")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<SurveyApplicationCheckDto> check(@RequestParam("employeeId") Long employeeId,
                                                            @RequestParam("surveyId") Long surveyId) {
         try {
@@ -47,6 +52,7 @@ public class SurveyApplicationController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<SurveyApplicationDto> create(@RequestBody SurveyApplicationCreateDto dto) {
         try {
             SurveyApplication created = service.create(dto);

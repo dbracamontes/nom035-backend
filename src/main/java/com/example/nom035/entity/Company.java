@@ -14,6 +14,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Company {
+    public List<Employee> getEmployees() { return employees; }
+    public void setEmployees(List<Employee> employees) { this.employees = employees; }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,4 +35,12 @@ public class Company {
     @OneToMany(mappedBy = "company")
     @JsonIgnore
     private List<CompanySurvey> companySurveys;
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public String getTaxId() { return taxId; }
+        public void setTaxId(String taxId) { this.taxId = taxId; }
+        public LocalDateTime getCreatedAt() { return createdAt; }
+        public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

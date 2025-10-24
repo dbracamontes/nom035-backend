@@ -8,6 +8,7 @@ import com.example.nom035.entity.Company;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.access.annotation.Secured;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @Secured("ROLE_EMPLOYEE")
     public List<EmployeeDto> getAll() {
         return employeeService.getAllEmployees()
             .stream()
@@ -33,6 +35,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @Secured("ROLE_EMPLOYEE")
     public EmployeeDto getById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id)
             .map(EmployeeDto::fromEntity)
@@ -40,6 +43,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/company/{companyId}")
+    @Secured("ROLE_EMPLOYEE")
     public List<EmployeeDto> getByCompany(@PathVariable Long companyId) {
         return employeeService.getEmployeesByCompanyId(companyId)
             .stream()
@@ -48,6 +52,7 @@ public class EmployeeController {
     }
 
     @PostMapping
+    @Secured("ROLE_EMPLOYEE")
     public EmployeeDto create(@RequestBody Employee employee) {
         // Resolve provided company id to a managed entity to avoid transient/nullable issues
         if (employee.getCompany() != null) {

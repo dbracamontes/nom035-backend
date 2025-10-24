@@ -32,6 +32,20 @@ public class Survey {
     private Survey baseSurvey;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+        public String getTitle() { return title; }
+        public void setTitle(String title) { this.title = title; }
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
+    public GuideType getGuideType() { return guideType; }
+    public void setGuideType(GuideType guideType) { this.guideType = guideType; }
+        public Boolean getActive() { return active; }
+        public void setActive(Boolean active) { this.active = active; }
+        public Survey getBaseSurvey() { return baseSurvey; }
+        public void setBaseSurvey(Survey baseSurvey) { this.baseSurvey = baseSurvey; }
+        public java.time.LocalDateTime getCreatedAt() { return createdAt; }
+        public void setCreatedAt(java.time.LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     @OneToMany(mappedBy = "survey")
     @JsonManagedReference

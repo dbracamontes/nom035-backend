@@ -13,6 +13,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SurveyApplication {
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public CompanySurvey getCompanySurvey() { return companySurvey; }
+    public void setCompanySurvey(CompanySurvey companySurvey) { this.companySurvey = companySurvey; }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
+    public LocalDateTime getStartedAt() { return startedAt; }
+    public void setStartedAt(LocalDateTime startedAt) { this.startedAt = startedAt; }
+    public LocalDateTime getCompletedAt() { return completedAt; }
+    public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
+    public ApplicationStatus getStatus() { return status; }
+    public void setStatus(ApplicationStatus status) { this.status = status; }
+    public Integer getScore() { return score; }
+    public void setScore(Integer score) { this.score = score; }
+    public RiskLevel getRiskLevel() { return riskLevel; }
+    public void setRiskLevel(RiskLevel riskLevel) { this.riskLevel = riskLevel; }
+    public List<Response> getResponses() { return responses; }
+    public void setResponses(List<Response> responses) { this.responses = responses; }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,14 +57,14 @@ public class SurveyApplication {
     @Enumerated(EnumType.STRING)
     private RiskLevel riskLevel; // Bajo, Medio, Alto
 
+    public enum RiskLevel {
+        Bajo, Medio, Alto
+    }
+
     @OneToMany(mappedBy = "surveyApplication")
     private List<Response> responses;
 
     public enum ApplicationStatus {
-        pendiente, en_progreso, completado
-    }
-
-    public enum RiskLevel {
-        Bajo, Medio, Alto
+        PENDIENTE, EN_PROGRESO, COMPLETADA, CANCELADA
     }
 }

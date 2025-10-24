@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OptionAnswer {
+    public Long getId() { return id; }
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

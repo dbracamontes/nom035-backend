@@ -126,7 +126,7 @@ public class SurveyApplicationService {
         long responses = responseRepository.countBySurveyApplicationId(latest.getId());
         dto.setResponsesCount((int) responses);
 
-        boolean statusCompleted = latest.getStatus() == SurveyApplication.ApplicationStatus.completado;
+    boolean statusCompleted = latest.getStatus() == SurveyApplication.ApplicationStatus.COMPLETADA;
         boolean completedAt = latest.getCompletedAt() != null;
         boolean allAnswered = questions > 0 && responses >= questions;
 
@@ -135,12 +135,12 @@ public class SurveyApplicationService {
     }
 
     private SurveyApplication.ApplicationStatus mapStatus(String s) {
-        if (s == null) return SurveyApplication.ApplicationStatus.pendiente;
+    if (s == null) return SurveyApplication.ApplicationStatus.PENDIENTE;
         String v = s.trim().toLowerCase();
-        if (v.contains("progres")) return SurveyApplication.ApplicationStatus.en_progreso;
+    if (v.contains("progres")) return SurveyApplication.ApplicationStatus.EN_PROGRESO;
         if (v.contains("complet") || v.contains("finaliz") || v.equals("done") || v.equals("closed"))
-            return SurveyApplication.ApplicationStatus.completado;
-        return SurveyApplication.ApplicationStatus.pendiente;
+            return SurveyApplication.ApplicationStatus.COMPLETADA;
+    return SurveyApplication.ApplicationStatus.PENDIENTE;
     }
 
     private LocalDateTime tryParseDateTime(String iso) {

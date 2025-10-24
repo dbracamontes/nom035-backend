@@ -60,6 +60,25 @@ INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, co
 (5, 5, 5, NOW(), '2025-12-31', 'v1', 'activo', 80.00, 'Evaluación piloto');
 
 -- ================================
+-- ROLES Y USUARIOS PARA SPRING SECURITY
+-- ================================
+INSERT INTO role (id, name) VALUES
+	(1, 'ADMIN'),
+	(2, 'COMPANY'),
+	(3, 'EMPLOYEE');
+
+-- Passwords en texto plano para pruebas: admin123, company123, employee123
+INSERT INTO user (id, username, password, email, enabled) VALUES
+	(1, 'admin', '{noop}admin123', 'admin@demo.com', TRUE),
+	(2, 'company', '{noop}company123', 'company@demo.com', TRUE),
+	(3, 'employee', '{noop}employee123', 'employee@demo.com', TRUE);
+
+INSERT INTO user_role (user_id, role_id) VALUES
+	(1, 1), -- admin -> ROLE_ADMIN
+	(2, 2), -- company -> ROLE_COMPANY
+	(3, 3); -- employee -> ROLE_EMPLOYEE
+
+-- ================================
 -- QUESTION
 -- ================================
 INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_factor, category) VALUES

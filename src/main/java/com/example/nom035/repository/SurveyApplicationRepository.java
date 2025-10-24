@@ -1,12 +1,15 @@
 package com.example.nom035.repository;
 
+
 import com.example.nom035.entity.SurveyApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface SurveyApplicationRepository extends JpaRepository<SurveyApplication, Long> {
     List<SurveyApplication> findByCompanySurveyId(Long companySurveyId);
     List<SurveyApplication> findByEmployeeId(Long employeeId);
