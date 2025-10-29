@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question {
+    public Long getId() { return id; }
+    public String getRiskFactor() { return riskFactor; }
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

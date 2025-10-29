@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.security.access.annotation.Secured;
 
 @RestController
 @RequestMapping("/api/surveys")
@@ -18,6 +19,7 @@ public class SurveyController {
     }
 
     @GetMapping
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public List<SurveyDto> getAll() {
         return surveyService.getAllSurveys()
             .stream()
@@ -26,6 +28,7 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public SurveyDto getById(@PathVariable Long id) {
         return surveyService.getSurveyById(id)
             .map(SurveyDto::fromEntity)
@@ -33,17 +36,20 @@ public class SurveyController {
     }
 
     @PostMapping
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public SurveyDto create(@RequestBody Survey survey) {
         return SurveyDto.fromEntity(surveyService.saveSurvey(survey));
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public SurveyDto update(@PathVariable Long id, @RequestBody Survey survey) {
         survey.setId(id);
         return SurveyDto.fromEntity(surveyService.saveSurvey(survey));
     }
 
     @DeleteMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public void delete(@PathVariable Long id) {
         surveyService.deleteSurvey(id);
     }

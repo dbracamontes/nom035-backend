@@ -44,6 +44,27 @@ public class CompanySurvey {
     @OneToMany(mappedBy = "companySurvey")
     @JsonIgnore
     private List<SurveyApplication> surveyApplications;
+    
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+        public Company getCompany() { return company; }
+        public void setCompany(Company company) { this.company = company; }
+        public Survey getSurvey() { return survey; }
+        public void setSurvey(Survey survey) { this.survey = survey; }
+        public LocalDate getAssignedAt() { return assignedAt; }
+        public void setAssignedAt(LocalDate assignedAt) { this.assignedAt = assignedAt; }
+        public LocalDate getDueDate() { return dueDate; }
+        public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+        public String getCompanyVersion() { return companyVersion; }
+        public void setCompanyVersion(String companyVersion) { this.companyVersion = companyVersion; }
+        public SurveyStatus getStatus() { return status; }
+        public void setStatus(SurveyStatus status) { this.status = status; }
+        public BigDecimal getCompletionRate() { return completionRate; }
+        public void setCompletionRate(BigDecimal completionRate) { this.completionRate = completionRate; }
+        public String getNotes() { return notes; }
+        public void setNotes(String notes) { this.notes = notes; }
+        public List<SurveyApplication> getSurveyApplications() { return surveyApplications; }
+        public void setSurveyApplications(List<SurveyApplication> surveyApplications) { this.surveyApplications = surveyApplications; }
 
     public enum SurveyStatus  {
         activo, inactivo

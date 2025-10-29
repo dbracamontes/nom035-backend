@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.annotation.Secured;
+
 @RestController
 @RequestMapping("/api/responses")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -20,6 +22,7 @@ public class ResponseController {
     private ResponseService responseService;
 
     @GetMapping
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<List<ResponseDto>> getAllResponses() {
         try {
             List<ResponseDto> responses = responseService.getAllResponses();
@@ -30,6 +33,7 @@ public class ResponseController {
     }
 
     @GetMapping("/{id}")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<ResponseDto> getResponseById(@PathVariable Long id) {
         try {
             Optional<ResponseDto> response = responseService.getResponseById(id);
@@ -41,6 +45,7 @@ public class ResponseController {
     }
 
     @GetMapping("/survey-application/{surveyApplicationId}")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<List<ResponseDto>> getResponsesBySurveyApplication(@PathVariable Long surveyApplicationId) {
         try {
             List<ResponseDto> responses = responseService.getResponsesBySurveyApplication(surveyApplicationId);
@@ -63,6 +68,7 @@ public class ResponseController {
     }
 
     @PostMapping
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<ResponseDto> createResponse(@RequestBody ResponseCreateDto responseCreateDto) {
         try {
             ResponseDto createdResponse = responseService.createResponse(responseCreateDto);

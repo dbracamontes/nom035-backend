@@ -11,6 +11,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Response {
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public SurveyApplication getSurveyApplication() { return surveyApplication; }
+    public void setSurveyApplication(SurveyApplication surveyApplication) { this.surveyApplication = surveyApplication; }
+    public Question getQuestion() { return question; }
+    public void setQuestion(Question question) { this.question = question; }
+    public OptionAnswer getOptionAnswer() { return optionAnswer; }
+    public void setOptionAnswer(OptionAnswer optionAnswer) { this.optionAnswer = optionAnswer; }
+    public String getFreeText() { return freeText; }
+    public void setFreeText(String freeText) { this.freeText = freeText; }
+    public Integer getValue() { return value; }
+    public void setValue(Integer value) { this.value = value; }
+    public LocalDateTime getAnsweredAt() { return answeredAt; }
+    public void setAnsweredAt(LocalDateTime answeredAt) { this.answeredAt = answeredAt; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

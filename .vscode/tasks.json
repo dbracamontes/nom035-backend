@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compilar proyecto (Maven)",
+			"type": "shell",
+			"command": "mvn clean package",
+			"isBackground": false,
+			"problemMatcher": [
+				"$maven"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Lanzar backend (Spring Boot)",
+			"type": "shell",
+			"command": "mvn spring-boot:run",
+			"isBackground": false,
+			"problemMatcher": [
+				"$maven"
+			],
+			"group": "run"
+		}
+	]
+}

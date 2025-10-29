@@ -52,7 +52,6 @@ CREATE TABLE survey (
         REFERENCES survey(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ========== COMPANY_SURVEY ==========
 CREATE TABLE company_survey (
     id BIGINT NOT NULL AUTO_INCREMENT,
     company_id BIGINT NOT NULL,
@@ -71,6 +70,33 @@ CREATE TABLE company_survey (
     UNIQUE (company_id, survey_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ========== USER ========== 
+CREATE TABLE user (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(150),
+    enabled BOOLEAN DEFAULT TRUE,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== ROLE ========== 
+CREATE TABLE role (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== USER_ROLE (Many-to-Many) ========== 
+CREATE TABLE user_role (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_userrole_user FOREIGN KEY (user_id)
+        REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT fk_userrole_role FOREIGN KEY (role_id)
+        REFERENCES role(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 -- ========== QUESTION ==========
 CREATE TABLE question (
     id BIGINT NOT NULL AUTO_INCREMENT,
