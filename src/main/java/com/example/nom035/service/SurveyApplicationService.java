@@ -114,7 +114,7 @@ public class SurveyApplicationService {
         if (endDate != null) sa.setCompletedAt(tryParseDateTime(endDate));
 
         // Calculate risk level if status is completed
-        if (sa.getStatus() == SurveyApplication.ApplicationStatus.completado) {
+        if (sa.getStatus() == SurveyApplication.ApplicationStatus.COMPLETADA) {
             calculateAndSetRiskLevel(sa);
         }
 
