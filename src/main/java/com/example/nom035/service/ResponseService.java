@@ -32,6 +32,9 @@ public class ResponseService {
     @Autowired
     private OptionAnswerRepository optionAnswerRepository;
 
+    @Autowired
+    private SurveyApplicationService surveyApplicationService;
+
     public List<ResponseDto> getAllResponses() {
         return responseRepository.findAll().stream()
                 .map(this::convertToDto)
@@ -47,6 +50,33 @@ public class ResponseService {
         return responseRepository.findBySurveyApplicationId(surveyApplicationId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<ResponseDto> getFilteredResponses(Long employeeId, Long surveyId) {
+        if (employeeId != null && surveyId != null) {
+            // Get responses by employee and survey
+            return responseRepository.findByEmployeeIdAndSurveyId(employeeId, surveyId).stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } else if (employeeId != null) {
+            // Get all responses by employee (across all surveys)
+            return responseRepository.findAll().stream()
+                    .filter(r -> r.getSurveyApplication() != null && 
+                                r.getSurveyApplication().getEmployee() != null &&
+                                r.getSurveyApplication().getEmployee().getId().equals(employeeId))
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } else if (surveyId != null) {
+            // Get all responses for a survey (across all employees)
+            return responseRepository.findAll().stream()
+                    .filter(r -> r.getQuestion() != null && 
+                                r.getQuestion().getSurvey() != null &&
+                                r.getQuestion().getSurvey().getId().equals(surveyId))
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        }
+        // No filters, return all
+        return getAllResponses();
     }
 
     public ResponseDto createResponse(ResponseCreateDto responseCreateDto) {
@@ -73,6 +103,16 @@ public class ResponseService {
         response.setFreeText(responseCreateDto.getTextAnswer());
         
         Response savedResponse = responseRepository.save(response);
+        
+        // Recalcular el riskLevel después de guardar la respuesta
+        try {
+            surveyApplicationService.calculateAndSetRiskLevel(surveyApplication);
+            surveyApplicationRepository.save(surveyApplication);
+        } catch (Exception e) {
+            // Log error but don't fail the response creation
+            System.err.println("Error calculating risk level: " + e.getMessage());
+        }
+        
         return convertToDto(savedResponse);
     }
 
@@ -80,9 +120,11 @@ public class ResponseService {
         Response response = responseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Response not found with id: " + id));
         
+        SurveyApplication surveyApplication = response.getSurveyApplication();
+        
         // Actualizar SurveyApplication
         if (responseCreateDto.getSurveyApplicationId() != null) {
-            SurveyApplication surveyApplication = surveyApplicationRepository.findById(responseCreateDto.getSurveyApplicationId())
+            surveyApplication = surveyApplicationRepository.findById(responseCreateDto.getSurveyApplicationId())
                     .orElseThrow(() -> new RuntimeException("SurveyApplication not found with id: " + responseCreateDto.getSurveyApplicationId()));
             response.setSurveyApplication(surveyApplication);
         }
@@ -107,6 +149,16 @@ public class ResponseService {
         response.setFreeText(responseCreateDto.getTextAnswer());
         
         Response updatedResponse = responseRepository.save(response);
+        
+        // Recalcular el riskLevel después de actualizar la respuesta
+        try {
+            surveyApplicationService.calculateAndSetRiskLevel(surveyApplication);
+            surveyApplicationRepository.save(surveyApplication);
+        } catch (Exception e) {
+            // Log error but don't fail the response update
+            System.err.println("Error calculating risk level: " + e.getMessage());
+        }
+        
         return convertToDto(updatedResponse);
     }
 

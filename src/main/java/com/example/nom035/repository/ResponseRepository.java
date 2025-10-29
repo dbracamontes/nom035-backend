@@ -16,4 +16,11 @@ public interface ResponseRepository extends JpaRepository<Response, Long> {
     List<Response> findAllByCompanyId(@Param("companyId") Long companyId);
 
     long countBySurveyApplicationId(Long surveyApplicationId);
+    
+    // Find responses by employee and survey (across all survey applications)
+    @Query("SELECT r FROM Response r " +
+           "WHERE r.surveyApplication.employee.id = :employeeId " +
+           "AND r.question.survey.id = :surveyId")
+    List<Response> findByEmployeeIdAndSurveyId(@Param("employeeId") Long employeeId, 
+                                                @Param("surveyId") Long surveyId);
 }

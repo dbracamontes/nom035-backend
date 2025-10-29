@@ -50,6 +50,18 @@ public class ResponseController {
         }
     }
 
+    @GetMapping("/filtered")
+    public ResponseEntity<List<ResponseDto>> getFilteredResponses(
+            @RequestParam(required = false) Long employeeId,
+            @RequestParam(required = false) Long surveyId) {
+        try {
+            List<ResponseDto> responses = responseService.getFilteredResponses(employeeId, surveyId);
+            return ResponseEntity.ok(responses);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ResponseDto> createResponse(@RequestBody ResponseCreateDto responseCreateDto) {
         try {

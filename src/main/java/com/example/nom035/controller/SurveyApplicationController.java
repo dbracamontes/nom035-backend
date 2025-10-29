@@ -57,4 +57,16 @@ public class SurveyApplicationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/{id}/calculate-risk")
+    public ResponseEntity<SurveyApplicationDto> calculateRiskLevel(@PathVariable Long id) {
+        try {
+            SurveyApplication updated = service.recalculateRiskLevel(id);
+            return ResponseEntity.ok(SurveyApplicationDto.fromEntity(updated));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
