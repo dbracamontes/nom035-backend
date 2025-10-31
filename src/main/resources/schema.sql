@@ -12,6 +12,11 @@ DROP TABLE IF EXISTS company_survey;
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS survey;
 DROP TABLE IF EXISTS company;
+DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `privilege`;
+DROP TABLE IF EXISTS `role_privilege`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -74,7 +79,8 @@ CREATE TABLE company_survey (
     UNIQUE (company_id, survey_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS user (
+-- ========== USER ========== 
+CREATE TABLE user (
     id BIGINT NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -84,12 +90,8 @@ CREATE TABLE IF NOT EXISTS user (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Add foreign key from user.company_id to company(id)
-ALTER TABLE `user`
-    ADD CONSTRAINT fk_user_company FOREIGN KEY (company_id)
-        REFERENCES company(id) ON DELETE SET NULL;
-
-CREATE TABLE IF NOT EXISTS role (
+-- ========== ROLE ========== 
+CREATE TABLE role (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (id)
@@ -100,10 +102,29 @@ CREATE TABLE IF NOT EXISTS user_role (
     role_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, role_id),
     CONSTRAINT fk_userrole_user FOREIGN KEY (user_id)
-        REFERENCES user(id) ON DELETE CASCADE,
+        REFERENCES `user`(id) ON DELETE CASCADE,
     CONSTRAINT fk_userrole_role FOREIGN KEY (role_id)
-        REFERENCES role(id) ON DELETE CASCADE
+        REFERENCES `role`(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== PRIVILEGE ========== 
+CREATE TABLE privilege (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== ROLE_PRIVILEGE (Many-to-Many) ========== 
+CREATE TABLE role_privilege (
+    role_id BIGINT NOT NULL,
+    privilege_id BIGINT NOT NULL,
+    PRIMARY KEY (role_id, privilege_id),
+    CONSTRAINT fk_roleprivilege_role FOREIGN KEY (role_id)
+        REFERENCES `role`(id) ON DELETE CASCADE,
+    CONSTRAINT fk_roleprivilege_privilege FOREIGN KEY (privilege_id)
+        REFERENCES privilege(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- ========== QUESTION ==========
 CREATE TABLE question (
     id BIGINT NOT NULL AUTO_INCREMENT,

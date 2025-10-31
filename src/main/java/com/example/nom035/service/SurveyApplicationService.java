@@ -67,9 +67,23 @@ public class SurveyApplicationService {
             throw new RuntimeException("Employee has no company associated");
         }
 
+        // Try to find existing CompanySurvey, or create one if it doesn't exist
         CompanySurvey cs = companySurveyRepository
                 .findByCompanyIdAndSurveyId(companyId, survey.getId())
-                .orElseThrow(() -> new RuntimeException("CompanySurvey not found for company " + companyId + " and survey " + survey.getId()));
+                .orElseGet(() -> {
+                    // Create a new CompanySurvey automatically
+                    CompanySurvey newCs = new CompanySurvey();
+                    newCs.setCompany(employee.getCompany());
+                    newCs.setSurvey(survey);
+                    newCs.setStatus(CompanySurvey.SurveyStatus.activo);
+                    newCs.setCompanyVersion("v1");
+                    newCs.setCompletionRate(java.math.BigDecimal.ZERO);
+                    newCs.setNotes("Auto-created for survey application");
+                    newCs.setAssignedAt(java.time.LocalDate.now());
+                    // Set due date to 1 year from now
+                    newCs.setDueDate(java.time.LocalDate.now().plusYears(1));
+                    return companySurveyRepository.save(newCs);
+                });
 
         SurveyApplication sa = new SurveyApplication();
         sa.setEmployee(employee);
@@ -100,6 +114,64 @@ public class SurveyApplicationService {
         if (startDate != null) sa.setStartedAt(tryParseDateTime(startDate));
         if (endDate != null) sa.setCompletedAt(tryParseDateTime(endDate));
 
+        // Calculate risk level if status is completed
+        if (sa.getStatus() == SurveyApplication.ApplicationStatus.COMPLETADA) {
+            calculateAndSetRiskLevel(sa);
+        }
+
+        return surveyApplicationRepository.save(sa);
+    }
+
+    /**
+     * Calculate the total score and risk level for a survey application
+     */
+    public void calculateAndSetRiskLevel(SurveyApplication sa) {
+        if (sa == null || sa.getId() == null) return;
+
+        // Get all responses for this application
+        List<com.example.nom035.entity.Response> responses = responseRepository.findBySurveyApplicationId(sa.getId());
+        
+        if (responses.isEmpty()) {
+            sa.setScore(0);
+            sa.setRiskLevel(SurveyApplication.RiskLevel.Bajo);
+            return;
+        }
+
+        // Calculate total score
+        int totalScore = 0;
+        for (com.example.nom035.entity.Response response : responses) {
+            if (response.getValue() != null) {
+                totalScore += response.getValue();
+            }
+        }
+
+        sa.setScore(totalScore);
+
+        // Determine risk level based on score
+        // These thresholds can be adjusted based on NOM-035 requirements
+        int numQuestions = responses.size();
+        double averageScore = numQuestions > 0 ? (double) totalScore / numQuestions : 0;
+
+        // Risk level based on average score per question
+        // Assuming scale: 1=Siempre (worst), 5=Nunca (best)
+        // Lower average = higher risk
+        if (averageScore <= 2.0) {
+            sa.setRiskLevel(SurveyApplication.RiskLevel.Alto);
+        } else if (averageScore <= 3.5) {
+            sa.setRiskLevel(SurveyApplication.RiskLevel.Medio);
+        } else {
+            sa.setRiskLevel(SurveyApplication.RiskLevel.Bajo);
+        }
+    }
+
+    /**
+     * Recalculate risk level for an existing application
+     */
+    public SurveyApplication recalculateRiskLevel(Long applicationId) {
+        SurveyApplication sa = surveyApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("SurveyApplication not found: " + applicationId));
+        
+        calculateAndSetRiskLevel(sa);
         return surveyApplicationRepository.save(sa);
     }
 
