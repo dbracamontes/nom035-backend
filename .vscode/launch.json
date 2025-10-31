@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Open Frontend in Browser",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "preLaunchTask": "Run Both (backend + frontend)",
+            "webRoot": "${workspaceFolder}/nom035-frontend/src"
+        }
+    ]
+}

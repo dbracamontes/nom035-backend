@@ -31,17 +31,17 @@ public class SurveyApplicationDto {
     }
 
     public static SurveyApplicationDto fromEntity(SurveyApplication sa) {
-        return new SurveyApplicationDto(
-                sa.getId(),
-                sa.getEmployee() != null ? sa.getEmployee().getId() : null,
-                sa.getCompanySurvey() != null ? sa.getCompanySurvey().getId() : null,
-                sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey() != null ? sa.getCompanySurvey().getSurvey().getId() : null,
-                sa.getStartedAt(),
-                sa.getCompletedAt(),
-                sa.getStatus() != null ? sa.getStatus().name() : null,
-                sa.getScore(),
-                sa.getRiskLevel() != null ? sa.getRiskLevel().name() : null
-        );
+    return new SurveyApplicationDto(
+        sa.getId(),
+        sa.getEmployee() != null ? sa.getEmployee().getId() : null,
+        sa.getCompanySurvey() != null ? sa.getCompanySurvey().getId() : null,
+        sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey() != null ? sa.getCompanySurvey().getSurvey().getId() : null,
+        sa.getStartedAt(),
+        sa.getCompletedAt(),
+        sa.getStatusEnum() != null ? sa.getStatusEnum().name() : null,
+        sa.getScore(),
+        sa.getRiskLevel() != null ? sa.getRiskLevel().name() : null
+    );
     }
 
     // Getters and setters

@@ -19,6 +19,8 @@ public class User {
     private String password;
 
     private String email;
+    @Column(name = "company_id")
+    private Long companyId;
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -38,6 +40,8 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
     public Set<Role> getRoles() { return roles; }

@@ -1,5 +1,9 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+
+DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS response;
 DROP TABLE IF EXISTS survey_application;
 DROP TABLE IF EXISTS option_answer;
@@ -70,25 +74,28 @@ CREATE TABLE company_survey (
     UNIQUE (company_id, survey_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ========== USER ========== 
-CREATE TABLE user (
+CREATE TABLE IF NOT EXISTS user (
     id BIGINT NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(150),
+    company_id BIGINT NULL,
     enabled BOOLEAN DEFAULT TRUE,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ========== ROLE ========== 
-CREATE TABLE role (
+-- Add foreign key from user.company_id to company(id)
+ALTER TABLE `user`
+    ADD CONSTRAINT fk_user_company FOREIGN KEY (company_id)
+        REFERENCES company(id) ON DELETE SET NULL;
+
+CREATE TABLE IF NOT EXISTS role (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ========== USER_ROLE (Many-to-Many) ========== 
-CREATE TABLE user_role (
+CREATE TABLE IF NOT EXISTS user_role (
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL,
     PRIMARY KEY (user_id, role_id),
@@ -131,7 +138,7 @@ CREATE TABLE survey_application (
     employee_id BIGINT NOT NULL,
     started_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     completed_at DATETIME,
-    status ENUM('pendiente','en_progreso','completado') DEFAULT 'pendiente',
+    status VARCHAR(32) DEFAULT 'pendiente',
     score INT DEFAULT 0,
     risk_level ENUM('Bajo','Medio','Alto'),
     PRIMARY KEY (id),

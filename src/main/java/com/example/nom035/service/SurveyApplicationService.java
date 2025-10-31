@@ -11,6 +11,7 @@ import com.example.nom035.repository.EmployeeRepository;
 import com.example.nom035.repository.SurveyApplicationRepository;
 import com.example.nom035.repository.SurveyRepository;
 import com.example.nom035.repository.ResponseRepository;
+import com.example.nom035.entity.ApplicationStatus;
 import com.example.nom035.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
@@ -84,8 +85,8 @@ public class SurveyApplicationService {
         sa.setCompletedAt(completedAt);
 
         // Status
-        SurveyApplication.ApplicationStatus status = mapStatus(dto.getStatus());
-        sa.setStatus(status);
+        ApplicationStatus status = mapStatus(dto.getStatus());
+        sa.setStatusEnum(status);
 
         // Initial score/risk left null; can be calculated later
         return surveyApplicationRepository.save(sa);
@@ -95,7 +96,7 @@ public class SurveyApplicationService {
         SurveyApplication sa = surveyApplicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("SurveyApplication not found: " + id));
 
-        if (statusStr != null) sa.setStatus(mapStatus(statusStr));
+    if (statusStr != null) sa.setStatusEnum(mapStatus(statusStr));
         if (startDate != null) sa.setStartedAt(tryParseDateTime(startDate));
         if (endDate != null) sa.setCompletedAt(tryParseDateTime(endDate));
 
@@ -118,7 +119,7 @@ public class SurveyApplicationService {
         SurveyApplication latest = list.get(0);
         dto.setFound(true);
         dto.setApplicationId(latest.getId());
-        dto.setStatus(latest.getStatus() != null ? latest.getStatus().name() : null);
+    dto.setStatus(latest.getStatusEnum() != null ? latest.getStatusEnum().name() : null);
         dto.setCompletedAt(latest.getCompletedAt());
 
         int questions = questionRepository.findBySurveyId(surveyId).size();
@@ -126,7 +127,7 @@ public class SurveyApplicationService {
         long responses = responseRepository.countBySurveyApplicationId(latest.getId());
         dto.setResponsesCount((int) responses);
 
-    boolean statusCompleted = latest.getStatus() == SurveyApplication.ApplicationStatus.COMPLETADA;
+    boolean statusCompleted = latest.getStatusEnum() == ApplicationStatus.COMPLETADO;
         boolean completedAt = latest.getCompletedAt() != null;
         boolean allAnswered = questions > 0 && responses >= questions;
 
@@ -134,13 +135,13 @@ public class SurveyApplicationService {
         return dto;
     }
 
-    private SurveyApplication.ApplicationStatus mapStatus(String s) {
-    if (s == null) return SurveyApplication.ApplicationStatus.PENDIENTE;
+    private ApplicationStatus mapStatus(String s) {
+        if (s == null) return ApplicationStatus.PENDIENTE;
         String v = s.trim().toLowerCase();
-    if (v.contains("progres")) return SurveyApplication.ApplicationStatus.EN_PROGRESO;
+        if (v.contains("progres")) return ApplicationStatus.EN_PROCESO;
         if (v.contains("complet") || v.contains("finaliz") || v.equals("done") || v.equals("closed"))
-            return SurveyApplication.ApplicationStatus.COMPLETADA;
-    return SurveyApplication.ApplicationStatus.PENDIENTE;
+            return ApplicationStatus.COMPLETADO;
+        return ApplicationStatus.PENDIENTE;
     }
 
     private LocalDateTime tryParseDateTime(String iso) {

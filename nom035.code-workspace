@@ -1,0 +1,14 @@
+{
+    "folders": [
+        {
+            "path": "../nom035-backend"
+        },
+        {
+            "path": "../nom035-frontend"
+        }
+    ],
+    "settings": {},
+    "extensions": {
+        "recommendations": []
+    }
+}

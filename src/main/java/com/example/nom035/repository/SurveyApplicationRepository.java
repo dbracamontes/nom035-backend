@@ -13,9 +13,8 @@ import java.util.List;
 public interface SurveyApplicationRepository extends JpaRepository<SurveyApplication, Long> {
     List<SurveyApplication> findByCompanySurveyId(Long companySurveyId);
     List<SurveyApplication> findByEmployeeId(Long employeeId);
-    @Query("SELECT sa.status, COUNT(sa) FROM SurveyApplication sa " +
-            "WHERE sa.employee.company.id = :companyId GROUP BY sa.status")
-     List<Object[]> countByStatusAndCompanyId(@Param("companyId") Long companyId);
+    @Query(value = "SELECT sa.status, COUNT(*) FROM survey_application sa JOIN employee e ON sa.employee_id = e.id WHERE e.company_id = :companyId GROUP BY sa.status", nativeQuery = true)
+    List<Object[]> countByStatusAndCompanyId(@Param("companyId") Long companyId);
 
      List<SurveyApplication> findByCompanySurvey_CompanyId(Long companyId);
 

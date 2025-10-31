@@ -2,24 +2,34 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Compilar proyecto (Maven)",
+			"label": "Run Backend (Maven)",
 			"type": "shell",
-			"command": "mvn clean package",
+			"command": "cd ../nom035-backend && mvn -DskipTests spring-boot:run",
 			"isBackground": false,
-			"problemMatcher": [
-				"$maven"
-			],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated"
+			}
 		},
 		{
-			"label": "Lanzar backend (Spring Boot)",
+			"label": "Run Frontend (npm start)",
 			"type": "shell",
-			"command": "mvn spring-boot:run",
+			"command": "cd ../nom035-frontend && npm install && npm start",
 			"isBackground": false,
-			"problemMatcher": [
-				"$maven"
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated"
+			}
+		},
+		{
+			"label": "Run Both (backend + frontend)",
+			"dependsOn": [
+				"Run Backend (Maven)",
+				"Run Frontend (npm start)"
 			],
-			"group": "run"
+			"dependsOrder": "parallel",
+			"type": "shell",
+			"group": "build"
 		}
 	]
 }

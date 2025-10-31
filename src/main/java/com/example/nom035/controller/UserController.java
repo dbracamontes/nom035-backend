@@ -1,10 +1,13 @@
 
 package com.example.nom035.controller;
 
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 import com.example.nom035.entity.User;
 import com.example.nom035.service.UserService;
@@ -19,6 +22,18 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
+        }
+        org.springframework.security.core.userdetails.UserDetails userDetails = (org.springframework.security.core.userdetails.UserDetails) authentication.getPrincipal();
+        java.util.Map<String, Object> userInfo = new java.util.HashMap<>();
+        userInfo.put("username", userDetails.getUsername());
+        userInfo.put("roles", userDetails.getAuthorities());
+        return ResponseEntity.ok(userInfo);
+    }
 
     @GetMapping
     @Secured("ROLE_ADMIN")

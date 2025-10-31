@@ -1,120 +1,63 @@
 package com.example.nom035.controller;
 
 import com.example.nom035.entity.Company;
+import com.example.nom035.entity.Employee;
 import com.example.nom035.service.CompanyService;
-import com.example.nom035.dto.CompanyDto;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import org.springframework.security.access.annotation.Secured;
+import com.example.nom035.service.EmployeeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.example.nom035.repository.UserRepository;
-import com.example.nom035.entity.User;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+/**
+ * Controller para operaciones de companies.
+ *
+ * IMPORTANTE:
+ * - Ajusta los imports y nombres de servicio (CompanyService, EmployeeService)
+ *   si en tu proyecto tienen otro paquete / nombre.
+ */
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
+
+    private final Logger log = LoggerFactory.getLogger(CompanyController.class);
+
     private final CompanyService companyService;
+    private final EmployeeService employeeService;
 
     @Autowired
-    private UserRepository userRepository;
-
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, EmployeeService employeeService) {
         this.companyService = companyService;
+        this.employeeService = employeeService;
     }
 
-    // Helper para obtener el usuario autenticado
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return userRepository.findByUsername(username).orElse(null);
-    }
-
-    // Helper para saber si es ADMIN
-    private boolean isAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-    }
-
-    // Helper para obtener el id de la empresa asociada al usuario COMPANY
-    private Long getCompanyIdForCurrentUser() {
-        User user = getCurrentUser();
-        if (user == null) return null;
-        // TODO: Relacionar User con Company directamente para robustez
-        // Por ahora, se asume que el username es el email de la empresa y hay coincidencia 1:1
-        // Si tienes un campo companyId en User, úsalo aquí
-        return null; // Implementar lógica real según tu modelo
-    }
-
+    /**
+     * Obtener todas las companies.
+     * Permitido a ROLE_COMPANY y ROLE_ADMIN.
+     */
     @GetMapping
-    @Secured("ROLE_COMPANY")
-    public List<CompanyDto> getAll() {
-        if (isAdmin()) {
-            return companyService.getAllCompanies()
-                .stream()
-                .map(CompanyDto::fromEntity)
-                .collect(Collectors.toList());
-        } else {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null) return List.of();
-            return companyService.getAllCompanies().stream()
-                .filter(c -> c.getId().equals(companyId))
-                .map(CompanyDto::fromEntity)
-                .collect(Collectors.toList());
-        }
+    @Secured({"ROLE_COMPANY", "ROLE_ADMIN"})
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        log.debug("Request to get all companies");
+        List<Company> list = companyService.getAllCompanies();
+        return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/{id}")
-    @Secured("ROLE_COMPANY")
-    public CompanyDto getById(@PathVariable Long id) {
-        if (!isAdmin()) {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null || !companyId.equals(id)) {
-                return null;
-            }
-        }
-        return companyService.getCompanyById(id)
-            .map(CompanyDto::fromEntity)
-            .orElse(null);
+    /**
+     * Obtener empleados de una company por id.
+     * Permitido a ROLE_COMPANY y ROLE_ADMIN.
+     */
+    @GetMapping("/{companyId}/employees")
+    @Secured({"ROLE_COMPANY", "ROLE_ADMIN"})
+    public ResponseEntity<List<Employee>> getCompanyEmployees(@PathVariable Long companyId) {
+        log.debug("Request to get employees for companyId={}", companyId);
+        List<Employee> employees = employeeService.getEmployeesByCompanyId(companyId);
+        return ResponseEntity.ok(employees);
     }
 
-    @PostMapping
-    @Secured("ROLE_COMPANY")
-    public CompanyDto create(@RequestBody Company company) {
-        if (!isAdmin()) {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null || !company.getId().equals(companyId)) {
-                return null;
-            }
-        }
-        return CompanyDto.fromEntity(companyService.saveCompany(company));
-    }
-
-    @PutMapping("/{id}")
-    @Secured("ROLE_COMPANY")
-    public CompanyDto update(@PathVariable Long id, @RequestBody Company company) {
-        if (!isAdmin()) {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null || !companyId.equals(id)) {
-                return null;
-            }
-        }
-        company.setId(id);
-        return CompanyDto.fromEntity(companyService.saveCompany(company));
-    }
-
-    @DeleteMapping("/{id}")
-    @Secured("ROLE_COMPANY")
-    public void delete(@PathVariable Long id) {
-        if (!isAdmin()) {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null || !companyId.equals(id)) {
-                return;
-            }
-        }
-        companyService.deleteCompany(id);
-    }
+    // Puedes añadir otros endpoints aquí y protegerlos de la misma forma.
 }

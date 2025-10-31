@@ -1,5 +1,6 @@
-# Usa una imagen oficial de Java 17 como base (puedes ajustar la versión)
-FROM eclipse-temurin:17-jdk-alpine
+# Usa una imagen oficial de Java 21 como base
+# Usa una imagen oficial de Java 21 como base
+FROM eclipse-temurin:21-jdk-alpine
 
 # Crear y usar el directorio de trabajo
 WORKDIR /app

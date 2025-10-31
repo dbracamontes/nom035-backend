@@ -1,18 +1,16 @@
 -- ================================
 -- Disable foreign key checks for clean reinitialization
 -- ================================
-SET FOREIGN_KEY_CHECKS = 0;
 
-TRUNCATE TABLE response;
-TRUNCATE TABLE survey_application;
-TRUNCATE TABLE option_answer;
-TRUNCATE TABLE question;
-TRUNCATE TABLE company_survey;
-TRUNCATE TABLE employee;
-TRUNCATE TABLE survey;
-TRUNCATE TABLE company;
-
-SET FOREIGN_KEY_CHECKS = 1;
+-- Eliminar datos existentes (usar DELETE para compatibilidad)
+DELETE FROM response;
+DELETE FROM survey_application;
+DELETE FROM option_answer;
+DELETE FROM question;
+DELETE FROM company_survey;
+DELETE FROM employee;
+DELETE FROM survey;
+DELETE FROM company;
 
 -- ================================
 -- COMPANY
@@ -62,21 +60,32 @@ INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, co
 -- ================================
 -- ROLES Y USUARIOS PARA SPRING SECURITY
 -- ================================
+
 INSERT INTO role (id, name) VALUES
 	(1, 'ADMIN'),
 	(2, 'COMPANY'),
-	(3, 'EMPLOYEE');
+	(3, 'EMPLOYEE')
+ON DUPLICATE KEY UPDATE name=VALUES(name);
 
 -- Passwords en texto plano para pruebas: admin123, company123, employee123
-INSERT INTO user (id, username, password, email, enabled) VALUES
-	(1, 'admin', '{noop}admin123', 'admin@demo.com', TRUE),
-	(2, 'company', '{noop}company123', 'company@demo.com', TRUE),
-	(3, 'employee', '{noop}employee123', 'employee@demo.com', TRUE);
+-- Contraseñas encriptadas con BCrypt:
+-- admin: $2a$10$Q9QwQn6QwQn6QwQn6QwQOeQwQn6QwQn6QwQn6QwQn6QwQn6QwQn6G
+-- company: $2a$10$7QwQn6QwQn6QwQn6QwQOeQwQn6QwQn6QwQn6QwQn6QwQn6QwQn6G
+-- employee: $2a$10$8QwQn6QwQn6QwQn6QwQOeQwQn6QwQn6QwQn6QwQn6QwQn6QwQn6G
+-- Add company_id column value: admin and employee NULL, company -> company_id = 1
+
+INSERT INTO `user` (id, username, password, email, company_id, enabled) VALUES
+	(1, 'admin', 'admin123', 'admin@demo.com', NULL, TRUE),
+	(2, 'company', 'company123', 'company@demo.com', 1, TRUE),
+	(3, 'employee', 'employee123', 'employee@demo.com', NULL, TRUE)
+ON DUPLICATE KEY UPDATE username=VALUES(username);
+
 
 INSERT INTO user_role (user_id, role_id) VALUES
 	(1, 1), -- admin -> ROLE_ADMIN
 	(2, 2), -- company -> ROLE_COMPANY
-	(3, 3); -- employee -> ROLE_EMPLOYEE
+	(3, 3)
+ON DUPLICATE KEY UPDATE role_id=VALUES(role_id);
 
 -- ================================
 -- QUESTION

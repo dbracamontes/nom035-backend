@@ -17,7 +17,7 @@ import com.example.nom035.dto.CompanySurveyDto;
 import com.example.nom035.dto.EmployeeDto;
 import com.example.nom035.entity.CompanySurvey;
 import com.example.nom035.entity.Response;
-import com.example.nom035.entity.SurveyApplication.ApplicationStatus;
+import com.example.nom035.entity.ApplicationStatus;
 import com.example.nom035.repository.CompanySurveyRepository;
 import com.example.nom035.repository.EmployeeRepository;
 import com.example.nom035.repository.ResponseRepository;
@@ -29,10 +29,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.access.annotation.Secured;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/dashboard")
 public class DashboardController {
+
+    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -60,7 +64,11 @@ public class DashboardController {
     // Helper to check if current user is ADMIN
     private boolean isAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        logger.info("[isAdmin] Usuario autenticado: {}", authentication.getName());
+        logger.info("[isAdmin] Autoridades: {}", authentication.getAuthorities());
+        boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        logger.info("[isAdmin] ¿Es ADMIN?: {}", isAdmin);
+        return isAdmin;
     }
 
     // -----------------------------
@@ -69,43 +77,76 @@ public class DashboardController {
     @GetMapping("/company/{companyId}")
     @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<?> getCompanyDashboard(@PathVariable Long companyId) {
+        logger.info("[getCompanyDashboard] INICIO endpoint para companyId={}", companyId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("[getCompanyDashboard] Usuario autenticado: {}", authentication.getName());
+        logger.info("[getCompanyDashboard] Autoridades: {}", authentication.getAuthorities());
         // Only ADMIN can access any company, others only their own
         if (!isAdmin()) {
+            logger.info("[getCompanyDashboard] Usuario NO es ADMIN, revisando permisos adicionales...");
             User user = getCurrentUser();
-            if (user == null) return ResponseEntity.status(403).body("No autorizado");
+            if (user == null) {
+                logger.info("[getCompanyDashboard] Usuario no encontrado en base de datos, acceso denegado");
+                return ResponseEntity.status(403).body("No autorizado");
+            }
             boolean allowed = false;
             // If user has COMPANY role, check if their company matches
             if (user.getRoles().stream().anyMatch(r -> r.getName().equals("COMPANY"))) {
-                // Assume username is company email or add companyId to User if needed
-                // Here, you may need to link User to Company directly for robust check
-                // For now, block if not matching
-                // TODO: Implement actual company-user link
+                logger.info("[getCompanyDashboard] Usuario tiene rol COMPANY");
                 allowed = true; // Replace with real check
             }
             // If user has EMPLOYEE role, check if their company matches
             if (user.getRoles().stream().anyMatch(r -> r.getName().equals("EMPLOYEE"))) {
-                // TODO: Link User to Employee and check company
+                logger.info("[getCompanyDashboard] Usuario tiene rol EMPLOYEE");
                 allowed = true; // Replace with real check
             }
-            if (!allowed) return ResponseEntity.status(403).body("No autorizado");
+            if (!allowed) {
+                logger.info("[getCompanyDashboard] Usuario no tiene permisos para la empresa solicitada, acceso denegado");
+                return ResponseEntity.status(403).body("No autorizado");
+            }
         }
+        logger.info("[getCompanyDashboard] Consultando empleados de la empresa {}", companyId);
         List<EmployeeDto> employees = employeeRepository.findByCompanyId(companyId)
             .stream()
             .map(EmployeeDto::fromEntity)
             .collect(Collectors.toList());
+    logger.info("[getCompanyDashboard] Empleados encontrados: {}", employees.size());
+    logger.info("[getCompanyDashboard] Empleados: {}", employees);
 
-        List<Object[]> statusCounts = surveyAppRepository.countByStatusAndCompanyId(companyId);
+        logger.info("[getCompanyDashboard] Consultando status de aplicaciones de encuesta para la empresa {}", companyId);
+        List<Object[]> statusCountsRaw = surveyAppRepository.countByStatusAndCompanyId(companyId);
+        logger.info("[getCompanyDashboard] Status counts: {}", statusCountsRaw.size());
+        List<Map<String, Object>> statusCounts = new ArrayList<>();
+        for (Object[] row : statusCountsRaw) {
+            String statusStr = (String) row[0];
+            long count = (row[1] instanceof Long) ? (Long) row[1] : ((Number) row[1]).longValue();
+            String statusLabel;
+            try {
+                statusLabel = com.example.nom035.entity.ApplicationStatus.from(statusStr).getValue();
+            } catch (Exception e) {
+                statusLabel = statusStr;
+            }
+            logger.info("[getCompanyDashboard] StatusCount row: status={}, count={}", statusLabel, count);
+            Map<String, Object> map = new HashMap<>();
+            map.put("status", statusLabel);
+            map.put("count", count);
+            statusCounts.add(map);
+        }
 
+        logger.info("[getCompanyDashboard] Consultando encuestas de la empresa {}", companyId);
         List<CompanySurveyDto> surveys = companySurveyRepository.findByCompanyId(companyId)
             .stream()
             .map(CompanySurveyDto::fromEntity)
             .collect(Collectors.toList());
+    logger.info("[getCompanyDashboard] Encuestas encontradas: {}", surveys.size());
+    logger.info("[getCompanyDashboard] Encuestas: {}", surveys);
 
         Map<String, Object> result = new HashMap<>();
         result.put("employees", employees);
-        result.put("surveyStatusCounts", statusCounts);
+    result.put("surveyStatusCounts", statusCounts);
         result.put("surveys", surveys);
 
+        logger.info("[getCompanyDashboard] Respuesta construida correctamente");
         return ResponseEntity.ok(result);
     }
 
@@ -164,10 +205,12 @@ public class DashboardController {
         List<Map<String, Object>> participation = new ArrayList<>();
 
         for (CompanySurvey cs : surveys) {
-            int totalEmployees = cs.getCompany().getEmployees().size();
-            long completed = cs.getSurveyApplications().stream()
-                    .filter(sa -> sa.getStatus() == ApplicationStatus.COMPLETADA)
-                    .count();
+            // Avoid accessing lazy relationships on detached entities (can cause LazyInitializationException).
+            // Fetch total employees with a repository query and survey applications via repository as well.
+            int totalEmployees = employeeRepository.findByCompanyId(companyId).size();
+        long completed = surveyAppRepository.findByCompanySurveyId(cs.getId()).stream()
+            .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
+            .count();
 
             Map<String, Object> map = new HashMap<>();
             map.put("surveyTitle", cs.getSurvey().getTitle());

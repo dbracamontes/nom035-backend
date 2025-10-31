@@ -5,6 +5,7 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
 ## Prerequisites
 
 - Docker & Docker Compose
+ - Java 21 (JDK) for local builds (the project targets Java 21)
 
 ## Quick Start
 
@@ -16,14 +17,17 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
    ```
 
 2. **Build and Run with Docker Compose**
-   At project root folder run below commands in the terminal
-   ```
+   At project root folder run the commands below. First copy `.env.example` to `.env` and fill secrets:
+
+   ```powershell
+   copy .env.example .env
+   # edit .env and set secure passwords
    mvn clean install
-   docker-compose up --build
+   docker compose up --build
    ```
 
    This will:
-   - Start MySQL with the database `nom035` and root password `your_mysql_password`.
+   - Start MySQL with the database defined in `.env` and the provided credentials.
    - Build and run the Spring Boot backend app on port **8080**.
 
 3. **Access API**
@@ -43,11 +47,14 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
 
 - On first run, the app will use `src/main/resources/data.sql` to seed the database with fake data (employees, surveys, questions, responses).
 
-## Customization
+## Configuration & Secrets
 
-- To change DB credentials, update:
-  - `docker-compose.yml` (env vars)
-  - `src/main/resources/application.properties`
+- Credentials and runtime variables are provided via environment variables. For local development create a `.env` based on `.env.example` and never commit real secrets.
+- The `Dockerfile` intentionally does not embed sensitive passwords. You should set:
+   - `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD`, etc. in `.env` or use Docker secrets for production.
+   - Spring datasource properties can be overridden with `SPRING_DATASOURCE_*` environment variables.
+
+If you need a production-ready secrets approach, use Docker secrets or a secret manager (HashiCorp Vault, AWS Secrets Manager, etc.).
 - To add surveys/questions, use `/api/surveys/generate` endpoint.
 
 ## Stopping the stack
@@ -58,10 +65,15 @@ docker-compose down
 
 ## Troubleshooting
 
-- If MySQL is not ready when app starts, restart the app container:
-  ```bash
-  docker-compose restart app
-  ```
+- If MySQL is not ready when app starts, the container includes a wait-for-db script so the backend will wait for the DB to accept TCP connections before starting. If you still see problems, check logs:
+   ```powershell
+   docker compose logs -f
+   ```
+
+-- To restart services:
+   ```powershell
+   docker compose restart
+   ```
 
 ---
 

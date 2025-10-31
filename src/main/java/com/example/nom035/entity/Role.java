@@ -15,9 +15,21 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
+
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
+
+    @ManyToMany
+    @JoinTable(
+        name = "role_privilege",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "privilege_id")
+    )
+    private Set<Privilege> privileges;
+
+    public Set<Privilege> getPrivileges() { return privileges; }
+    public void setPrivileges(Set<Privilege> privileges) { this.privileges = privileges; }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

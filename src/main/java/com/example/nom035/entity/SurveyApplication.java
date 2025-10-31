@@ -23,8 +23,8 @@ public class SurveyApplication {
     public void setStartedAt(LocalDateTime startedAt) { this.startedAt = startedAt; }
     public LocalDateTime getCompletedAt() { return completedAt; }
     public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
-    public ApplicationStatus getStatus() { return status; }
-    public void setStatus(ApplicationStatus status) { this.status = status; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
     public Integer getScore() { return score; }
     public void setScore(Integer score) { this.score = score; }
     public RiskLevel getRiskLevel() { return riskLevel; }
@@ -49,8 +49,21 @@ public class SurveyApplication {
 
     private LocalDateTime completedAt;
 
-    @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
+    @Column(name = "status")
+    private String status;
+
+    public ApplicationStatus getStatusEnum() {
+        try {
+            return ApplicationStatus.from(status);
+        } catch (Exception e) {
+            // Loguear el error si el status no es válido
+            System.err.println("[SurveyApplication] Valor de status inválido: '" + status + "'. " + e.getMessage());
+            return null;
+        }
+    }
+    public void setStatusEnum(ApplicationStatus statusEnum) {
+        this.status = statusEnum != null ? statusEnum.getValue() : null;
+    }
 
     private Integer score; // suma de valores de respuestas
 
@@ -64,7 +77,5 @@ public class SurveyApplication {
     @OneToMany(mappedBy = "surveyApplication")
     private List<Response> responses;
 
-    public enum ApplicationStatus {
-        PENDIENTE, EN_PROGRESO, COMPLETADA, CANCELADA
-    }
+    // ApplicationStatus is now a top-level enum (src/main/java/com/example/nom035/entity/ApplicationStatus.java)
 }
