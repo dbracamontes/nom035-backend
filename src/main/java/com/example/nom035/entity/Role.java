@@ -20,6 +20,14 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "role_privilege",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "privilege_id")
+    )
+    private Set<Privilege> privileges;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
