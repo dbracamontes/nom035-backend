@@ -71,6 +71,25 @@ public class DashboardController {
         return isAdmin;
     }
 
+    // Helper para saber si es COMPANY
+    private boolean isCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+
+    // Helper para saber si es EMPLOYEE
+    private boolean isEmployee() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYEE"));
+    }
+
+    // Helper para obtener el companyId del usuario autenticado (si aplica)
+    private Long getCompanyIdForCurrentUser() {
+        User user = getCurrentUser();
+        if (user == null) return null;
+        return user.getCompanyId();
+    }
+
     // -----------------------------
     // 1. Dashboard general por empresa
     // -----------------------------
@@ -78,32 +97,17 @@ public class DashboardController {
     @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<?> getCompanyDashboard(@PathVariable Long companyId) {
         logger.info("[getCompanyDashboard] INICIO endpoint para companyId={}", companyId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("[getCompanyDashboard] Usuario autenticado: {}", authentication.getName());
-        logger.info("[getCompanyDashboard] Autoridades: {}", authentication.getAuthorities());
-        // Only ADMIN can access any company, others only their own
-        if (!isAdmin()) {
-            logger.info("[getCompanyDashboard] Usuario NO es ADMIN, revisando permisos adicionales...");
-            User user = getCurrentUser();
-            if (user == null) {
-                logger.info("[getCompanyDashboard] Usuario no encontrado en base de datos, acceso denegado");
-                return ResponseEntity.status(403).body("No autorizado");
-            }
-            boolean allowed = false;
-            // If user has COMPANY role, check if their company matches
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("COMPANY"))) {
-                logger.info("[getCompanyDashboard] Usuario tiene rol COMPANY");
-                allowed = true; // Replace with real check
-            }
-            // If user has EMPLOYEE role, check if their company matches
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("EMPLOYEE"))) {
-                logger.info("[getCompanyDashboard] Usuario tiene rol EMPLOYEE");
-                allowed = true; // Replace with real check
-            }
-            if (!allowed) {
+        if (isAdmin()) {
+            // acceso total
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(companyId)) {
                 logger.info("[getCompanyDashboard] Usuario no tiene permisos para la empresa solicitada, acceso denegado");
                 return ResponseEntity.status(403).body("No autorizado");
             }
+        } else {
+            logger.info("[getCompanyDashboard] Usuario no tiene permisos para la empresa solicitada, acceso denegado");
+            return ResponseEntity.status(403).body("No autorizado");
         }
         logger.info("[getCompanyDashboard] Consultando empleados de la empresa {}", companyId);
         List<EmployeeDto> employees = employeeRepository.findByCompanyId(companyId)
@@ -156,17 +160,15 @@ public class DashboardController {
     @GetMapping("/company/{companyId}/risk")
     @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<?> getRiskByFactor(@PathVariable Long companyId) {
-        if (!isAdmin()) {
-            User user = getCurrentUser();
-            if (user == null) return ResponseEntity.status(403).body("No autorizado");
-            boolean allowed = false;
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("COMPANY"))) {
-                allowed = true; // TODO: check company match
+        if (isAdmin()) {
+            // acceso total
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(companyId)) {
+                return ResponseEntity.status(403).body("No autorizado");
             }
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("EMPLOYEE"))) {
-                allowed = true; // TODO: check company match
-            }
-            if (!allowed) return ResponseEntity.status(403).body("No autorizado");
+        } else {
+            return ResponseEntity.status(403).body("No autorizado");
         }
         // Obtener todas las respuestas de empleados de la empresa
         List<Response> responses = responseRepository.findAllByCompanyId(companyId);
@@ -188,17 +190,15 @@ public class DashboardController {
     @GetMapping("/company/{companyId}/participation")
     @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<?> getParticipation(@PathVariable Long companyId) {
-        if (!isAdmin()) {
-            User user = getCurrentUser();
-            if (user == null) return ResponseEntity.status(403).body("No autorizado");
-            boolean allowed = false;
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("COMPANY"))) {
-                allowed = true; // TODO: check company match
+        if (isAdmin()) {
+            // acceso total
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(companyId)) {
+                return ResponseEntity.status(403).body("No autorizado");
             }
-            if (user.getRoles().stream().anyMatch(r -> r.getName().equals("EMPLOYEE"))) {
-                allowed = true; // TODO: check company match
-            }
-            if (!allowed) return ResponseEntity.status(403).body("No autorizado");
+        } else {
+            return ResponseEntity.status(403).body("No autorizado");
         }
         List<CompanySurvey> surveys = companySurveyRepository.findByCompanyId(companyId);
 

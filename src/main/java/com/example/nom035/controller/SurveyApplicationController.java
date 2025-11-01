@@ -18,6 +18,33 @@ import org.springframework.security.access.annotation.Secured;
 @RequestMapping("/api/survey-applications")
 @CrossOrigin(origins = "*")
 public class SurveyApplicationController {
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.example.nom035.repository.EmployeeRepository employeeRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.example.nom035.repository.UserRepository userRepository;
+
+    private com.example.nom035.entity.User getCurrentUser() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElse(null);
+    }
+    private boolean isAdmin() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+    private boolean isCompany() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+    private boolean isEmployee() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYEE"));
+    }
+    private Long getCompanyIdForCurrentUser() {
+        com.example.nom035.entity.User user = getCurrentUser();
+        if (user == null) return null;
+        return user.getCompanyId();
+    }
 
     private final SurveyApplicationService service;
 
@@ -28,7 +55,24 @@ public class SurveyApplicationController {
     @GetMapping
     @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public List<SurveyApplicationDto> list() {
-        return service.getAll().stream().map(SurveyApplicationDto::fromEntity).collect(Collectors.toList());
+        if (isAdmin()) {
+            return service.getAll().stream().map(SurveyApplicationDto::fromEntity).collect(Collectors.toList());
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null) return List.of();
+            return service.getAll().stream()
+                .filter(sa -> {
+                    // Obtener companyId real desde companySurvey
+                    if (sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany() != null) {
+                        return sa.getCompanySurvey().getCompany().getId().equals(myCompanyId);
+                    }
+                    return false;
+                })
+                .map(SurveyApplicationDto::fromEntity)
+                .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
     }
 
     @GetMapping("/{id}")
@@ -55,8 +99,22 @@ public class SurveyApplicationController {
     @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
     public ResponseEntity<SurveyApplicationDto> create(@RequestBody SurveyApplicationCreateDto dto) {
         try {
-            SurveyApplication created = service.create(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(SurveyApplicationDto.fromEntity(created));
+            if (isAdmin()) {
+                SurveyApplication created = service.create(dto);
+                return ResponseEntity.status(HttpStatus.CREATED).body(SurveyApplicationDto.fromEntity(created));
+            } else if (isCompany()) {
+                Long myCompanyId = getCompanyIdForCurrentUser();
+                if (myCompanyId == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                // Validar que el empleado pertenece a la empresa
+                com.example.nom035.entity.Employee employee = employeeRepository.findById(dto.getEmployeeId()).orElse(null);
+                if (employee == null || employee.getCompany() == null || !employee.getCompany().getId().equals(myCompanyId)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+                SurveyApplication created = service.create(dto);
+                return ResponseEntity.status(HttpStatus.CREATED).body(SurveyApplicationDto.fromEntity(created));
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().build();
         } catch (Exception ex) {

@@ -28,15 +28,16 @@ public class WebSecurityConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:3000");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        config.setAllowCredentials(true);
+    CorsConfiguration config = new CorsConfiguration();
+    config.addAllowedOrigin("http://localhost:3000"); // Para desarrollo en puerto 3000
+    config.addAllowedOrigin("http://localhost:3001"); // Para desarrollo en puerto 3001
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return new CorsFilter(source);
     }
 
     @Bean
@@ -69,7 +70,8 @@ public class WebSecurityConfig {
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) -> {
             response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("Access Denied");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Acceso denegado: no tienes permisos suficientes para esta acción.\"}");
         };
     }
 

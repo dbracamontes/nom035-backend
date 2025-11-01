@@ -15,6 +15,31 @@ import org.springframework.security.access.annotation.Secured;
 @RestController
 @RequestMapping("/api/company-surveys")
 public class CompanySurveyController {
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.example.nom035.repository.UserRepository userRepository;
+
+    private com.example.nom035.entity.User getCurrentUser() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElse(null);
+    }
+    private boolean isAdmin() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+    private boolean isCompany() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+    private boolean isEmployee() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYEE"));
+    }
+    private Long getCompanyIdForCurrentUser() {
+        com.example.nom035.entity.User user = getCurrentUser();
+        if (user == null) return null;
+        return user.getCompanyId();
+    }
     private final CompanySurveyService companySurveyService;
     private final SurveyApplicationService surveyApplicationService;
 
@@ -43,10 +68,23 @@ public class CompanySurveyController {
     @GetMapping("/company/{companyId}")
     @Secured({"ROLE_COMPANY", "ROLE_ADMIN"})
     public List<CompanySurveyDto> getByCompany(@PathVariable Long companyId) {
-        return companySurveyService.getByCompanyId(companyId)
-            .stream()
-            .map(CompanySurveyDto::fromEntity)
-            .collect(Collectors.toList());
+        if (isAdmin()) {
+            return companySurveyService.getByCompanyId(companyId)
+                .stream()
+                .map(CompanySurveyDto::fromEntity)
+                .collect(Collectors.toList());
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(companyId)) {
+                return List.of();
+            }
+            return companySurveyService.getByCompanyId(companyId)
+                .stream()
+                .map(CompanySurveyDto::fromEntity)
+                .collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
     }
 
     @GetMapping("/survey/{surveyId}")
@@ -62,7 +100,18 @@ public class CompanySurveyController {
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     @Secured({"ROLE_COMPANY", "ROLE_ADMIN"})
     public CompanySurveyDto create(@RequestBody CompanySurveyCreateDto createDto) {
-        return CompanySurveyDto.fromEntity(companySurveyService.createCompanySurvey(createDto));
+        // Solo ADMIN o COMPANY de la empresa pueden crear
+        if (isAdmin()) {
+            return CompanySurveyDto.fromEntity(companySurveyService.createCompanySurvey(createDto));
+        } else if (isCompany()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(createDto.getCompanyId())) {
+                throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "No autorizado para crear encuestas en otra empresa");
+            }
+            return CompanySurveyDto.fromEntity(companySurveyService.createCompanySurvey(createDto));
+        } else {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "No autorizado");
+        }
     }
 
     @PutMapping("/{id}")

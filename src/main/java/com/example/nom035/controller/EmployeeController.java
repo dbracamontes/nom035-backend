@@ -28,11 +28,6 @@ public class EmployeeController {
     @Autowired
     private UserRepository userRepository;
 
-    public EmployeeController(EmployeeService employeeService, CompanyService companyService) {
-        this.employeeService = employeeService;
-        this.companyService = companyService;
-    }
-
     // Helper para obtener el usuario autenticado
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,72 +41,97 @@ public class EmployeeController {
         return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
-    // Helper para obtener el id de la empresa asociada al usuario
+    // Helper para saber si es COMPANY
+    private boolean isCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+
+    // Helper para saber si es EMPLOYEE
+    private boolean isEmployee() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYEE"));
+    }
+
+    // Helper para obtener el companyId del usuario autenticado (si aplica)
     private Long getCompanyIdForCurrentUser() {
         User user = getCurrentUser();
         if (user == null) return null;
-        // TODO: Relacionar User con Company directamente para robustez
-        // Por ahora, se asume que el username es el email de la empresa y hay coincidencia 1:1
-        // Si tienes un campo companyId en User, úsalo aquí
-        return null; // Implementar lógica real según tu modelo
+        return user.getCompanyId();
     }
 
+    public EmployeeController(EmployeeService employeeService, CompanyService companyService) {
+        this.employeeService = employeeService;
+        this.companyService = companyService;
+    }
+
+
     @GetMapping
-    @Secured("ROLE_EMPLOYEE")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public List<EmployeeDto> getAll() {
         if (isAdmin()) {
             return employeeService.getAllEmployees()
                 .stream()
                 .map(EmployeeDto::fromEntity)
                 .collect(Collectors.toList());
-        } else {
+        } else if (isCompany() || isEmployee()) {
             Long companyId = getCompanyIdForCurrentUser();
             if (companyId == null) return List.of();
             return employeeService.getAllEmployees().stream()
                 .filter(e -> e.getCompany() != null && e.getCompany().getId().equals(companyId))
                 .map(EmployeeDto::fromEntity)
                 .collect(Collectors.toList());
+        } else {
+            return List.of();
         }
     }
 
     @GetMapping("/{id}")
-    @Secured("ROLE_EMPLOYEE")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public EmployeeDto getById(@PathVariable Long id) {
         Optional<Employee> empOpt = employeeService.getEmployeeById(id);
         if (empOpt.isEmpty()) return null;
         Employee emp = empOpt.get();
-        if (!isAdmin()) {
+        if (isAdmin()) {
+            return EmployeeDto.fromEntity(emp);
+        } else if (isCompany() || isEmployee()) {
             Long companyId = getCompanyIdForCurrentUser();
             if (companyId == null || emp.getCompany() == null || !emp.getCompany().getId().equals(companyId)) {
                 return null;
             }
+            return EmployeeDto.fromEntity(emp);
+        } else {
+            return null;
         }
-        return EmployeeDto.fromEntity(emp);
     }
 
     @GetMapping("/company/{companyId}")
-    @Secured("ROLE_EMPLOYEE")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public List<EmployeeDto> getByCompany(@PathVariable Long companyId) {
-        if (!isAdmin()) {
+        if (isAdmin()) {
+            return employeeService.getEmployeesByCompanyId(companyId)
+                .stream()
+                .map(EmployeeDto::fromEntity)
+                .collect(Collectors.toList());
+        } else if (isCompany() || isEmployee()) {
             Long myCompanyId = getCompanyIdForCurrentUser();
             if (myCompanyId == null || !myCompanyId.equals(companyId)) {
                 return List.of();
             }
+            return employeeService.getEmployeesByCompanyId(companyId)
+                .stream()
+                .map(EmployeeDto::fromEntity)
+                .collect(Collectors.toList());
+        } else {
+            return List.of();
         }
-        return employeeService.getEmployeesByCompanyId(companyId)
-            .stream()
-            .map(EmployeeDto::fromEntity)
-            .collect(Collectors.toList());
     }
 
     @PostMapping
-    @Secured("ROLE_EMPLOYEE")
+    @Secured("ROLE_ADMIN")
     public EmployeeDto create(@RequestBody Employee employee) {
         if (!isAdmin()) {
-            Long companyId = getCompanyIdForCurrentUser();
-            if (companyId == null || employee.getCompany() == null || !employee.getCompany().getId().equals(companyId)) {
-                return null;
-            }
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para crear empleados");
         }
         // Resolve provided company id to a managed entity to avoid transient/nullable issues
         if (employee.getCompany() != null) {

@@ -62,9 +62,9 @@ INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, co
 -- ================================
 
 INSERT INTO role (id, name) VALUES
-	(1, 'ADMIN'),
-	(2, 'COMPANY'),
-	(3, 'EMPLOYEE')
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_COMPANY'),
+    (3, 'ROLE_EMPLOYEE')
 ON DUPLICATE KEY UPDATE name=VALUES(name);
 
 -- Passwords en texto plano para pruebas: admin123, company123, employee123
