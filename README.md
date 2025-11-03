@@ -22,6 +22,7 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
    ```powershell
    copy .env.example .env
    # edit .env and set secure passwords
+   mvn clean install -DskipTests
    mvn clean install
    docker compose up --build
    ```

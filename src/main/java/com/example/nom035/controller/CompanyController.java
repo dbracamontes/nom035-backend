@@ -48,6 +48,65 @@ public class CompanyController {
     }
 
     /**
+     * Obtener una company por ID.
+     * Permitido a ROLE_COMPANY y ROLE_ADMIN.
+     */
+    @GetMapping("/{id}")
+    @Secured({"ROLE_COMPANY", "ROLE_ADMIN"})
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+        log.debug("Request to get company with id={}", id);
+        return companyService.getCompanyById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Crear una nueva company.
+     * Permitido solo a ROLE_ADMIN.
+     */
+    @PostMapping
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+        log.debug("Request to create company: {}", company.getName());
+        if (company.getId() != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Company saved = companyService.saveCompany(company);
+        return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * Actualizar una company existente.
+     * Permitido solo a ROLE_ADMIN.
+     */
+    @PutMapping("/{id}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
+        log.debug("Request to update company with id={}", id);
+        if (!companyService.getCompanyById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        company.setId(id);
+        Company updated = companyService.saveCompany(company);
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * Eliminar una company.
+     * Permitido solo a ROLE_ADMIN.
+     */
+    @DeleteMapping("/{id}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
+        log.debug("Request to delete company with id={}", id);
+        if (!companyService.getCompanyById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        companyService.deleteCompany(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * Obtener empleados de una company por id.
      * Permitido a ROLE_COMPANY y ROLE_ADMIN.
      */
