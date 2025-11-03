@@ -95,7 +95,13 @@ public class WebSecurityConfig {
                     "/api/auth/**",
                     "/api/public/**",
                     "/favicon.ico").permitAll()
-                .requestMatchers("/api/companies/**", "/api/employees/**", "/api/dashboard/**").hasAnyRole("ADMIN", "COMPANY")
+                // Solo ADMIN puede crear, editar o eliminar empleados
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/employees/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/employees/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
+                // ADMIN y COMPANY pueden consultar empleados y empresas
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")
+                .requestMatchers("/api/companies/**", "/api/dashboard/**").hasAnyRole("ADMIN", "COMPANY")
                 .requestMatchers("/api/**").authenticated()
             )
             .httpBasic(Customizer.withDefaults())

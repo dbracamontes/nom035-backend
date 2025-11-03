@@ -8,6 +8,10 @@ import com.example.nom035.entity.Company;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.nom035.repository.UserRepository;
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
     private final EmployeeService employeeService;
     private final CompanyService companyService;
 
@@ -38,7 +43,12 @@ public class EmployeeController {
     // Helper para saber si es ADMIN
     private boolean isAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        String username = authentication.getName();
+        logger.info("[isAdmin] Usuario autenticado: {}", username);
+        logger.info("[isAdmin] Authorities: {}", authentication.getAuthorities());
+        boolean result = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        logger.info("[isAdmin] ¿Es admin?: {}", result);
+        return result;
     }
 
     // Helper para saber si es COMPANY
@@ -130,7 +140,12 @@ public class EmployeeController {
     @PostMapping
     @Secured("ROLE_ADMIN")
     public EmployeeDto create(@RequestBody Employee employee) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        logger.info("[create] Intentando crear empleado. Usuario autenticado: {}", username);
+        logger.info("[create] Authorities: {}", authentication.getAuthorities());
         if (!isAdmin()) {
+            logger.warn("[create] Acceso denegado para usuario: {}", username);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para crear empleados");
         }
         // Resolve provided company id to a managed entity to avoid transient/nullable issues

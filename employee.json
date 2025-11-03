@@ -1,0 +1,11 @@
+{
+  "name": "Test User",
+  "email": "test@demo.com",
+  "position": "Tester",
+  "department": "QA",
+  "seniorityYears": 1,
+  "gender": "M",
+  "age": 30,
+  "status": "activo",
+  "company": { "id": 1 }
+}
