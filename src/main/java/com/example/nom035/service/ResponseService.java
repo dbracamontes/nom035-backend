@@ -13,6 +13,7 @@ import com.example.nom035.repository.OptionAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,36 +81,56 @@ public class ResponseService {
     }
 
     public ResponseDto createResponse(ResponseCreateDto responseCreateDto) {
-        Response response = new Response();
-        
-        // Buscar y asignar SurveyApplication
+        // Validate SurveyApplication
         SurveyApplication surveyApplication = surveyApplicationRepository.findById(responseCreateDto.getSurveyApplicationId())
                 .orElseThrow(() -> new RuntimeException("SurveyApplication not found with id: " + responseCreateDto.getSurveyApplicationId()));
-        response.setSurveyApplication(surveyApplication);
         
-        // Buscar y asignar Question
+        // Validate Question
         Question question = questionRepository.findById(responseCreateDto.getQuestionId())
                 .orElseThrow(() -> new RuntimeException("Question not found with id: " + responseCreateDto.getQuestionId()));
+
+        // Idempotent upsert by (surveyApplication, question)
+        Response response = responseRepository
+                .findBySurveyApplicationIdAndQuestionId(surveyApplication.getId(), question.getId())
+                .orElse(new Response());
+
+        response.setSurveyApplication(surveyApplication);
         response.setQuestion(question);
-        
-        // Asignar OptionAnswer si existe
+
+        // OptionAnswer (optional)
+        OptionAnswer optionAnswer = null;
         if (responseCreateDto.getOptionAnswerId() != null) {
-            OptionAnswer optionAnswer = optionAnswerRepository.findById(responseCreateDto.getOptionAnswerId())
+            optionAnswer = optionAnswerRepository.findById(responseCreateDto.getOptionAnswerId())
                     .orElseThrow(() -> new RuntimeException("OptionAnswer not found with id: " + responseCreateDto.getOptionAnswerId()));
             response.setOptionAnswer(optionAnswer);
+        } else {
+            response.setOptionAnswer(null);
         }
         
-        // Asignar respuesta de texto si existe
-        response.setFreeText(responseCreateDto.getTextAnswer());
+        // Free text (support both freeText and textAnswer)
+        String freeText = responseCreateDto.getFreeText() != null ? responseCreateDto.getFreeText() : responseCreateDto.getTextAnswer();
+        response.setFreeText(freeText);
+
+        // Numeric value
+        if (responseCreateDto.getValue() != null) {
+            response.setValue(responseCreateDto.getValue());
+        } else if (optionAnswer != null && optionAnswer.getValue() != null) {
+            response.setValue(optionAnswer.getValue());
+        } else {
+            // No value provided; leave null to not affect scoring
+            response.setValue(null);
+        }
+
+        // Timestamp
+        response.setAnsweredAt(LocalDateTime.now());
         
         Response savedResponse = responseRepository.save(response);
         
-        // Recalcular el riskLevel después de guardar la respuesta
+        // Recalculate the application's score and risk level
         try {
             surveyApplicationService.calculateAndSetRiskLevel(surveyApplication);
             surveyApplicationRepository.save(surveyApplication);
         } catch (Exception e) {
-            // Log error but don't fail the response creation
             System.err.println("Error calculating risk level: " + e.getMessage());
         }
         
@@ -122,40 +143,49 @@ public class ResponseService {
         
         SurveyApplication surveyApplication = response.getSurveyApplication();
         
-        // Actualizar SurveyApplication
+        // Update SurveyApplication
         if (responseCreateDto.getSurveyApplicationId() != null) {
             surveyApplication = surveyApplicationRepository.findById(responseCreateDto.getSurveyApplicationId())
                     .orElseThrow(() -> new RuntimeException("SurveyApplication not found with id: " + responseCreateDto.getSurveyApplicationId()));
             response.setSurveyApplication(surveyApplication);
         }
         
-        // Actualizar Question
+        // Update Question
         if (responseCreateDto.getQuestionId() != null) {
             Question question = questionRepository.findById(responseCreateDto.getQuestionId())
                     .orElseThrow(() -> new RuntimeException("Question not found with id: " + responseCreateDto.getQuestionId()));
             response.setQuestion(question);
         }
         
-        // Actualizar OptionAnswer
+        // Update OptionAnswer
         if (responseCreateDto.getOptionAnswerId() != null) {
             OptionAnswer optionAnswer = optionAnswerRepository.findById(responseCreateDto.getOptionAnswerId())
                     .orElseThrow(() -> new RuntimeException("OptionAnswer not found with id: " + responseCreateDto.getOptionAnswerId()));
             response.setOptionAnswer(optionAnswer);
+            // If no explicit value provided, mirror optionAnswer's numeric value
+            if (responseCreateDto.getValue() == null) {
+                response.setValue(optionAnswer.getValue());
+            }
         } else {
             response.setOptionAnswer(null);
         }
         
-        // Actualizar texto
-        response.setFreeText(responseCreateDto.getTextAnswer());
+        // Update numeric value if provided
+        if (responseCreateDto.getValue() != null) {
+            response.setValue(responseCreateDto.getValue());
+        }
+        
+        // Update text
+        String freeText = responseCreateDto.getFreeText() != null ? responseCreateDto.getFreeText() : responseCreateDto.getTextAnswer();
+        response.setFreeText(freeText);
         
         Response updatedResponse = responseRepository.save(response);
         
-        // Recalcular el riskLevel después de actualizar la respuesta
+        // Recalculate the application's score and risk level
         try {
             surveyApplicationService.calculateAndSetRiskLevel(surveyApplication);
             surveyApplicationRepository.save(surveyApplication);
         } catch (Exception e) {
-            // Log error but don't fail the response update
             System.err.println("Error calculating risk level: " + e.getMessage());
         }
         
@@ -170,12 +200,16 @@ public class ResponseService {
     }
 
     private ResponseDto convertToDto(Response response) {
-        return new ResponseDto(
+        ResponseDto dto = new ResponseDto(
                 response.getId(),
                 response.getSurveyApplication() != null ? response.getSurveyApplication().getId() : null,
                 response.getQuestion() != null ? response.getQuestion().getId() : null,
                 response.getOptionAnswer() != null ? response.getOptionAnswer().getId() : null,
                 response.getFreeText()
         );
+        // Enrich with numeric value and freeText fields for clients expecting them
+        dto.setValue(response.getValue());
+        dto.setFreeText(response.getFreeText());
+        return dto;
     }
 }

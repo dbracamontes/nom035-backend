@@ -16,8 +16,16 @@ public class ResponseDto {
     @JsonProperty("optionAnswerId")
     private Long optionAnswerId;
     
+    // Backward-compat: some clients expect textAnswer
     @JsonProperty("textAnswer")
     private String textAnswer;
+
+    // New: explicit fields used by current frontend
+    @JsonProperty("value")
+    private Integer value;
+
+    @JsonProperty("freeText")
+    private String freeText;
     
     // Constructors
     public ResponseDto() {}
@@ -28,6 +36,8 @@ public class ResponseDto {
         this.questionId = questionId;
         this.optionAnswerId = optionAnswerId;
         this.textAnswer = textAnswer;
+        // Keep freeText in sync by default
+        this.freeText = textAnswer;
     }
     
     // Getters and Setters
@@ -70,6 +80,12 @@ public class ResponseDto {
     public void setTextAnswer(String textAnswer) {
         this.textAnswer = textAnswer;
     }
+
+    public Integer getValue() { return value; }
+    public void setValue(Integer value) { this.value = value; }
+
+    public String getFreeText() { return freeText; }
+    public void setFreeText(String freeText) { this.freeText = freeText; }
     
     @Override
     public String toString() {
@@ -79,6 +95,8 @@ public class ResponseDto {
                 ", questionId=" + questionId +
                 ", optionAnswerId=" + optionAnswerId +
                 ", textAnswer='" + textAnswer + '\'' +
+                ", value=" + value +
+                ", freeText='" + freeText + '\'' +
                 '}';
     }
 }

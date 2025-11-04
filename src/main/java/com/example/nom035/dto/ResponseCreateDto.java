@@ -15,6 +15,14 @@ public class ResponseCreateDto {
     
     @JsonProperty("textAnswer")
     private String textAnswer;
+
+    // New: numeric value sent by frontend when no optionAnswerId is used
+    @JsonProperty("value")
+    private Integer value;
+
+    // New: free text field name used by frontend
+    @JsonProperty("freeText")
+    private String freeText;
     
     // Constructors
     public ResponseCreateDto() {}
@@ -58,6 +66,12 @@ public class ResponseCreateDto {
     public void setTextAnswer(String textAnswer) {
         this.textAnswer = textAnswer;
     }
+
+    public Integer getValue() { return value; }
+    public void setValue(Integer value) { this.value = value; }
+
+    public String getFreeText() { return freeText; }
+    public void setFreeText(String freeText) { this.freeText = freeText; }
     
     @Override
     public String toString() {
@@ -66,6 +80,8 @@ public class ResponseCreateDto {
                 ", questionId=" + questionId +
                 ", optionAnswerId=" + optionAnswerId +
                 ", textAnswer='" + textAnswer + '\'' +
+                ", value=" + value +
+                ", freeText='" + freeText + '\'' +
                 '}';
     }
 }

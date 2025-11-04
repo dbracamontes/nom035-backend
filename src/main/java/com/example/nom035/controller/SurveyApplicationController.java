@@ -57,17 +57,23 @@ public class SurveyApplicationController {
     public List<SurveyApplicationDto> list() {
         if (isAdmin()) {
             return service.getAll().stream().map(SurveyApplicationDto::fromEntity).collect(Collectors.toList());
-        } else if (isCompany() || isEmployee()) {
+        } else if (isCompany()) {
             Long myCompanyId = getCompanyIdForCurrentUser();
             if (myCompanyId == null) return List.of();
             return service.getAll().stream()
-                .filter(sa -> {
-                    // Obtener companyId real desde companySurvey
-                    if (sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany() != null) {
-                        return sa.getCompanySurvey().getCompany().getId().equals(myCompanyId);
-                    }
-                    return false;
-                })
+                .filter(sa -> sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany() != null
+                        && sa.getCompanySurvey().getCompany().getId().equals(myCompanyId))
+                .map(SurveyApplicationDto::fromEntity)
+                .collect(Collectors.toList());
+        } else if (isEmployee()) {
+            // Limit employee to only their own survey applications
+            com.example.nom035.entity.User currentUser = getCurrentUser();
+            if (currentUser == null || currentUser.getEmail() == null) return List.of();
+            com.example.nom035.entity.Employee employee = employeeRepository.findByEmail(currentUser.getEmail()).orElse(null);
+            if (employee == null) return List.of();
+            Long myEmployeeId = employee.getId();
+            return service.getAll().stream()
+                .filter(sa -> sa.getEmployee() != null && sa.getEmployee().getId().equals(myEmployeeId))
                 .map(SurveyApplicationDto::fromEntity)
                 .collect(Collectors.toList());
         } else {
