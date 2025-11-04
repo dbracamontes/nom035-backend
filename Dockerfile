@@ -16,5 +16,10 @@ ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/nom035?useSSL=false&serverTime
 ENV SPRING_DATASOURCE_USERNAME=root
 ENV SPRING_DATASOURCE_PASSWORD=your_mysql_password
 
+# Instala zona horaria y configura America/Mexico_City
+RUN apk add --no-cache tzdata \
+	&& cp /usr/share/zoneinfo/America/Mexico_City /etc/localtime \
+	&& echo "America/Mexico_City" > /etc/timezone
+
 # Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Duser.timezone=America/Mexico_City", "-jar", "app.jar"]
