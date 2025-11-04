@@ -69,14 +69,29 @@ public class ResponseController {
 
     @PostMapping
     @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
-    public ResponseEntity<ResponseDto> createResponse(@RequestBody ResponseCreateDto responseCreateDto) {
+    public ResponseEntity<?> createResponse(@RequestBody List<ResponseCreateDto> responseCreateDtoList) {
         try {
-            ResponseDto createdResponse = responseService.createResponse(responseCreateDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdResponse);
+            if (responseCreateDtoList == null || responseCreateDtoList.isEmpty()) {
+                return ResponseEntity.badRequest().body("Request body cannot be empty");
+            }
+            
+            // Si solo hay una respuesta, devolver un objeto único
+            if (responseCreateDtoList.size() == 1) {
+                ResponseDto createdResponse = responseService.createResponse(responseCreateDtoList.get(0));
+                return ResponseEntity.status(HttpStatus.CREATED).body(createdResponse);
+            }
+            
+            // Si hay múltiples respuestas, procesarlas todas
+            List<ResponseDto> createdResponses = new java.util.ArrayList<>();
+            for (ResponseCreateDto dto : responseCreateDtoList) {
+                ResponseDto createdResponse = responseService.createResponse(dto);
+                createdResponses.add(createdResponse);
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdResponses);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 

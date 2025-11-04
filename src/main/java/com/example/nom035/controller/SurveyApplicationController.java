@@ -96,7 +96,7 @@ public class SurveyApplicationController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<SurveyApplicationDto> create(@RequestBody SurveyApplicationCreateDto dto) {
         try {
             if (isAdmin()) {
@@ -109,6 +109,24 @@ public class SurveyApplicationController {
                 com.example.nom035.entity.Employee employee = employeeRepository.findById(dto.getEmployeeId()).orElse(null);
                 if (employee == null || employee.getCompany() == null || !employee.getCompany().getId().equals(myCompanyId)) {
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+                SurveyApplication created = service.create(dto);
+                return ResponseEntity.status(HttpStatus.CREATED).body(SurveyApplicationDto.fromEntity(created));
+            } else if (isEmployee()) {
+                // Los empleados pueden crear aplicaciones de encuesta
+                // Si no se proporciona employeeId, buscar por el email del usuario actual
+                if (dto.getEmployeeId() == null) {
+                    com.example.nom035.entity.User currentUser = getCurrentUser();
+                    if (currentUser == null || currentUser.getEmail() == null) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                    }
+                    // Buscar empleado por email
+                    com.example.nom035.entity.Employee employee = employeeRepository.findByEmail(currentUser.getEmail()).orElse(null);
+                    if (employee == null) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(null); // Could return error message: "No employee found with email: " + currentUser.getEmail()
+                    }
+                    dto.setEmployeeId(employee.getId());
                 }
                 SurveyApplication created = service.create(dto);
                 return ResponseEntity.status(HttpStatus.CREATED).body(SurveyApplicationDto.fromEntity(created));
@@ -126,6 +144,30 @@ public class SurveyApplicationController {
     public ResponseEntity<SurveyApplicationDto> calculateRiskLevel(@PathVariable Long id) {
         try {
             SurveyApplication updated = service.recalculateRiskLevel(id);
+            return ResponseEntity.ok(SurveyApplicationDto.fromEntity(updated));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/{id}/complete")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
+    public ResponseEntity<SurveyApplicationDto> completeApplication(@PathVariable Long id) {
+        try {
+            SurveyApplication sa = service.getById(id);
+            if (sa == null) return ResponseEntity.notFound().build();
+            
+            // Actualizar el estado a completado
+            sa.setStatusEnum(com.example.nom035.entity.ApplicationStatus.COMPLETADO);
+            sa.setCompletedAt(java.time.LocalDateTime.now());
+            
+            // Calcular el nivel de riesgo
+            service.calculateAndSetRiskLevel(sa);
+            
+            // Guardar los cambios
+            SurveyApplication updated = service.updateApplication(sa);
             return ResponseEntity.ok(SurveyApplicationDto.fromEntity(updated));
         } catch (RuntimeException ex) {
             return ResponseEntity.notFound().build();

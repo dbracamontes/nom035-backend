@@ -110,7 +110,7 @@ public class SurveyApplicationService {
         SurveyApplication sa = surveyApplicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("SurveyApplication not found: " + id));
 
-    if (statusStr != null) sa.setStatusEnum(mapStatus(statusStr));
+        if (statusStr != null) sa.setStatusEnum(mapStatus(statusStr));
         if (startDate != null) sa.setStartedAt(tryParseDateTime(startDate));
         if (endDate != null) sa.setCompletedAt(tryParseDateTime(endDate));
 
@@ -119,6 +119,10 @@ public class SurveyApplicationService {
             calculateAndSetRiskLevel(sa);
         }
 
+        return surveyApplicationRepository.save(sa);
+    }
+
+    public SurveyApplication updateApplication(SurveyApplication sa) {
         return surveyApplicationRepository.save(sa);
     }
 

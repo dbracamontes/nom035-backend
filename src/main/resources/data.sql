@@ -35,7 +35,8 @@ INSERT INTO employee (id, company_id, name, email, position, department, seniori
 (7, 4, 'Luis Fernández', 'luis.fernandez@buildit.com', 'Engineer', 'Production', 5, 'M', 32, 'activo'),
 (8, 4, 'Paula Jiménez', 'paula.jimenez@buildit.com', 'Supervisor', 'Production', 8, 'F', 38, 'activo'),
 (9, 5, 'Ricardo Soto', 'ricardo.soto@softlogic.com', 'Project Manager', 'PMO', 9, 'M', 41, 'activo'),
-(10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'activo');
+(10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'activo'),
+(11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'activo');
 
 -- ================================
 -- SURVEY
