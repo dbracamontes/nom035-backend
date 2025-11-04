@@ -18,7 +18,7 @@ public class QuestionController {
 
     // El endpoint principal que mencionaste
     @GetMapping("/surveys/{surveyId}/questions")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<List<Question>> getQuestionsBySurveyId(@PathVariable Long surveyId) {
         List<Question> questions = questionService.getQuestionsBySurveyId(surveyId);
         return ResponseEntity.ok(questions);
@@ -26,14 +26,14 @@ public class QuestionController {
     
     // Endpoint adicional por si lo necesitas
     @GetMapping("/questions")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<List<Question>> getAllQuestions() {
         return ResponseEntity.ok(questionService.getAllQuestions());
     }
     
     // Endpoint por guide type
     @GetMapping("/questions/guide/{guideType}")
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public ResponseEntity<List<Question>> getQuestionsByGuideType(@PathVariable String guideType) {
         List<Question> questions = questionService.getQuestionsByGuideType(guideType);
         return ResponseEntity.ok(questions);

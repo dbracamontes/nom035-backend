@@ -19,7 +19,7 @@ public class SurveyController {
     }
 
     @GetMapping
-    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public List<SurveyDto> getAll() {
         return surveyService.getAllSurveys()
             .stream()
@@ -28,7 +28,7 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
     public SurveyDto getById(@PathVariable Long id) {
         return surveyService.getSurveyById(id)
             .map(SurveyDto::fromEntity)
