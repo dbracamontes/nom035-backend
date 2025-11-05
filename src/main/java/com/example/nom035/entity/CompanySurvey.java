@@ -6,6 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -51,7 +52,8 @@ public class CompanySurvey {
         public void setCompany(Company company) { this.company = company; }
         public Survey getSurvey() { return survey; }
         public void setSurvey(Survey survey) { this.survey = survey; }
-        public LocalDate getAssignedAt() { return assignedAt; }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "America/Mexico_City")
+    public LocalDate getAssignedAt() { return assignedAt; }
         public void setAssignedAt(LocalDate assignedAt) { this.assignedAt = assignedAt; }
         public LocalDate getDueDate() { return dueDate; }
         public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }

@@ -25,6 +25,9 @@ import com.example.nom035.repository.SurveyApplicationRepository;
 
 import com.example.nom035.repository.UserRepository;
 import com.example.nom035.entity.User;
+import com.example.nom035.repository.CompanyRepository;
+import com.example.nom035.entity.Company;
+import com.example.nom035.dto.CompanyParticipationSummaryDto;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -53,6 +56,45 @@ public class DashboardController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+    // -----------------------------
+    // 4. Resumen global de participación por empresa
+    // -----------------------------
+    @GetMapping("/participation/summary")
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity<?> getParticipationSummary() {
+        logger.info("[getParticipationSummary] INICIO endpoint global de resumen por empresa");
+        List<Company> companies = companyRepository.findAll();
+        List<CompanyParticipationSummaryDto> summaryList = new ArrayList<>();
+        for (Company company : companies) {
+            Long companyId = company.getId();
+            String companyName = company.getName();
+            int totalEmployees = (int) employeeRepository.findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo).size();
+            // Encuestas completadas: contar aplicaciones de encuesta COMPLETADO para empleados activos
+            int responded = 0;
+            try {
+                responded = (int) surveyAppRepository.findByCompanySurvey_CompanyId(companyId).stream()
+                    .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
+                    .count();
+            } catch (Exception e) {
+                logger.warn("[getParticipationSummary] Error contando respondidos para empresa {}: {}", companyId, e.getMessage());
+            }
+            int pending = Math.max(totalEmployees - responded, 0);
+            int percent = (totalEmployees > 0) ? (int) Math.round((responded * 100.0) / totalEmployees) : 0;
+            String status;
+            if (percent >= 85) {
+                status = "Cumple NOM-035";
+            } else if (percent >= 50) {
+                status = "En Progreso";
+            } else {
+                status = "Bajo";
+            }
+            summaryList.add(new CompanyParticipationSummaryDto(companyId, companyName, totalEmployees, responded, pending, percent, status));
+        }
+        return ResponseEntity.ok(summaryList);
+    }
 
     // Helper to get current authenticated User
     private User getCurrentUser() {
@@ -109,13 +151,13 @@ public class DashboardController {
             logger.info("[getCompanyDashboard] Usuario no tiene permisos para la empresa solicitada, acceso denegado");
             return ResponseEntity.status(403).body("No autorizado");
         }
-        logger.info("[getCompanyDashboard] Consultando empleados de la empresa {}", companyId);
-        List<EmployeeDto> employees = employeeRepository.findByCompanyId(companyId)
+        logger.info("[getCompanyDashboard] Consultando empleados activos de la empresa {}", companyId);
+        List<EmployeeDto> employees = employeeRepository.findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo)
             .stream()
             .map(EmployeeDto::fromEntity)
             .collect(Collectors.toList());
-    logger.info("[getCompanyDashboard] Empleados encontrados: {}", employees.size());
-    logger.info("[getCompanyDashboard] Empleados: {}", employees);
+        logger.info("[getCompanyDashboard] Empleados activos encontrados: {}", employees.size());
+        logger.info("[getCompanyDashboard] Empleados activos: {}", employees);
 
         logger.info("[getCompanyDashboard] Consultando status de aplicaciones de encuesta para la empresa {}", companyId);
         List<Object[]> statusCountsRaw = surveyAppRepository.countByStatusAndCompanyId(companyId);
