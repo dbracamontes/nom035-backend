@@ -199,6 +199,12 @@ public class ResponseService {
         responseRepository.deleteById(id);
     }
 
+    public List<ResponseDto> getAllResponsesByCompany(Long companyId) {
+        return responseRepository.findAllByCompanyId(companyId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private ResponseDto convertToDto(Response response) {
         ResponseDto dto = new ResponseDto(
                 response.getId(),

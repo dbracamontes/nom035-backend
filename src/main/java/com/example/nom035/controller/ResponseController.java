@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.example.nom035.repository.UserRepository;
+import com.example.nom035.entity.User;
 
 @RestController
 @RequestMapping("/api/responses")
@@ -21,19 +26,48 @@ public class ResponseController {
     @Autowired
     private ResponseService responseService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return null;
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElse(null);
+    }
+    private boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+    private boolean isCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+
     @GetMapping
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<List<ResponseDto>> getAllResponses() {
         try {
-            List<ResponseDto> responses = responseService.getAllResponses();
-            return ResponseEntity.ok(responses);
+            if (isAdmin()) {
+                return ResponseEntity.ok(responseService.getAllResponses());
+            } else if (isCompany()) {
+                User u = getCurrentUser();
+                if (u == null || u.getCompanyId() == null) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+                return ResponseEntity.ok(responseService.getAllResponsesByCompany(u.getCompanyId()));
+            } else {
+                // ROLE_EMPLOYEE (legacy behavior: return all)
+                List<ResponseDto> responses = responseService.getAllResponses();
+                return ResponseEntity.ok(responses);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<ResponseDto> getResponseById(@PathVariable Long id) {
         try {
             Optional<ResponseDto> response = responseService.getResponseById(id);
@@ -45,7 +79,7 @@ public class ResponseController {
     }
 
     @GetMapping("/survey-application/{surveyApplicationId}")
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<List<ResponseDto>> getResponsesBySurveyApplication(@PathVariable Long surveyApplicationId) {
         try {
             List<ResponseDto> responses = responseService.getResponsesBySurveyApplication(surveyApplicationId);
@@ -56,6 +90,7 @@ public class ResponseController {
     }
 
     @GetMapping("/filtered")
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<List<ResponseDto>> getFilteredResponses(
             @RequestParam(required = false) Long employeeId,
             @RequestParam(required = false) Long surveyId) {

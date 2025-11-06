@@ -63,23 +63,56 @@ public class DashboardController {
     // 4. Resumen global de participación por empresa
     // -----------------------------
     @GetMapping("/participation/summary")
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<?> getParticipationSummary() {
         logger.info("[getParticipationSummary] INICIO endpoint global de resumen por empresa");
-        List<Company> companies = companyRepository.findAll();
-        List<CompanyParticipationSummaryDto> summaryList = new ArrayList<>();
-        for (Company company : companies) {
-            Long companyId = company.getId();
-            String companyName = company.getName();
-            int totalEmployees = (int) employeeRepository.findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo).size();
-            // Encuestas completadas: contar aplicaciones de encuesta COMPLETADO para empleados activos
+        if (isAdmin()) {
+            List<Company> companies = companyRepository.findAll();
+            List<CompanyParticipationSummaryDto> summaryList = new ArrayList<>();
+            for (Company company : companies) {
+                Long companyId = company.getId();
+                String companyName = company.getName();
+                int totalEmployees = (int) employeeRepository.findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo).size();
+                // Encuestas completadas: contar aplicaciones de encuesta COMPLETADO para empleados activos
+                int responded = 0;
+                try {
+                    responded = (int) surveyAppRepository.findByCompanySurvey_CompanyId(companyId).stream()
+                        .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
+                        .count();
+                } catch (Exception e) {
+                    logger.warn("[getParticipationSummary] Error contando respondidos para empresa {}: {}", companyId, e.getMessage());
+                }
+                int pending = Math.max(totalEmployees - responded, 0);
+                int percent = (totalEmployees > 0) ? (int) Math.round((responded * 100.0) / totalEmployees) : 0;
+                String status;
+                if (percent >= 85) {
+                    status = "Cumple NOM-035";
+                } else if (percent >= 50) {
+                    status = "En Progreso";
+                } else {
+                    status = "Bajo";
+                }
+                summaryList.add(new CompanyParticipationSummaryDto(companyId, companyName, totalEmployees, responded, pending, percent, status));
+            }
+            return ResponseEntity.ok(summaryList);
+        } else if (isCompany()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null) {
+                logger.info("[getParticipationSummary] COMPANY user sin companyId, acceso denegado");
+                return ResponseEntity.status(403).body("No autorizado");
+            }
+            Company company = companyRepository.findById(myCompanyId).orElse(null);
+            if (company == null) {
+                return ResponseEntity.ok(List.of());
+            }
+            int totalEmployees = (int) employeeRepository.findByCompanyIdAndStatus(myCompanyId, com.example.nom035.entity.Employee.EmployeeStatus.activo).size();
             int responded = 0;
             try {
-                responded = (int) surveyAppRepository.findByCompanySurvey_CompanyId(companyId).stream()
+                responded = (int) surveyAppRepository.findByCompanySurvey_CompanyId(myCompanyId).stream()
                     .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
                     .count();
             } catch (Exception e) {
-                logger.warn("[getParticipationSummary] Error contando respondidos para empresa {}: {}", companyId, e.getMessage());
+                logger.warn("[getParticipationSummary] Error contando respondidos para empresa {}: {}", myCompanyId, e.getMessage());
             }
             int pending = Math.max(totalEmployees - responded, 0);
             int percent = (totalEmployees > 0) ? (int) Math.round((responded * 100.0) / totalEmployees) : 0;
@@ -91,9 +124,12 @@ public class DashboardController {
             } else {
                 status = "Bajo";
             }
-            summaryList.add(new CompanyParticipationSummaryDto(companyId, companyName, totalEmployees, responded, pending, percent, status));
+            CompanyParticipationSummaryDto dto = new CompanyParticipationSummaryDto(myCompanyId, company.getName(), totalEmployees, responded, pending, percent, status);
+            return ResponseEntity.ok(List.of(dto));
+        } else {
+            logger.info("[getParticipationSummary] Usuario sin rol adecuado, acceso denegado");
+            return ResponseEntity.status(403).body("No autorizado");
         }
-        return ResponseEntity.ok(summaryList);
     }
 
     // Helper to get current authenticated User
