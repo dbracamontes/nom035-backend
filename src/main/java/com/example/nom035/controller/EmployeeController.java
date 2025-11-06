@@ -107,7 +107,7 @@ public class EmployeeController {
         } else if (isCompany() || isEmployee()) {
             Long companyId = getCompanyIdForCurrentUser();
             if (companyId == null || emp.getCompany() == null || !emp.getCompany().getId().equals(companyId)) {
-                return null;
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para ver este empleado");
             }
             return EmployeeDto.fromEntity(emp);
         } else {
@@ -138,37 +138,64 @@ public class EmployeeController {
     }
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public EmployeeDto create(@RequestBody Employee employee) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         logger.info("[create] Intentando crear empleado. Usuario autenticado: {}", username);
         logger.info("[create] Authorities: {}", authentication.getAuthorities());
+
+        // If caller is COMPANY role, force company to be the caller's company
         if (!isAdmin()) {
-            logger.warn("[create] Acceso denegado para usuario: {}", username);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para crear empleados");
-        }
-        // Resolve provided company id to a managed entity to avoid transient/nullable issues
-        if (employee.getCompany() != null) {
-            Long cid = employee.getCompany().getId();
-            if (cid == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "company.id is required");
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null) {
+                logger.warn("[create] Usuario de empresa sin companyId: {}", username);
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para crear empleados");
             }
-            Company company = companyService.getCompanyById(cid)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found"));
-            employee.setCompany(company);
+            // If request includes a company, ensure it matches the user's company
+            if (employee.getCompany() != null) {
+                Long cid = employee.getCompany().getId();
+                if (cid == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "company.id is required");
+                }
+                if (!cid.equals(myCompanyId)) {
+                    logger.warn("[create] Usuario intenta crear empleado para otra empresa: {} -> {}", username, cid);
+                    throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No puedes crear empleados para otra empresa");
+                }
+                Company company = companyService.getCompanyById(cid)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found"));
+                employee.setCompany(company);
+            } else {
+                // Set the employee's company to the user's company when not provided
+                Company company = companyService.getCompanyById(myCompanyId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found"));
+                employee.setCompany(company);
+            }
+        } else {
+            // Admin: resolve provided company id to a managed entity (if present)
+            if (employee.getCompany() != null) {
+                Long cid = employee.getCompany().getId();
+                if (cid == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "company.id is required");
+                }
+                Company company = companyService.getCompanyById(cid)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found"));
+                employee.setCompany(company);
+            }
         }
+
         return EmployeeDto.fromEntity(employeeService.saveEmployee(employee));
     }
 
     @PutMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public EmployeeDto update(@PathVariable Long id, @RequestBody Employee employee) {
         Employee existing = employeeService.getEmployeeById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee not found"));
         if (!isAdmin()) {
             Long companyId = getCompanyIdForCurrentUser();
             if (companyId == null || existing.getCompany() == null || !existing.getCompany().getId().equals(companyId)) {
-                return null;
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para modificar este empleado");
             }
         }
         // Only overwrite fields when the request provides them; preserve company if not provided
@@ -193,6 +220,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
     public void delete(@PathVariable Long id) {
         Optional<Employee> empOpt = employeeService.getEmployeeById(id);
         if (empOpt.isEmpty()) return;
@@ -200,7 +228,7 @@ public class EmployeeController {
         if (!isAdmin()) {
             Long companyId = getCompanyIdForCurrentUser();
             if (companyId == null || emp.getCompany() == null || !emp.getCompany().getId().equals(companyId)) {
-                return;
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para eliminar este empleado");
             }
         }
         employeeService.deleteEmployee(id);
