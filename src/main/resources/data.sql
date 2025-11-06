@@ -46,7 +46,8 @@ INSERT INTO survey (id, title, description, guide_type, active, version, base_su
 (2, 'Guía II - Factores de Riesgo Psicosocial', 'Identificación de factores de riesgo psicosocial.', 'II', TRUE, '1.0', NULL, NOW()),
 (3, 'Guía III - Entorno Organizacional', 'Evaluación del entorno organizacional y clima laboral.', 'III', TRUE, '1.0', NULL, NOW()),
 (4, 'Encuesta de Satisfacción', 'Encuesta personalizada de satisfacción laboral.', 'Personalizado', TRUE, '2.0', NULL, NOW()),
-(5, 'Encuesta de Comunicación Interna', 'Evaluación de canales y efectividad de comunicación.', 'Personalizado', TRUE, '2.1', NULL, NOW());
+(5, 'Encuesta de Comunicación Interna', 'Evaluación de canales y efectividad de comunicación.', 'Personalizado', TRUE, '2.1', NULL, NOW()),
+(6, 'Encuesta NOM-035 Integral', 'Cuestionario completo de 73 reactivos del NOM-035.', 'Personalizado', TRUE, '1.0', NULL, NOW());
 
 -- ================================
 -- COMPANY_SURVEY
@@ -198,6 +199,22 @@ INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_facto
 (73, 5, '¿Sus subalternos ignoran las sugerencias que se le hacen para mejorar su trabajo?', 'likert', 16, 'Ignorar sugerencias', 'Liderazgo trabajadores');
 
 -- ================================
+-- ENCUESTA NOM-035 INTEGRAL (73 reactivos combinados)
+-- ================================
+SET @nom035_sort := 0;
+INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_factor, category)
+SELECT 100 + id AS id,
+	   6 AS survey_id,
+	   text,
+	   response_type,
+	   (@nom035_sort := @nom035_sort + 1) AS sort_order,
+	   risk_factor,
+	   category
+FROM question
+WHERE id BETWEEN 1 AND 73
+ORDER BY id;
+
+-- ================================
 -- OPTION_ANSWER
 -- ================================
 INSERT INTO option_answer (id, question_id, text, value, sort_order) VALUES
@@ -224,6 +241,25 @@ INSERT INTO option_answer (id, question_id, text, value, sort_order) VALUES
 (18, 4, 'A veces', 3, 3),
 (19, 4, 'Frecuentemente', 4, 4),
 (20, 4, 'Siempre', 5, 5);
+
+-- Opciones estándar para las preguntas de la encuesta NOM-035 integral
+SET @nom035_option_id := (SELECT COALESCE(MAX(id), 0) FROM option_answer);
+INSERT INTO option_answer (id, question_id, text, value, sort_order)
+SELECT (@nom035_option_id := @nom035_option_id + 1) AS id,
+	   q.id,
+	   opts.text,
+	   opts.value,
+	   opts.sort_order
+FROM question q
+JOIN (
+	SELECT 'Nunca' AS text, 1 AS value, 1 AS sort_order UNION ALL
+	SELECT 'Rara vez', 2 AS value, 2 AS sort_order UNION ALL
+	SELECT 'A veces', 3 AS value, 3 AS sort_order UNION ALL
+	SELECT 'Frecuentemente', 4 AS value, 4 AS sort_order UNION ALL
+	SELECT 'Siempre', 5 AS value, 5 AS sort_order
+) AS opts
+WHERE q.survey_id = 6
+ORDER BY q.id, opts.sort_order;
 
 -- ================================
 -- SURVEY_APPLICATION (explicit IDs for consistency)
