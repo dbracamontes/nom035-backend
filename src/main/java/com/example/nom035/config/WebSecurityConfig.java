@@ -95,14 +95,15 @@ public class WebSecurityConfig {
                     "/api/auth/**",
                     "/api/public/**",
                     "/favicon.ico").permitAll()
-                // Solo ADMIN puede crear, editar o eliminar empleados
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/employees/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/employees/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
-                // ADMIN y COMPANY pueden consultar empleados y empresas
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")
-                .requestMatchers("/api/companies/**", "/api/dashboard/**").hasAnyRole("ADMIN", "COMPANY")
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                // ADMIN y COMPANY pueden crear, editar o eliminar empleados (el controller valida el alcance por empresa)
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/employees", "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/api/employees", "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/employees", "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")
+                // ADMIN, COMPANY (y opcionalmente EMPLOYEE) pueden consultar empleados; el controller aplica filtros
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/employees", "/api/employees/**").hasAnyRole("ADMIN", "COMPANY", "EMPLOYEE")
+                 .requestMatchers("/api/companies/**", "/api/dashboard/**").hasAnyRole("ADMIN", "COMPANY")
+                 .requestMatchers("/api/**").authenticated()
             )
             .httpBasic(Customizer.withDefaults())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

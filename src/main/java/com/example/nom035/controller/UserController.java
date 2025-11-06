@@ -1,4 +1,3 @@
-
 package com.example.nom035.controller;
 
 
@@ -23,6 +22,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private com.example.nom035.repository.UserRepository userRepository;
+
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser(Authentication authentication) {
         if (authentication == null) {
@@ -32,6 +34,16 @@ public class UserController {
         java.util.Map<String, Object> userInfo = new java.util.HashMap<>();
         userInfo.put("username", userDetails.getUsername());
         userInfo.put("roles", userDetails.getAuthorities());
+        // Enrich with persisted user info (companyId, id, email) so frontend can enforce permissions correctly
+        try {
+            java.util.Optional<User> uOpt = userRepository.findByUsername(userDetails.getUsername());
+            if (uOpt.isPresent()) {
+                User u = uOpt.get();
+                userInfo.put("id", u.getId());
+                userInfo.put("email", u.getEmail());
+                userInfo.put("companyId", u.getCompanyId());
+            }
+        } catch (Exception ignored) { }
         return ResponseEntity.ok(userInfo);
     }
 
