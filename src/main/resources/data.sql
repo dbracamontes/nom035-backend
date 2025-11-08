@@ -38,6 +38,26 @@ INSERT INTO employee (id, company_id, name, email, position, department, seniori
 (10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'activo'),
 (11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'activo');
 
+-- Agregar empleados adicionales para TechNova SA (company_id = 1) hasta tener 20 en total
+INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, status) VALUES
+(12, 1, 'Jorge Martínez', 'jorge.martinez@technova.com', 'Backend Developer', 'IT', 4, 'M', 29, 'activo'),
+(13, 1, 'Natalia Reyes', 'natalia.reyes@technova.com', 'Frontend Developer', 'IT', 3, 'F', 27, 'activo'),
+(14, 1, 'Diego Hernández', 'diego.hernandez@technova.com', 'DevOps Engineer', 'IT', 5, 'M', 33, 'activo'),
+(15, 1, 'Valeria Castro', 'valeria.castro@technova.com', 'Product Owner', 'PMO', 6, 'F', 35, 'activo'),
+(16, 1, 'Sebastián Ortiz', 'sebastian.ortiz@technova.com', 'Data Analyst', 'Operations', 2, 'M', 26, 'activo'),
+(17, 1, 'Daniela Rojas', 'daniela.rojas@technova.com', 'UX Designer', 'Design', 4, 'F', 31, 'activo'),
+(18, 1, 'Fernando Álvarez', 'fernando.alvarez@technova.com', 'QA Analyst', 'QA', 3, 'M', 28, 'activo'),
+(19, 1, 'Adriana Méndez', 'adriana.mendez@technova.com', 'Scrum Master', 'PMO', 5, 'F', 34, 'activo'),
+(20, 1, 'Pablo Navarro', 'pablo.navarro@technova.com', 'Support Engineer', 'IT', 2, 'M', 25, 'activo'),
+(21, 1, 'Camila Aguilar', 'camila.aguilar@technova.com', 'HR Specialist', 'HR', 4, 'F', 30, 'activo'),
+(22, 1, 'Rodrigo Vega', 'rodrigo.vega@technova.com', 'Security Engineer', 'IT', 7, 'M', 38, 'activo'),
+(23, 1, 'Andrea Ruiz', 'andrea.ruiz@technova.com', 'Business Analyst', 'Operations', 5, 'F', 32, 'activo'),
+(24, 1, 'Mauricio León', 'mauricio.leon@technova.com', 'Mobile Developer', 'IT', 3, 'M', 29, 'activo'),
+(25, 1, 'Paola Salas', 'paola.salas@technova.com', 'Data Engineer', 'IT', 4, 'F', 33, 'activo'),
+(26, 1, 'Iván Castillo', 'ivan.castillo@technova.com', 'SysAdmin', 'IT', 6, 'M', 36, 'activo'),
+(27, 1, 'Karen Silva', 'karen.silva@technova.com', 'Technical Writer', 'PMO', 3, 'F', 28, 'activo'),
+(28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'activo');
+
 -- ================================
 -- SURVEY
 -- ================================
@@ -280,6 +300,29 @@ INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, 
 (8, 5, 9, NOW(), NULL, 'pendiente', NULL, 'Medio'),
 (9, 5, 10, NOW(), NOW(), 'completado', 95, 'Bajo');
 
+-- Asignar cuestionarios para todos los empleados de TechNova SA (company_id=1)
+-- 16 completados: 2,11,12,13,14,15,16,17,18,19,21,22,24,25,26,27
+-- 4 pendientes: 1 (ya existente), 20,23,28
+INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, completed_at, status, score, risk_level) VALUES
+(10, 1, 11, NOW(), NOW(), 'completado', 82, 'Medio'),
+(11, 1, 12, NOW(), NOW(), 'completado', 87, 'Bajo'),
+(12, 1, 13, NOW(), NOW(), 'completado', 90, 'Bajo'),
+(13, 1, 14, NOW(), NOW(), 'completado', 78, 'Medio'),
+(14, 1, 15, NOW(), NOW(), 'completado', 93, 'Bajo'),
+(15, 1, 16, NOW(), NOW(), 'completado', 75, 'Medio'),
+(16, 1, 17, NOW(), NOW(), 'completado', 88, 'Medio'),
+(17, 1, 18, NOW(), NOW(), 'completado', 84, 'Medio'),
+(18, 1, 19, NOW(), NOW(), 'completado', 91, 'Bajo'),
+(19, 1, 20, NOW(), NULL, 'pendiente', NULL, 'Medio'),
+(20, 1, 21, NOW(), NOW(), 'completado', 86, 'Bajo'),
+(21, 1, 22, NOW(), NOW(), 'completado', 89, 'Bajo'),
+(22, 1, 23, NOW(), NULL, 'pendiente', NULL, 'Medio'),
+(23, 1, 24, NOW(), NOW(), 'completado', 77, 'Medio'),
+(24, 1, 25, NOW(), NOW(), 'completado', 92, 'Bajo'),
+(25, 1, 26, NOW(), NOW(), 'completado', 83, 'Medio'),
+(26, 1, 27, NOW(), NOW(), 'completado', 88, 'Medio'),
+(27, 1, 28, NOW(), NULL, 'pendiente', NULL, 'Medio');
+
 -- ================================
 -- RESPONSE
 -- ================================
@@ -292,4 +335,20 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, valu
 (6, 6, 4, 4, NULL),
 (7, 7, 5, 5, NULL),
 (7, 8, 5, 5, NULL),
-(9, 9, 4, 4, 'Equilibrio adecuado.');
+(9, 9, 4, 4, 'Equilibrio adecuado.'),
+-- Respuestas mínimas para aplicaciones completadas de TechNova SA sin registros previos
+(10, 1, 4, 4, NULL),
+(11, 1, 4, 4, NULL),
+(12, 1, 4, 4, NULL),
+(13, 1, 4, 4, NULL),
+(14, 1, 4, 4, NULL),
+(15, 1, 4, 4, NULL),
+(16, 1, 4, 4, NULL),
+(17, 1, 4, 4, NULL),
+(18, 1, 4, 4, NULL),
+(20, 1, 4, 4, NULL),
+(21, 1, 4, 4, NULL),
+(23, 1, 4, 4, NULL),
+(24, 1, 4, 4, NULL),
+(25, 1, 4, 4, NULL),
+(26, 1, 4, 4, NULL);

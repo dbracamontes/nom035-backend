@@ -283,19 +283,64 @@ public class DashboardController {
         List<Map<String, Object>> participation = new ArrayList<>();
 
         for (CompanySurvey cs : surveys) {
-            // Avoid accessing lazy relationships on detached entities (can cause LazyInitializationException).
-            // Fetch total employees with a repository query and survey applications via repository as well.
-            int totalEmployees = employeeRepository.findByCompanyId(companyId).size();
-        long completed = surveyAppRepository.findByCompanySurveyId(cs.getId()).stream()
-            .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
-            .count();
+            // Total empleados activos
+            int totalEmployees = employeeRepository
+                .findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo)
+                .size();
+            long completed = surveyAppRepository.findByCompanySurveyId(cs.getId()).stream()
+                .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
+                .count();
 
             Map<String, Object> map = new HashMap<>();
             map.put("surveyTitle", cs.getSurvey().getTitle());
             map.put("completionRate", totalEmployees > 0 ? (completed * 100.0 / totalEmployees) : 0);
+            map.put("responded", completed);
+            map.put("pending", Math.max(totalEmployees - (int) completed, 0));
             participation.add(map);
         }
 
         return ResponseEntity.ok(participation);
+    }
+
+    // -----------------------------
+    // 3.1 Resumen canónico de participación por empresa (1 empresa)
+    // -----------------------------
+    @GetMapping("/company/{companyId}/participation/summary")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
+    public ResponseEntity<?> getCompanyParticipationSummary(@PathVariable Long companyId) {
+        if (isAdmin()) {
+            // acceso total
+        } else if (isCompany() || isEmployee()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            if (myCompanyId == null || !myCompanyId.equals(companyId)) {
+                return ResponseEntity.status(403).body("No autorizado");
+            }
+        } else {
+            return ResponseEntity.status(403).body("No autorizado");
+        }
+        Company company = companyRepository.findById(companyId).orElse(null);
+        if (company == null) return ResponseEntity.notFound().build();
+
+        int totalEmployees = employeeRepository
+            .findByCompanyIdAndStatus(companyId, com.example.nom035.entity.Employee.EmployeeStatus.activo)
+            .size();
+        int responded = 0;
+        try {
+            responded = (int) surveyAppRepository.findByCompanySurvey_CompanyId(companyId).stream()
+                .filter(sa -> sa.getStatusEnum() == ApplicationStatus.COMPLETADO)
+                .count();
+        } catch (Exception e) {
+            logger.warn("[getCompanyParticipationSummary] Error contando respondidos para empresa {}: {}", companyId, e.getMessage());
+        }
+        int pending = Math.max(totalEmployees - responded, 0);
+        int percent = (totalEmployees > 0) ? (int) Math.round((responded * 100.0) / totalEmployees) : 0;
+        Map<String, Object> dto = new HashMap<>();
+        dto.put("companyId", companyId);
+        dto.put("companyName", company.getName());
+        dto.put("totalEmployees", totalEmployees);
+        dto.put("responded", responded);
+        dto.put("pending", pending);
+        dto.put("percent", percent);
+        return ResponseEntity.ok(dto);
     }
 }
