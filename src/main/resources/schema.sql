@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `privilege`;
 DROP TABLE IF EXISTS `role_privilege`;
+DROP TABLE IF EXISTS `password_reset_token`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -86,8 +87,12 @@ CREATE TABLE user (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(150),
     company_id BIGINT NULL,
+    employee_id BIGINT NULL,
     enabled BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT fk_user_employee FOREIGN KEY (employee_id)
+        REFERENCES employee(id) ON DELETE SET NULL,
+    UNIQUE KEY uq_user_employee (employee_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== ROLE ========== 
@@ -123,6 +128,19 @@ CREATE TABLE role_privilege (
         REFERENCES `role`(id) ON DELETE CASCADE,
     CONSTRAINT fk_roleprivilege_privilege FOREIGN KEY (privilege_id)
         REFERENCES privilege(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== PASSWORD RESET TOKEN ==========
+CREATE TABLE password_reset_token (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    token VARCHAR(64) NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used BOOLEAN NOT NULL DEFAULT FALSE,
+    used_at DATETIME NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_password_token_user FOREIGN KEY (user_id)
+        REFERENCES `user`(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== QUESTION ==========

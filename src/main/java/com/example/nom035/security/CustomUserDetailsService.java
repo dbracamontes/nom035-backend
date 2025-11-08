@@ -28,6 +28,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         logger.info("[CustomUserDetailsService] Buscando usuario: {}", username);
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isEmpty()) {
+            logger.info("[CustomUserDetailsService] Usuario no encontrado por username, intentando email: {}", username);
+            userOpt = userRepository.findByEmail(username);
+        }
+        if (userOpt.isEmpty()) {
             logger.warn("[CustomUserDetailsService] Usuario no encontrado: {}", username);
             throw new UsernameNotFoundException("Usuario no encontrado: " + username);
         }

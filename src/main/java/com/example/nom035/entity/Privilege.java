@@ -2,6 +2,7 @@ package com.example.nom035.entity;
 
 import jakarta.persistence.*;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Privilege {
@@ -9,6 +10,7 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name; // e.g. VIEW_DASHBOARD, ASSIGN_SURVEY, ANSWER_SURVEY
+    @JsonIgnore
     @ManyToMany(mappedBy = "privileges")
     private Set<Role> roles;
     public Long getId() { return id; }

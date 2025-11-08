@@ -76,11 +76,16 @@ ON DUPLICATE KEY UPDATE name=VALUES(name);
 -- employee: $2a$10$8QwQn6QwQn6QwQn6QwQOeQwQn6QwQn6QwQn6QwQn6QwQn6QwQn6G
 -- Add company_id column value: admin and employee NULL, company -> company_id = 1
 
-INSERT INTO `user` (id, username, password, email, company_id, enabled) VALUES
-	(1, 'admin', 'admin123', 'admin@demo.com', NULL, TRUE),
-	(2, 'company', 'company123', 'company@demo.com', 1, TRUE),
-	(3, 'employee', 'employee123', 'employee@demo.com', NULL, TRUE)
+INSERT INTO `user` (id, username, password, email, company_id, employee_id, enabled) VALUES
+	(1, 'admin', 'admin123', 'admin@demo.com', NULL, NULL, TRUE),
+	(2, 'company', 'company123', 'company@demo.com', 1, NULL, TRUE),
+	(3, 'employee', 'employee123', 'employee@demo.com', NULL, 11, TRUE)
 ON DUPLICATE KEY UPDATE username=VALUES(username);
+
+UPDATE `user` u
+JOIN employee e ON LOWER(u.email) = LOWER(e.email)
+SET u.employee_id = e.id
+WHERE u.email IS NOT NULL AND u.employee_id IS NULL;
 
 
 INSERT INTO user_role (user_id, role_id) VALUES
