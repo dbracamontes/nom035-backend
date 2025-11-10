@@ -53,7 +53,7 @@ public class SurveyApplicationController {
     }
 
     @GetMapping
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public List<SurveyApplicationDto> list() {
         if (isAdmin()) {
             return service.getAll().stream().map(SurveyApplicationDto::fromEntity).collect(Collectors.toList());
@@ -82,18 +82,59 @@ public class SurveyApplicationController {
     }
 
     @GetMapping("/{id}")
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<SurveyApplicationDto> get(@PathVariable Long id) {
         SurveyApplication sa = service.getById(id);
         if (sa == null) return ResponseEntity.notFound().build();
+
+        // Company scoping: only allow companies to access applications of their own company
+        if (isCompany()) {
+            Long myCompanyId = getCompanyIdForCurrentUser();
+            boolean sameCompany = sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany() != null
+                    && sa.getCompanySurvey().getCompany().getId() != null
+                    && sa.getCompanySurvey().getCompany().getId().equals(myCompanyId);
+            if (!sameCompany) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
+        // Employee scoping: only allow an employee to access their own application
+        if (isEmployee()) {
+            com.example.nom035.entity.User currentUser = getCurrentUser();
+            if (currentUser == null || currentUser.getEmail() == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            com.example.nom035.entity.Employee employee = employeeRepository.findByEmail(currentUser.getEmail()).orElse(null);
+            if (employee == null || sa.getEmployee() == null || !employee.getId().equals(sa.getEmployee().getId())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
         return ResponseEntity.ok(SurveyApplicationDto.fromEntity(sa));
     }
 
     @GetMapping("/check")
-    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN"})
+    @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
     public ResponseEntity<SurveyApplicationCheckDto> check(@RequestParam("employeeId") Long employeeId,
                                                            @RequestParam("surveyId") Long surveyId) {
         try {
+            // Company scoping: verify the employee belongs to the same company
+            if (isCompany()) {
+                Long myCompanyId = getCompanyIdForCurrentUser();
+                com.example.nom035.entity.Employee employee = employeeRepository.findById(employeeId).orElse(null);
+                if (employee == null || employee.getCompany() == null || employee.getCompany().getId() == null || !employee.getCompany().getId().equals(myCompanyId)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+
+            // Employee scoping: ensure the requested check is for the current employee
+            if (isEmployee()) {
+                com.example.nom035.entity.User currentUser = getCurrentUser();
+                if (currentUser == null || currentUser.getEmail() == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                com.example.nom035.entity.Employee employee = employeeRepository.findByEmail(currentUser.getEmail()).orElse(null);
+                if (employee == null || employee.getId() == null || !employee.getId().equals(employeeId)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                }
+            }
+
             SurveyApplicationCheckDto dto = service.check(employeeId, surveyId);
             return ResponseEntity.ok(dto);
         } catch (Exception ex) {
