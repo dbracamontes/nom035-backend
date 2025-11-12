@@ -41,6 +41,17 @@ public class Question {
 
     private String riskFactor;
 
+    @Column(name = "survey_title")
+    private String surveyTitle; // denormalized survey title
+
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OptionAnswer> options;
+
+    @PrePersist
+    @PreUpdate
+    private void syncSurveyTitle() {
+        if (survey != null) {
+            this.surveyTitle = survey.getTitle();
+        }
+    }
 }

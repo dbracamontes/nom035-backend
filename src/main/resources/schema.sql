@@ -153,6 +153,7 @@ CREATE TABLE question (
     risk_factor VARCHAR(100),
     category VARCHAR(100),
     guide_type VARCHAR(10),
+    survey_title VARCHAR(200), -- denormalized survey title
     PRIMARY KEY (id),
     CONSTRAINT fk_question_survey FOREIGN KEY (survey_id)
         REFERENCES survey(id) ON DELETE CASCADE

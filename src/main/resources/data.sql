@@ -59,25 +59,17 @@ INSERT INTO employee (id, company_id, name, email, position, department, seniori
 (28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'activo');
 
 -- ================================
--- SURVEY
+-- SURVEY (solo uno: Encuesta NOM-035 Integral ahora id=1)
 -- ================================
 INSERT INTO survey (id, title, description, guide_type, active, version, base_survey_id, created_at) VALUES
-(1, 'Guía I - Condiciones de Trabajo', 'Evaluación de condiciones generales del entorno laboral.', 'I', TRUE, '1.0', NULL, NOW()),
-(2, 'Guía II - Factores de Riesgo Psicosocial', 'Identificación de factores de riesgo psicosocial.', 'II', TRUE, '1.0', NULL, NOW()),
-(3, 'Guía III - Entorno Organizacional', 'Evaluación del entorno organizacional y clima laboral.', 'III', TRUE, '1.0', NULL, NOW()),
-(4, 'Encuesta de Satisfacción', 'Encuesta personalizada de satisfacción laboral.', 'Personalizado', TRUE, '2.0', NULL, NOW()),
-(5, 'Encuesta de Comunicación Interna', 'Evaluación de canales y efectividad de comunicación.', 'Personalizado', TRUE, '2.1', NULL, NOW()),
-(6, 'Encuesta NOM-035 Integral', 'Cuestionario completo de 73 reactivos del NOM-035.', 'Personalizado', TRUE, '1.0', NULL, NOW());
+(1, 'Encuesta NOM-035 Integral', 'Cuestionario completo de 73 reactivos del NOM-035.', 'Personalizado', TRUE, '1.0', NULL, NOW());
 
 -- ================================
--- COMPANY_SURVEY
+-- COMPANY_SURVEY (only TechNova SA)
 -- ================================
+DELETE FROM company_survey; 
 INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, company_version, status, completion_rate, notes) VALUES
-(1, 1, 1, NOW(), '2025-12-01', 'v1', 'activo', 85.00, 'Primera aplicación del año'),
-(2, 2, 2, NOW(), '2025-11-15', 'v1', 'activo', 70.00, 'Evaluación semestral'),
-(3, 3, 3, NOW(), '2025-10-30', 'v2', 'activo', 90.00, 'Actualización de versión'),
-(4, 4, 4, NOW(), '2025-12-31', 'v1', 'activo', 75.00, 'Primera aplicación'),
-(5, 5, 5, NOW(), '2025-12-31', 'v1', 'activo', 80.00, 'Evaluación piloto');
+(1, 1, 1, NOW(), '2025-12-31', 'v1', 'activo', 0.00, 'Aplicación inicial pendiente');
 
 -- ================================
 -- ROLES Y USUARIOS PARA SPRING SECURITY
@@ -115,240 +107,124 @@ INSERT INTO user_role (user_id, role_id) VALUES
 ON DUPLICATE KEY UPDATE role_id=VALUES(role_id);
 
 -- ================================
--- QUESTION
+-- QUESTION (todas asociadas al único survey id=1)
 -- ================================
-INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_factor, category) VALUES
--- Condiciones del ambiente de trabajo
-(1, 1, '¿El espacio donde trabaja le permite realizar sus tareas de forma higiénica y segura?', 'likert', 1, 'Condiciones físicas', 'Ambiente'),
-(2, 1, '¿Su trabajo le exige hacer mucho esfuerzo físico?', 'likert', 2, 'Esfuerzo físico', 'Ambiente'),
-(3, 1, '¿Le preocupa sufrir un accidente en su trabajo como consecuencia del espacio donde lo realiza?', 'likert', 3, 'Seguridad', 'Ambiente'),
-(4, 1, '¿Considera que en su trabajo se aplican las normas de seguridad y salud laboral?', 'likert', 4, 'Normas de seguridad', 'Ambiente'),
-
--- Carga de trabajo
-(5, 1, '¿Debido al alto volumen de trabajo tiene que disponer de horas adicionales a su turno habitual?', 'likert', 5, 'Sobrecarga', 'Carga'),
-(6, 1, '¿Debido al alto volumen de trabajo no puede disponer de una pausa durante su jornada habitual?', 'likert', 6, 'Pausas', 'Carga'),
-(7, 1, '¿Cree que es necesario llevar un ritmo de trabajo mas acelerado para cumplir con sus actividades cotidianas?', 'likert', 7, 'Ritmo', 'Carga'),
-(8, 1, '¿Su trabajo le exige que esta muy concentrado en sus labores?', 'likert', 8, 'Concentración', 'Carga'),
-(9, 1, '¿Su trabajo requiere que memorice una gran cantidad de información?', 'likert', 9, 'Memoria', 'Carga'),
-(10, 1, '¿En su trabajo tiene que tomar decisiones complicadas de forma rápida?', 'likert', 10, 'Decisiones', 'Carga'),
-(11, 1, '¿Su trabajo le exige que atienda varios asuntos al mismo tiempo?', 'likert', 11, 'Multitarea', 'Carga'),
-(12, 1, '¿En su trabajo usted es responsable de objetos de un alto valor monetario?', 'likert', 12, 'Responsabilidad económica', 'Carga'),
-(13, 1, '¿Es responsable ante sus superiores de los resultados que obtenga todo su equipo o área de trabajo?', 'likert', 13, 'Responsabilidad grupal', 'Carga'),
-
--- Falta de control sobre el trabajo
-(14, 2, '¿Considera que dentro de sus actividades diarias realiza alguna que sea fuera de su área de trabajo?', 'likert', 1, 'Actividades ajenas', 'Control'),
-(15, 2, '¿Recibe ordenes contradictorias en su trabajo?', 'likert', 2, 'Órdenes contradictorias', 'Control'),
-(16, 2, '¿Considera que realiza acciones innecesarias en el desarrollo de su trabajo?', 'likert', 3, 'Acciones innecesarias', 'Control'),
-
--- Jornada de trabajo
-(17, 2, '¿Trabaja horas extraordinarias mas de tres veces por semana?', 'likert', 4, 'Horas extra', 'Jornada'),
-(18, 2, '¿Su trabajo le exige laborar en días de descanso, festivos o fines de semana?', 'likert', 5, 'Días festivos', 'Jornada'),
-(19, 2, '¿Considera que el tiempo de trabajo es excesivo y no le permite desarrollar su vida personal?', 'likert', 6, 'Equilibrio vida-trabajo', 'Jornada'),
-(20, 2, '¿Atiende usted asuntos laborales cuando se encuentra en casa?', 'likert', 7, 'Trabajo en casa', 'Jornada'),
-(21, 2, '¿Piensa en actividades personales cuando esta en el trabajo?', 'likert', 8, 'Distracción personal', 'Jornada'),
-(22, 2, '¿Cree usted que sus responsabilidades familiares o personales afectan su trabajo?', 'likert', 9, 'Interferencia familiar', 'Jornada'),
-
--- Interferencia en la relación trabajo-familia
-(23, 2, '¿Su trabajo le permite que desarrolle nuevas habilidades?', 'likert', 10, 'Desarrollo de habilidades', 'Desarrollo'),
-(24, 2, '¿En su trabajo puede aspirar a un mejor puesto?', 'likert', 11, 'Promoción', 'Desarrollo'),
-(25, 2, '¿Durante su jornada de trabajo puede tomar pausas cuando lo necesite?', 'likert', 12, 'Pausas necesarias', 'Autonomía'),
-(26, 2, '¿Puede decidir que trabajo realiza y que trabajo no durante su jornada?', 'likert', 13, 'Decisión de tareas', 'Autonomía'),
-(27, 2, '¿Puede manejar la velocidad a la cual realiza su trabajo?', 'likert', 14, 'Velocidad de trabajo', 'Autonomía'),
-(28, 2, '¿Puede decidir el orden en el cual realizar sus tareas cotidianas?', 'likert', 15, 'Orden de tareas', 'Autonomía'),
-
--- Liderazgo negativo y relaciones negativas en el trabajo
-(29, 2, '¿Los cambios en el trabajo dificulta sus labores cotidianas?', 'likert', 16, 'Cambios laborales', 'Cambio'),
-(30, 2, '¿Con frecuencia se presentan cambios repentinos los cuales afectan en la realización de sus actividades?', 'likert', 17, 'Cambios repentinos', 'Cambio'),
-(31, 2, '¿Cuándo se presenta oportunidad de cambio en el trabajo, toman en cuenta sus ideas/aportaciones?', 'likert', 18, 'Participación en cambios', 'Participación'),
-
--- Funciones del puesto
-(32, 3, '¿Le informan con claridad cuales son sus funciones?', 'likert', 1, 'Claridad de funciones', 'Funciones'),
-(33, 3, '¿Se le explica con claridad los resultados que debe obtener en su trabajo?', 'likert', 2, 'Claridad de resultados', 'Funciones'),
-(34, 3, '¿Se le explica con claridad el objetivo de su trabajo?', 'likert', 3, 'Claridad de objetivos', 'Funciones'),
-(35, 3, '¿Le indican a quien debe dirigirse para resolver sus problemas o asuntos de trabajo?', 'likert', 4, 'Jerarquía clara', 'Funciones'),
-
--- Capacitación
-(36, 3, '¿Le permiten asistir a capacitaciones relacionadas con su trabajo?', 'likert', 5, 'Acceso a capacitación', 'Capacitación'),
-(37, 3, '¿Recibe capacitación útil para hacer bien su trabajo?', 'likert', 6, 'Utilidad de capacitación', 'Capacitación'),
-
--- Participación y manejo del cambio
-(38, 3, '¿Su jefe le ayuda a organizar mejor su trabajo?', 'likert', 7, 'Organización del jefe', 'Liderazgo'),
-(39, 3, '¿Su jefe tiene en cuenta sus puntos de vista y opiniones?', 'likert', 8, 'Consideración del jefe', 'Liderazgo'),
-(40, 3, '¿Su jefe le comunica a tiempo la información relacionada con su trabajo?', 'likert', 9, 'Comunicación del jefe', 'Liderazgo'),
-(41, 3, '¿Su jefe le da orientación suficiente para realizar su trabajo adecuadamente?', 'likert', 10, 'Orientación del jefe', 'Liderazgo'),
-(42, 3, '¿Su jefe le ayuda a solucionar los problemas que se le presentan en el trabajo?', 'likert', 11, 'Apoyo del jefe', 'Liderazgo'),
-
--- Relaciones en el trabajo
-(43, 3, '¿Confía en sus compañeros de trabajo?', 'likert', 12, 'Confianza en compañeros', 'Relaciones'),
-(44, 3, '¿Entre compañeros logran solucionar los problemas de trabajo de una forma respetuosa?', 'likert', 13, 'Solución respetuosa', 'Relaciones'),
-(45, 3, '¿En su trabajo le hacen sentir parte del grupo?', 'likert', 14, 'Pertenencia al grupo', 'Relaciones'),
-(46, 3, '¿Recibe ayuda de sus compañeros cuando tiene que realizar un trabajo en equipo?', 'likert', 15, 'Ayuda en equipo', 'Relaciones'),
-(47, 3, '¿Sus compañeros de trabajo le ayudan cuando tiene dificultades?', 'likert', 16, 'Ayuda en dificultades', 'Relaciones'),
-
--- Retroalimentación del desempeño
-(48, 4, '¿Le informan sobre lo que hace bien o mal en el trabajo?', 'likert', 1, 'Retroalimentación', 'Desempeño'),
-(49, 4, '¿La forma como le evalúan en su centro de trabajo le ayuda a mejorar su desempeño?', 'likert', 2, 'Evaluación constructiva', 'Desempeño'),
-
--- Reconocimiento del desempeño
-(50, 4, '¿En su centro de trabajo le pagan a tiempo su salario?', 'likert', 3, 'Pago puntual', 'Reconocimiento'),
-(51, 4, '¿El pago que recibe es el que merece por el trabajo realizado?', 'likert', 4, 'Pago justo', 'Reconocimiento'),
-(52, 4, '¿Al obtener los resultados esperados de su trabajo le reconocen o recompensan?', 'likert', 5, 'Recompensas', 'Reconocimiento'),
-(53, 4, '¿Quién realiza bien el trabajo puede crecer laboralmente dentro de su centro de trabajo?', 'likert', 6, 'Crecimiento laboral', 'Reconocimiento'),
-
--- Insuficiente sentido de pertenencia e inestabilidad
-(54, 4, '¿Considera que su trabajo es estable?', 'likert', 7, 'Estabilidad laboral', 'Pertenencia'),
-(55, 4, '¿Existe continua rotación de personal en su trabajo?', 'likert', 8, 'Rotación de personal', 'Pertenencia'),
-(56, 4, '¿Siente orgullo de laborar en este centro de trabajo?', 'likert', 9, 'Orgullo laboral', 'Pertenencia'),
-(57, 4, '¿Se siente comprometido con su trabajo?', 'likert', 10, 'Compromiso laboral', 'Pertenencia'),
-
--- Violencia
-(58, 5, '¿En su trabajo puede expresarse libremente sin interrupciones?', 'likert', 1, 'Libertad de expresión', 'Violencia'),
-(59, 5, '¿Recibe constantemente críticas sobre su trabajo o sobre su persona?', 'likert', 2, 'Críticas constantes', 'Violencia'),
-(60, 5, '¿Recibe burlas, calumnias, difamaciones o humillaciones en su trabajo?', 'likert', 3, 'Burlas y humillaciones', 'Violencia'),
-(61, 5, '¿Ignoran su presencia o es excluido de las reuniones de trabajo y toma de decisiones?', 'likert', 4, 'Exclusión social', 'Violencia'),
-(62, 5, '¿Se manipulan las situaciones de trabajo para hacerle parecer un mal trabajador?', 'likert', 5, 'Manipulación laboral', 'Violencia'),
-(63, 5, '¿Sus éxitos laborales son ignorados y atribuidos a otros trabajadores?', 'likert', 6, 'Robo de méritos', 'Violencia'),
-(64, 5, '¿Sus oportunidades de tener un ascenso o mejora laboral son bloqueadas o impedidas?', 'likert', 7, 'Bloqueo de ascensos', 'Violencia'),
-(65, 5, '¿Ha presenciado actos de violencia en su centro de trabajo?', 'likert', 8, 'Violencia presenciada', 'Violencia'),
-
--- Factores propios de la actividad
-(66, 5, '¿Atiende a clientes o usuarios muy enojados?', 'likert', 9, 'Clientes enojados', 'Actividad'),
-(67, 5, '¿Su trabajo le exige atender a personas muy necesitadas de ayuda o enfermas?', 'likert', 10, 'Personas necesitadas', 'Actividad'),
-(68, 5, '¿Para hacer su trabajo debe demostrar sentimientos distintos a los suyos?', 'likert', 11, 'Trabajo emocional', 'Actividad'),
-(69, 5, '¿Su trabajo le exige atender situaciones de violencia?', 'likert', 12, 'Situaciones de violencia', 'Actividad'),
-
--- Liderazgo de los trabajadores
-(70, 5, '¿Sus subalternos comunican tarde los asuntos de trabajo?', 'likert', 13, 'Comunicación tardía subalternos', 'Liderazgo trabajadores'),
-(71, 5, '¿Sus subalternos dificultan el logro de los objetivos de trabajo?', 'likert', 14, 'Obstaculización objetivos', 'Liderazgo trabajadores'),
-(72, 5, '¿Sus subalternos cooperan poco en las actividades cotidianas cuando se les requiere?', 'likert', 15, 'Falta de cooperación', 'Liderazgo trabajadores'),
-(73, 5, '¿Sus subalternos ignoran las sugerencias que se le hacen para mejorar su trabajo?', 'likert', 16, 'Ignorar sugerencias', 'Liderazgo trabajadores');
+DELETE FROM question; -- asegurar limpieza
+INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_factor, category, survey_title) VALUES
+(1, 1, '¿El espacio donde trabaja le permite realizar sus tareas de forma higiénica y segura?', 'likert', 1, 'Condiciones físicas', 'Ambiente', 'Guía I - Condiciones de Trabajo'),
+(2, 1, '¿Su trabajo le exige hacer mucho esfuerzo físico?', 'likert', 2, 'Esfuerzo físico', 'Ambiente', 'Guía I - Condiciones de Trabajo'),
+(3, 1, '¿Le preocupa sufrir un accidente en su trabajo como consecuencia del espacio donde lo realiza?', 'likert', 3, 'Seguridad', 'Ambiente', 'Guía I - Condiciones de Trabajo'),
+(4, 1, '¿Considera que en su trabajo se aplican las normas de seguridad y salud laboral?', 'likert', 4, 'Normas de seguridad', 'Ambiente', 'Guía I - Condiciones de Trabajo'),
+(5, 1, '¿Debido al alto volumen de trabajo tiene que disponer de horas adicionales a su turno habitual?', 'likert', 5, 'Sobrecarga', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(6, 1, '¿Debido al alto volumen de trabajo no puede disponer de una pausa durante su jornada habitual?', 'likert', 6, 'Pausas', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(7, 1, '¿Cree que es necesario llevar un ritmo de trabajo mas acelerado para cumplir con sus actividades cotidianas?', 'likert', 7, 'Ritmo', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(8, 1, '¿Su trabajo le exige que esta muy concentrado en sus labores?', 'likert', 8, 'Concentración', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(9, 1, '¿Su trabajo requiere que memorice una gran cantidad de información?', 'likert', 9, 'Memoria', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(10,1, '¿En su trabajo tiene que tomar decisiones complicadas de forma rápida?', 'likert', 10, 'Decisiones', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(11,1, '¿Su trabajo le exige que atienda varios asuntos al mismo tiempo?', 'likert', 11, 'Multitarea', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(12,1, '¿En su trabajo usted es responsable de objetos de un alto valor monetario?', 'likert', 12, 'Responsabilidad económica', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(13,1, '¿Es responsable ante sus superiores de los resultados que obtenga todo su equipo o área de trabajo?', 'likert', 13, 'Responsabilidad grupal', 'Carga', 'Guía I - Condiciones de Trabajo'),
+(14,1, '¿Considera que dentro de sus actividades diarias realiza alguna que sea fuera de su área de trabajo?', 'likert', 14, 'Actividades ajenas', 'Control', 'Guía II - Factores de Riesgo Psicosocial'),
+(15,1, '¿Recibe ordenes contradictorias en su trabajo?', 'likert', 15, 'Órdenes contradictorias', 'Control', 'Guía II - Factores de Riesgo Psicosocial'),
+(16,1, '¿Considera que realiza acciones innecesarias en el desarrollo de su trabajo?', 'likert', 16, 'Acciones innecesarias', 'Control', 'Guía II - Factores de Riesgo Psicosocial'),
+(17,1, '¿Trabaja horas extraordinarias mas de tres veces por semana?', 'likert', 17, 'Horas extra', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(18,1, '¿Su trabajo le exige laborar en días de descanso, festivos o fines de semana?', 'likert', 18, 'Días festivos', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(19,1, '¿Considera que el tiempo de trabajo es excesivo y no le permite desarrollar su vida personal?', 'likert', 19, 'Equilibrio vida-trabajo', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(20,1, '¿Atiende usted asuntos laborales cuando se encuentra en casa?', 'likert', 20, 'Trabajo en casa', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(21,1, '¿Piensa en actividades personales cuando esta en el trabajo?', 'likert', 21, 'Distracción personal', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(22,1, '¿Cree usted que sus responsabilidades familiares o personales afectan su trabajo?', 'likert', 22, 'Interferencia familiar', 'Jornada', 'Guía II - Factores de Riesgo Psicosocial'),
+(23,1, '¿Su trabajo le permite que desarrolle nuevas habilidades?', 'likert', 23, 'Desarrollo de habilidades', 'Desarrollo', 'Guía II - Factores de Riesgo Psicosocial'),
+(24,1, '¿En su trabajo puede aspirar a un mejor puesto?', 'likert', 24, 'Promoción', 'Desarrollo', 'Guía II - Factores de Riesgo Psicosocial'),
+(25,1, '¿Durante su jornada de trabajo puede tomar pausas cuando lo necesite?', 'likert', 25, 'Pausas necesarias', 'Autonomía', 'Guía II - Factores de Riesgo Psicosocial'),
+(26,1, '¿Puede decidir que trabajo realiza y que trabajo no durante su jornada?', 'likert', 26, 'Decisión de tareas', 'Autonomía', 'Guía II - Factores de Riesgo Psicosocial'),
+(27,1, '¿Puede manejar la velocidad a la cual realiza su trabajo?', 'likert', 27, 'Velocidad de trabajo', 'Autonomía', 'Guía II - Factores de Riesgo Psicosocial'),
+(28,1, '¿Puede decidir el orden en el cual realizar sus tareas cotidianas?', 'likert', 28, 'Orden de tareas', 'Autonomía', 'Guía II - Factores de Riesgo Psicosocial'),
+(29,1, '¿Los cambios en el trabajo dificulta sus labores cotidianas?', 'likert', 29, 'Cambios laborales', 'Cambio', 'Guía II - Factores de Riesgo Psicosocial'),
+(30,1, '¿Con frecuencia se presentan cambios repentinos los cuales afectan en la realización de sus actividades?', 'likert', 30, 'Cambios repentinos', 'Cambio', 'Guía II - Factores de Riesgo Psicosocial'),
+(31,1, '¿Cuándo se presenta oportunidad de cambio en el trabajo, toman en cuenta sus ideas/aportaciones?', 'likert', 31, 'Participación en cambios', 'Participación', 'Guía II - Factores de Riesgo Psicosocial'),
+(32,1, '¿Le informan con claridad cuales son sus funciones?', 'likert', 32, 'Claridad de funciones', 'Funciones', 'Guía III - Entorno Organizacional'),
+(33,1, '¿Se le explica con claridad los resultados que debe obtener en su trabajo?', 'likert', 33, 'Claridad de resultados', 'Funciones', 'Guía III - Entorno Organizacional'),
+(34,1, '¿Se le explica con claridad el objetivo de su trabajo?', 'likert', 34, 'Claridad de objetivos', 'Funciones', 'Guía III - Entorno Organizacional'),
+(35,1, '¿Le indican a quien debe dirigirse para resolver sus problemas o asuntos de trabajo?', 'likert', 35, 'Jerarquía clara', 'Funciones', 'Guía III - Entorno Organizacional'),
+(36,1, '¿Le permiten asistir a capacitaciones relacionadas con su trabajo?', 'likert', 36, 'Acceso a capacitación', 'Capacitación', 'Guía III - Entorno Organizacional'),
+(37,1, '¿Recibe capacitación útil para hacer bien su trabajo?', 'likert', 37, 'Utilidad de capacitación', 'Capacitación', 'Guía III - Entorno Organizacional'),
+(38,1, '¿Su jefe le ayuda a organizar mejor su trabajo?', 'likert', 38, 'Organización del jefe', 'Liderazgo', 'Guía III - Entorno Organizacional'),
+(39,1, '¿Su jefe tiene en cuenta sus puntos de vista y opiniones?', 'likert', 39, 'Consideración del jefe', 'Liderazgo', 'Guía III - Entorno Organizacional'),
+(40,1, '¿Su jefe le comunica a tiempo la información relacionada con su trabajo?', 'likert', 40, 'Comunicación del jefe', 'Liderazgo', 'Guía III - Entorno Organizacional'),
+(41,1, '¿Su jefe le da orientación suficiente para realizar su trabajo adecuadamente?', 'likert', 41, 'Orientación del jefe', 'Liderazgo', 'Guía III - Entorno Organizacional'),
+(42,1, '¿Su jefe le ayuda a solucionar los problemas que se le presentan en el trabajo?', 'likert', 42, 'Apoyo del jefe', 'Liderazgo', 'Guía III - Entorno Organizacional'),
+(43,1, '¿Confía en sus compañeros de trabajo?', 'likert', 43, 'Confianza en compañeros', 'Relaciones', 'Guía III - Entorno Organizacional'),
+(44,1, '¿Entre compañeros logran solucionar los problemas de trabajo de una forma respetuosa?', 'likert', 44, 'Solución respetuosa', 'Relaciones', 'Guía III - Entorno Organizacional'),
+(45,1, '¿En su trabajo le hacen sentir parte del grupo?', 'likert', 45, 'Pertenencia al grupo', 'Relaciones', 'Guía III - Entorno Organizacional'),
+(46,1, '¿Recibe ayuda de sus compañeros cuando tiene que realizar un trabajo en equipo?', 'likert', 46, 'Ayuda en equipo', 'Relaciones', 'Guía III - Entorno Organizacional'),
+(47,1, '¿Sus compañeros de trabajo le ayudan cuando tiene dificultades?', 'likert', 47, 'Ayuda en dificultades', 'Relaciones', 'Guía III - Entorno Organizacional'),
+(48,1, '¿Le informan sobre lo que hace bien o mal en el trabajo?', 'likert', 48, 'Retroalimentación', 'Desempeño', 'Encuesta de Satisfacción'),
+(49,1, '¿La forma como le evalúan en su centro de trabajo le ayuda a mejorar su desempeño?', 'likert', 49, 'Evaluación constructiva', 'Desempeño', 'Encuesta de Satisfacción'),
+(50,1, '¿En su centro de trabajo le pagan a tiempo su salario?', 'likert', 50, 'Pago puntual', 'Reconocimiento', 'Encuesta de Satisfacción'),
+(51,1, '¿El pago que recibe es el que merece por el trabajo realizado?', 'likert', 51, 'Pago justo', 'Reconocimiento', 'Encuesta de Satisfacción'),
+(52,1, '¿Al obtener los resultados esperados de su trabajo le reconocen o recompensan?', 'likert', 52, 'Recompensas', 'Reconocimiento', 'Encuesta de Satisfacción'),
+(53,1, '¿Quién realiza bien el trabajo puede crecer laboralmente dentro de su centro de trabajo?', 'likert', 53, 'Crecimiento laboral', 'Reconocimiento', 'Encuesta de Satisfacción'),
+(54,1, '¿Considera que su trabajo es estable?', 'likert', 54, 'Estabilidad laboral', 'Pertenencia', 'Encuesta de Satisfacción'),
+(55,1, '¿Existe continua rotación de personal en su trabajo?', 'likert', 55, 'Rotación de personal', 'Pertenencia', 'Encuesta de Satisfacción'),
+(56,1, '¿Siente orgullo de laborar en este centro de trabajo?', 'likert', 56, 'Orgullo laboral', 'Pertenencia', 'Encuesta de Satisfacción'),
+(57,1, '¿Se siente comprometido con su trabajo?', 'likert', 57, 'Compromiso laboral', 'Pertenencia', 'Encuesta de Satisfacción'),
+(58,1, '¿En su trabajo puede expresarse libremente sin interrupciones?', 'likert', 58, 'Libertad de expresión', 'Violencia', 'Encuesta de Comunicación Interna'),
+(59,1, '¿Recibe constantemente críticas sobre su trabajo o sobre su persona?', 'likert', 59, 'Críticas constantes', 'Violencia', 'Encuesta de Comunicación Interna'),
+(60,1, '¿Recibe burlas, calumnias, difamaciones o humillaciones en su trabajo?', 'likert', 60, 'Burlas y humillaciones', 'Violencia', 'Encuesta de Comunicación Interna'),
+(61,1, '¿Ignoran su presencia o es excluido de las reuniones de trabajo y toma de decisiones?', 'likert', 61, 'Exclusión social', 'Violencia', 'Encuesta de Comunicación Interna'),
+(62,1, '¿Se manipulan las situaciones de trabajo para hacerle parecer un mal trabajador?', 'likert', 62, 'Manipulación laboral', 'Violencia', 'Encuesta de Comunicación Interna'),
+(63,1, '¿Sus éxitos laborales son ignorados y atribuidos a otros trabajadores?', 'likert', 63, 'Robo de méritos', 'Violencia', 'Encuesta de Comunicación Interna'),
+(64,1, '¿Sus oportunidades de tener un ascenso o mejora laboral son bloqueadas o impedidas?', 'likert', 64, 'Bloqueo de ascensos', 'Violencia', 'Encuesta de Comunicación Interna'),
+(65,1, '¿Ha presenciado actos de violencia en su centro de trabajo?', 'likert', 65, 'Violencia presenciada', 'Violencia', 'Encuesta de Comunicación Interna'),
+(66,1, '¿Atiende a clientes o usuarios muy enojados?', 'likert', 66, 'Clientes enojados', 'Actividad', 'Encuesta de Comunicación Interna'),
+(67,1, '¿Su trabajo le exige atender a personas muy necesitadas de ayuda o enfermas?', 'likert', 67, 'Personas necesitadas', 'Actividad', 'Encuesta de Comunicación Interna'),
+(68,1, '¿Para hacer su trabajo debe demostrar sentimientos distintos a los suyos?', 'likert', 68, 'Trabajo emocional', 'Actividad', 'Encuesta de Comunicación Interna'),
+(69,1, '¿Su trabajo le exige atender situaciones de violencia?', 'likert', 69, 'Situaciones de violencia', 'Actividad', 'Encuesta de Comunicación Interna'),
+(70,1, '¿Sus subalternos comunican tarde los asuntos de trabajo?', 'likert', 70, 'Comunicación tardía subalternos', 'Liderazgo trabajadores', 'Encuesta de Comunicación Interna'),
+(71,1, '¿Sus subalternos dificultan el logro de los objetivos de trabajo?', 'likert', 71, 'Obstaculización objetivos', 'Liderazgo trabajadores', 'Encuesta de Comunicación Interna'),
+(72,1, '¿Sus subalternos cooperan poco en las actividades cotidianas cuando se les requiere?', 'likert', 72, 'Falta de cooperación', 'Liderazgo trabajadores', 'Encuesta de Comunicación Interna'),
+(73,1, '¿Sus subalternos ignoran las sugerencias que se le hacen para mejorar su trabajo?', 'likert', 73, 'Ignorar sugerencias', 'Liderazgo trabajadores', 'Encuesta de Comunicación Interna');
 
 -- ================================
--- ENCUESTA NOM-035 INTEGRAL (73 reactivos combinados)
--- ================================
-SET @nom035_sort := 0;
-INSERT INTO question (id, survey_id, text, response_type, sort_order, risk_factor, category)
-SELECT 100 + id AS id,
-	   6 AS survey_id,
-	   text,
-	   response_type,
-	   (@nom035_sort := @nom035_sort + 1) AS sort_order,
-	   risk_factor,
-	   category
-FROM question
-WHERE id BETWEEN 1 AND 73
-ORDER BY id;
-
--- ================================
--- OPTION_ANSWER
--- ================================
-INSERT INTO option_answer (id, question_id, text, value, sort_order) VALUES
-(1, 1, 'Nunca', 1, 1),
-(2, 1, 'Rara vez', 2, 2),
-(3, 1, 'A veces', 3, 3),
-(4, 1, 'Frecuentemente', 4, 4),
-(5, 1, 'Siempre', 5, 5),
-
-(6, 2, 'Nunca', 1, 1),
-(7, 2, 'Rara vez', 2, 2),
-(8, 2, 'A veces', 3, 3),
-(9, 2, 'Frecuentemente', 4, 4),
-(10, 2, 'Siempre', 5, 5),
-
-(11, 3, 'Nunca', 1, 1),
-(12, 3, 'Rara vez', 2, 2),
-(13, 3, 'A veces', 3, 3),
-(14, 3, 'Frecuentemente', 4, 4),
-(15, 3, 'Siempre', 5, 5),
-
-(16, 4, 'Nunca', 1, 1),
-(17, 4, 'Rara vez', 2, 2),
-(18, 4, 'A veces', 3, 3),
-(19, 4, 'Frecuentemente', 4, 4),
-(20, 4, 'Siempre', 5, 5);
-
--- Opciones estándar para las preguntas de la encuesta NOM-035 integral
-SET @nom035_option_id := (SELECT COALESCE(MAX(id), 0) FROM option_answer);
+-- OPTION_ANSWER (rebuild deterministically for all 73 questions)
+DELETE FROM option_answer;
 INSERT INTO option_answer (id, question_id, text, value, sort_order)
-SELECT (@nom035_option_id := @nom035_option_id + 1) AS id,
-	   q.id,
-	   opts.text,
-	   opts.value,
-	   opts.sort_order
+SELECT ((q.id - 1) * 5 + o.sort_order) AS id,
+       q.id,
+       o.text,
+       o.value,
+       o.sort_order
 FROM question q
 JOIN (
-	SELECT 'Nunca' AS text, 1 AS value, 1 AS sort_order UNION ALL
-	SELECT 'Rara vez', 2 AS value, 2 AS sort_order UNION ALL
-	SELECT 'A veces', 3 AS value, 3 AS sort_order UNION ALL
-	SELECT 'Frecuentemente', 4 AS value, 4 AS sort_order UNION ALL
-	SELECT 'Siempre', 5 AS value, 5 AS sort_order
-) AS opts
-WHERE q.survey_id = 6
-ORDER BY q.id, opts.sort_order;
+  SELECT 'Nunca'  AS text, 1 AS value, 1 AS sort_order UNION ALL
+  SELECT 'Rara vez',        2 AS value, 2 AS sort_order UNION ALL
+  SELECT 'A veces',         3 AS value, 3 AS sort_order UNION ALL
+  SELECT 'Frecuentemente',  4 AS value, 4 AS sort_order UNION ALL
+  SELECT 'Siempre',         5 AS value, 5 AS sort_order
+) o
+ORDER BY q.id, o.sort_order;
 
 -- ================================
--- SURVEY_APPLICATION (explicit IDs for consistency)
+-- SURVEY_APPLICATION (all TechNova SA employees, pending & unanswered)
 -- ================================
 INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, completed_at, status, score, risk_level) VALUES
-(1, 1, 1, NOW(), NULL, 'pendiente', NULL, 'Medio'),
-(2, 1, 2, NOW(), NOW(), 'completado', 85, 'Bajo'),
-(3, 2, 3, NOW(), NULL, 'pendiente', NULL, 'Medio'),
-(4, 3, 4, NOW(), NOW(), 'completado', 92, 'Bajo'),
-(5, 3, 5, NOW(), NULL, 'pendiente', NULL, 'Alto'),
-(6, 4, 7, NOW(), NOW(), 'completado', 88, 'Medio'),
-(7, 4, 8, NOW(), NOW(), 'completado', 90, 'Bajo'),
-(8, 5, 9, NOW(), NULL, 'pendiente', NULL, 'Medio'),
-(9, 5, 10, NOW(), NOW(), 'completado', 95, 'Bajo');
-
--- Asignar cuestionarios para todos los empleados de TechNova SA (company_id=1)
--- 16 completados: 2,11,12,13,14,15,16,17,18,19,21,22,24,25,26,27
--- 4 pendientes: 1 (ya existente), 20,23,28
-INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, completed_at, status, score, risk_level) VALUES
-(10, 1, 11, NOW(), NOW(), 'completado', 82, 'Medio'),
-(11, 1, 12, NOW(), NOW(), 'completado', 87, 'Bajo'),
-(12, 1, 13, NOW(), NOW(), 'completado', 90, 'Bajo'),
-(13, 1, 14, NOW(), NOW(), 'completado', 78, 'Medio'),
-(14, 1, 15, NOW(), NOW(), 'completado', 93, 'Bajo'),
-(15, 1, 16, NOW(), NOW(), 'completado', 75, 'Medio'),
-(16, 1, 17, NOW(), NOW(), 'completado', 88, 'Medio'),
-(17, 1, 18, NOW(), NOW(), 'completado', 84, 'Medio'),
-(18, 1, 19, NOW(), NOW(), 'completado', 91, 'Bajo'),
-(19, 1, 20, NOW(), NULL, 'pendiente', NULL, 'Medio'),
-(20, 1, 21, NOW(), NOW(), 'completado', 86, 'Bajo'),
-(21, 1, 22, NOW(), NOW(), 'completado', 89, 'Bajo'),
-(22, 1, 23, NOW(), NULL, 'pendiente', NULL, 'Medio'),
-(23, 1, 24, NOW(), NOW(), 'completado', 77, 'Medio'),
-(24, 1, 25, NOW(), NOW(), 'completado', 92, 'Bajo'),
-(25, 1, 26, NOW(), NOW(), 'completado', 83, 'Medio'),
-(26, 1, 27, NOW(), NOW(), 'completado', 88, 'Medio'),
-(27, 1, 28, NOW(), NULL, 'pendiente', NULL, 'Medio');
-
--- ================================
--- RESPONSE
--- ================================
-INSERT INTO response (survey_application_id, question_id, option_answer_id, value, free_text) VALUES
-(2, 1, 4, 4, NULL),
-(2, 2, 5, 5, NULL),
-(4, 3, 4, 4, NULL),
-(4, 4, 5, 5, NULL),
-(6, 5, 5, 5, NULL),
-(6, 6, 4, 4, NULL),
-(7, 7, 5, 5, NULL),
-(7, 8, 5, 5, NULL),
-(9, 9, 4, 4, 'Equilibrio adecuado.'),
--- Respuestas mínimas para aplicaciones completadas de TechNova SA sin registros previos
-(10, 1, 4, 4, NULL),
-(11, 1, 4, 4, NULL),
-(12, 1, 4, 4, NULL),
-(13, 1, 4, 4, NULL),
-(14, 1, 4, 4, NULL),
-(15, 1, 4, 4, NULL),
-(16, 1, 4, 4, NULL),
-(17, 1, 4, 4, NULL),
-(18, 1, 4, 4, NULL),
-(20, 1, 4, 4, NULL),
-(21, 1, 4, 4, NULL),
-(23, 1, 4, 4, NULL),
-(24, 1, 4, 4, NULL),
-(25, 1, 4, 4, NULL),
-(26, 1, 4, 4, NULL);
+(1, 1, 1, NOW(), NULL, 'pendiente', NULL, NULL),
+(2, 1, 2, NOW(), NULL, 'pendiente', NULL, NULL),
+(3, 1, 11, NOW(), NULL, 'pendiente', NULL, NULL),
+(4, 1, 12, NOW(), NULL, 'pendiente', NULL, NULL),
+(5, 1, 13, NOW(), NULL, 'pendiente', NULL, NULL),
+(6, 1, 14, NOW(), NULL, 'pendiente', NULL, NULL),
+(7, 1, 15, NOW(), NULL, 'pendiente', NULL, NULL),
+(8, 1, 16, NOW(), NULL, 'pendiente', NULL, NULL),
+(9, 1, 17, NOW(), NULL, 'pendiente', NULL, NULL),
+(10, 1, 18, NOW(), NULL, 'pendiente', NULL, NULL),
+(11, 1, 19, NOW(), NULL, 'pendiente', NULL, NULL),
+(12, 1, 20, NOW(), NULL, 'pendiente', NULL, NULL),
+(13, 1, 21, NOW(), NULL, 'pendiente', NULL, NULL),
+(14, 1, 22, NOW(), NULL, 'pendiente', NULL, NULL),
+(15, 1, 23, NOW(), NULL, 'pendiente', NULL, NULL),
+(16, 1, 24, NOW(), NULL, 'pendiente', NULL, NULL),
+(17, 1, 25, NOW(), NULL, 'pendiente', NULL, NULL),
+(18, 1, 26, NOW(), NULL, 'pendiente', NULL, NULL),
+(19, 1, 27, NOW(), NULL, 'pendiente', NULL, NULL),
+(20, 1, 28, NOW(), NULL, 'pendiente', NULL, NULL);
