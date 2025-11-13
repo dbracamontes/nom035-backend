@@ -47,6 +47,8 @@ public class SurveyApplicationController {
     }
 
     private final SurveyApplicationService service;
+    @org.springframework.beans.factory.annotation.Autowired
+    private com.example.nom035.service.CompanySurveyService companySurveyService;
 
     public SurveyApplicationController(SurveyApplicationService service) {
         this.service = service;
@@ -215,6 +217,10 @@ public class SurveyApplicationController {
             
             // Guardar los cambios
             SurveyApplication updated = service.updateApplication(sa);
+            // Recalcular el completionRate de la empresa
+            if (sa.getCompanySurvey() != null && sa.getCompanySurvey().getId() != null) {
+                companySurveyService.recalculateCompletionRate(sa.getCompanySurvey().getId());
+            }
             return ResponseEntity.ok(SurveyApplicationDto.fromEntity(updated));
         } catch (RuntimeException ex) {
             return ResponseEntity.notFound().build();

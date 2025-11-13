@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 public class SurveyApplicationService {
-
+    private final CompanySurveyService companySurveyService;
     private final SurveyApplicationRepository surveyApplicationRepository;
     private final EmployeeRepository employeeRepository;
     private final CompanySurveyRepository companySurveyRepository;
@@ -35,13 +35,15 @@ public class SurveyApplicationService {
                                     CompanySurveyRepository companySurveyRepository,
                                     SurveyRepository surveyRepository,
                                     ResponseRepository responseRepository,
-                                    QuestionRepository questionRepository) {
+                                    QuestionRepository questionRepository,
+                                    CompanySurveyService companySurveyService) {
         this.surveyApplicationRepository = surveyApplicationRepository;
         this.employeeRepository = employeeRepository;
         this.companySurveyRepository = companySurveyRepository;
         this.surveyRepository = surveyRepository;
         this.responseRepository = responseRepository;
         this.questionRepository = questionRepository;
+        this.companySurveyService = companySurveyService;
     }
 
     public List<SurveyApplication> getAll() {
@@ -119,7 +121,12 @@ public class SurveyApplicationService {
             calculateAndSetRiskLevel(sa);
         }
 
-        return surveyApplicationRepository.save(sa);
+        SurveyApplication saved = surveyApplicationRepository.save(sa);
+        // Recalcular el completionRate de la encuesta de empresa
+        if (sa.getCompanySurvey() != null && sa.getCompanySurvey().getId() != null) {
+            companySurveyService.recalculateCompletionRate(sa.getCompanySurvey().getId());
+        }
+        return saved;
     }
 
     public SurveyApplication updateApplication(SurveyApplication sa) {
