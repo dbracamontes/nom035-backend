@@ -29,19 +29,22 @@ public class SurveyApplicationService {
     private final SurveyRepository surveyRepository;
     private final ResponseRepository responseRepository;
     private final QuestionRepository questionRepository;
+    private final Nom035ScoringService nom035ScoringService;
 
     public SurveyApplicationService(SurveyApplicationRepository surveyApplicationRepository,
                                     EmployeeRepository employeeRepository,
                                     CompanySurveyRepository companySurveyRepository,
                                     SurveyRepository surveyRepository,
                                     ResponseRepository responseRepository,
-                                    QuestionRepository questionRepository) {
+                                    QuestionRepository questionRepository,
+                                    Nom035ScoringService nom035ScoringService) {
         this.surveyApplicationRepository = surveyApplicationRepository;
         this.employeeRepository = employeeRepository;
         this.companySurveyRepository = companySurveyRepository;
         this.surveyRepository = surveyRepository;
         this.responseRepository = responseRepository;
         this.questionRepository = questionRepository;
+        this.nom035ScoringService = nom035ScoringService;
     }
 
     public List<SurveyApplication> getAll() {
@@ -127,43 +130,29 @@ public class SurveyApplicationService {
     }
 
     /**
-     * Calculate the total score and risk level for a survey application
+     * Calculate the total score and risk level for a survey application using NOM-035 ranges
      */
     public void calculateAndSetRiskLevel(SurveyApplication sa) {
         if (sa == null || sa.getId() == null) return;
 
         // Get all responses for this application
         List<com.example.nom035.entity.Response> responses = responseRepository.findBySurveyApplicationId(sa.getId());
-        
+
         if (responses.isEmpty()) {
             sa.setScore(0);
             sa.setRiskLevel(SurveyApplication.RiskLevel.Bajo);
             return;
         }
 
-        // Calculate total score
-        int totalScore = 0;
-        for (com.example.nom035.entity.Response response : responses) {
-            if (response.getValue() != null) {
-                totalScore += response.getValue();
-            }
-        }
-
-        sa.setScore(totalScore);
-
-        // Determine risk level based on score
-        // These thresholds can be adjusted based on NOM-035 requirements
-        int numQuestions = responses.size();
-        double averageScore = numQuestions > 0 ? (double) totalScore / numQuestions : 0;
-
-        // Risk level based on average score per question
-        // Assuming scale: 1=Siempre (worst), 5=Nunca (best)
-        // Lower average = higher risk
-        if (averageScore <= 2.0) {
-            sa.setRiskLevel(SurveyApplication.RiskLevel.Alto);
-        } else if (averageScore <= 3.5) {
+        Nom035ScoringService.Result res = nom035ScoringService.score(responses);
+        sa.setScore(res.globalScore);
+        // Map 5-level to 3-level stored enum
+        String gl = res.globalLevel;
+        if ("Medio".equalsIgnoreCase(gl)) {
             sa.setRiskLevel(SurveyApplication.RiskLevel.Medio);
-        } else {
+        } else if ("Alto".equalsIgnoreCase(gl) || "Muy alto".equalsIgnoreCase(gl)) {
+            sa.setRiskLevel(SurveyApplication.RiskLevel.Alto);
+        } else { // Nulo/Bajo
             sa.setRiskLevel(SurveyApplication.RiskLevel.Bajo);
         }
     }
@@ -174,7 +163,7 @@ public class SurveyApplicationService {
     public SurveyApplication recalculateRiskLevel(Long applicationId) {
         SurveyApplication sa = surveyApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("SurveyApplication not found: " + applicationId));
-        
+
         calculateAndSetRiskLevel(sa);
         return surveyApplicationRepository.save(sa);
     }
@@ -195,7 +184,7 @@ public class SurveyApplicationService {
         SurveyApplication latest = list.get(0);
         dto.setFound(true);
         dto.setApplicationId(latest.getId());
-    dto.setStatus(latest.getStatusEnum() != null ? latest.getStatusEnum().name() : null);
+        dto.setStatus(latest.getStatusEnum() != null ? latest.getStatusEnum().name() : null);
         dto.setCompletedAt(latest.getCompletedAt());
 
         int questions = questionRepository.findBySurveyId(surveyId).size();
@@ -203,7 +192,7 @@ public class SurveyApplicationService {
         long responses = responseRepository.countBySurveyApplicationId(latest.getId());
         dto.setResponsesCount((int) responses);
 
-    boolean statusCompleted = latest.getStatusEnum() == ApplicationStatus.COMPLETADO;
+        boolean statusCompleted = latest.getStatusEnum() == ApplicationStatus.COMPLETADO;
         boolean completedAt = latest.getCompletedAt() != null;
         boolean allAnswered = questions > 0 && responses >= questions;
 

@@ -1,0 +1,251 @@
+package com.example.nom035.controller;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.nom035.dto.CategoryScoreDto;
+import com.example.nom035.dto.DictamenDto;
+import com.example.nom035.entity.SurveyApplication;
+import com.example.nom035.entity.Response;
+import com.example.nom035.entity.User;
+import com.example.nom035.repository.ResponseRepository;
+import com.example.nom035.repository.SurveyApplicationRepository;
+import com.example.nom035.repository.UserRepository;
+import com.example.nom035.service.Nom035ScoringService;
+import com.example.nom035.service.PdfReportService;
+import com.example.nom035.service.PdfBrandingConfig;
+
+@RestController
+@RequestMapping("/api/reports")
+public class ReportsController {
+
+    @Autowired
+    private SurveyApplicationRepository surveyApplicationRepository;
+
+    @Autowired
+    private ResponseRepository responseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private Nom035ScoringService scoringService;
+
+    @Autowired
+    private PdfReportService pdfReportService;
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return null;
+        String username = authentication.getName();
+        return userRepository.findByUsername(username).orElse(null);
+    }
+    private boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+    private boolean isCompany() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+
+    @GetMapping("/application/{applicationId}/dictamen")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
+    public ResponseEntity<?> getApplicationDictamen(@PathVariable Long applicationId) {
+        SurveyApplication sa = surveyApplicationRepository.findById(applicationId).orElse(null);
+        if (sa == null) return ResponseEntity.notFound().build();
+
+        // Access control: company users can only see their company
+        if (!isAdmin() && isCompany()) {
+            User u = getCurrentUser();
+            if (u == null || u.getCompanyId() == null || !u.getCompanyId().equals(sa.getCompanySurvey().getCompany().getId())) {
+                return ResponseEntity.status(403).body("No autorizado");
+            }
+        }
+
+        List<Response> responses = responseRepository.findBySurveyApplicationId(applicationId);
+        Nom035ScoringService.Result res = scoringService.score(responses);
+
+        DictamenDto dto = new DictamenDto();
+        dto.setApplicationId(applicationId);
+        dto.setEmployeeId(sa.getEmployee() != null ? sa.getEmployee().getId() : null);
+        dto.setCompanyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany()!=null ? sa.getCompanySurvey().getCompany().getId() : null);
+        dto.setSurveyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey()!=null ? sa.getCompanySurvey().getSurvey().getId() : null);
+        dto.setGlobalScore(res.globalScore);
+        dto.setGlobalLevel(res.globalLevel);
+        dto.setTraumaticEventsCount(res.traumaticEventsCount);
+        dto.setTraumaticAlert(res.traumaticAlert);
+
+        List<CategoryScoreDto> cats = new ArrayList<>();
+        for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
+            String level = res.categoryLevels.getOrDefault(e.getKey(), "N/A");
+            cats.add(new CategoryScoreDto(e.getKey(), e.getValue(), level));
+        }
+        dto.setCategories(cats);
+
+        // Build a brief conclusion per provided guidance
+        String risky = cats.stream()
+            .filter(c -> {
+                String lv = c.getLevel();
+                return "Medio".equalsIgnoreCase(lv) || "Alto".equalsIgnoreCase(lv) || "Muy alto".equalsIgnoreCase(lv);
+            })
+            .map(CategoryScoreDto::getCategory)
+            .collect(Collectors.joining(", "));
+        StringBuilder sb = new StringBuilder();
+        sb.append("Nivel global ").append(dto.getGlobalLevel()).append(".");
+        if (!risky.isBlank()) {
+            sb.append(" Riesgo en: ").append(risky).append(".");
+        }
+        if (dto.isTraumaticAlert()) {
+            sb.append(" Alerta: ").append(dto.getTraumaticEventsCount()).append(" respuestas afirmativas en Acontecimientos Traumáticos Severos. Requiere canalización clínica.");
+        }
+        dto.setConclusion(sb.toString());
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/company/{companyId}/dictamen-summary")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    public ResponseEntity<?> getCompanyDictamenSummary(@PathVariable Long companyId) {
+        if (!isAdmin()) {
+            // Company role restriction
+            if (isCompany()) {
+                User u = getCurrentUser();
+                if (u == null || u.getCompanyId() == null || !u.getCompanyId().equals(companyId)) {
+                    return ResponseEntity.status(403).body("No autorizado");
+                }
+            } else {
+                return ResponseEntity.status(403).body("No autorizado");
+            }
+        }
+
+        List<SurveyApplication> apps = surveyApplicationRepository.findByCompanySurvey_CompanyId(companyId);
+        int appsCount = apps.size();
+
+        Map<String, Integer> levelDist = new LinkedHashMap<>();
+        levelDist.put("Nulo", 0);
+        levelDist.put("Bajo", 0);
+        levelDist.put("Medio", 0);
+        levelDist.put("Alto", 0);
+        levelDist.put("Muy alto", 0);
+
+        Map<String, Integer> sumCategoryScores = new LinkedHashMap<>();
+        int traumaticTotal = 0;
+
+        for (SurveyApplication sa : apps) {
+            List<Response> responses = responseRepository.findBySurveyApplicationId(sa.getId());
+            Nom035ScoringService.Result res = scoringService.score(responses);
+            levelDist.computeIfPresent(res.globalLevel, (k, v) -> v + 1);
+            traumaticTotal += res.traumaticEventsCount;
+            // accumulate category scores
+            for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
+                sumCategoryScores.put(e.getKey(), sumCategoryScores.getOrDefault(e.getKey(), 0) + e.getValue());
+            }
+        }
+
+        Map<String, Double> avgCategoryScores = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> e : sumCategoryScores.entrySet()) {
+            avgCategoryScores.put(e.getKey(), appsCount > 0 ? e.getValue() / (double) appsCount : 0.0);
+        }
+
+        Map<String, Object> out = new LinkedHashMap<>();
+        out.put("applicationsCount", appsCount);
+        out.put("globalLevelDistribution", levelDist);
+        out.put("avgCategoryScores", avgCategoryScores);
+        out.put("traumaticYesCount", traumaticTotal);
+        return ResponseEntity.ok(out);
+    }
+
+    // --- New PDF endpoints ---
+    @GetMapping(value = "/application/{applicationId}/dictamen.pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
+    public ResponseEntity<byte[]> getApplicationDictamenPdf(
+            @PathVariable Long applicationId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String subtitle,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) String footerText,
+            @RequestParam(required = false) String primaryHex,
+            @RequestParam(required = false) String secondaryHex,
+            @RequestParam(required = false) String logoClasspath
+    ) {
+        ResponseEntity<?> jsonResp = getApplicationDictamen(applicationId);
+        if (!jsonResp.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.status(jsonResp.getStatusCode()).build();
+        }
+        DictamenDto dto = (DictamenDto) jsonResp.getBody();
+
+        boolean hasBrand = title != null || subtitle != null || companyName != null || footerText != null || primaryHex != null || secondaryHex != null || logoClasspath != null;
+        byte[] pdf;
+        if (hasBrand) {
+            PdfBrandingConfig brand = new PdfBrandingConfig()
+                .setTitle(title)
+                .setSubtitle(subtitle)
+                .setCompanyName(companyName)
+                .setFooterText(footerText)
+                .setPrimaryHex(primaryHex)
+                .setSecondaryHex(secondaryHex)
+                .setLogoClasspath(logoClasspath);
+            pdf = pdfReportService.buildApplicationDictamenPdf(dto, brand);
+        } else {
+            pdf = pdfReportService.buildApplicationDictamenPdf(dto);
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=dictamen-" + applicationId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+    @GetMapping(value = "/company/{companyId}/dictamen-summary.pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    public ResponseEntity<byte[]> getCompanyDictamenSummaryPdf(
+            @PathVariable Long companyId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String subtitle,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) String footerText,
+            @RequestParam(required = false) String primaryHex,
+            @RequestParam(required = false) String secondaryHex,
+            @RequestParam(required = false) String logoClasspath
+    ) {
+        ResponseEntity<?> jsonResp = getCompanyDictamenSummary(companyId);
+        if (!jsonResp.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.status(jsonResp.getStatusCode()).build();
+        }
+        @SuppressWarnings("unchecked")
+        Map<String, Object> summary = (Map<String, Object>) jsonResp.getBody();
+
+        boolean hasBrand = title != null || subtitle != null || companyName != null || footerText != null || primaryHex != null || secondaryHex != null || logoClasspath != null;
+        byte[] pdf;
+        if (hasBrand) {
+            PdfBrandingConfig brand = new PdfBrandingConfig()
+                .setTitle(title)
+                .setSubtitle(subtitle)
+                .setCompanyName(companyName)
+                .setFooterText(footerText)
+                .setPrimaryHex(primaryHex)
+                .setSecondaryHex(secondaryHex)
+                .setLogoClasspath(logoClasspath);
+            pdf = pdfReportService.buildCompanySummaryPdf(summary, brand);
+        } else {
+            pdf = pdfReportService.buildCompanySummaryPdf(summary);
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=dictamen-summary-company-" + companyId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+}

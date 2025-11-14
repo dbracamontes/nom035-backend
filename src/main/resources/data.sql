@@ -228,3 +228,18 @@ INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, 
 (18, 1, 26, NOW(), NULL, 'pendiente', NULL, NULL),
 (19, 1, 27, NOW(), NULL, 'pendiente', NULL, NULL),
 (20, 1, 28, NOW(), NULL, 'pendiente', NULL, NULL);
+
+-- Preload: mark first 5 TechNova applications as completed with medium score
+UPDATE survey_application
+SET completed_at = NOW(), status='completada', score = 219, risk_level='Medio'
+WHERE id BETWEEN 1 AND 5;
+
+-- Insert uniform responses (value=3 "A veces") for applications 1..5 over all 73 questions
+INSERT INTO response (survey_application_id, question_id, option_answer_id, value, answered_at)
+SELECT apps.app_id AS survey_application_id,
+       q.id AS question_id,
+       ((q.id - 1) * 5 + 3) AS option_answer_id, -- id for sort_order 3 (value 3)
+       3 AS value,
+       NOW() AS answered_at
+FROM question q
+JOIN (SELECT 1 AS app_id UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) apps;

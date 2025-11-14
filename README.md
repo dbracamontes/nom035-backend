@@ -44,6 +44,44 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
    - `/api/survey-responses`
    - `/api/reports`
 
+## PDF Reports
+
+Two PDF endpoints are available (authentication required):
+
+1. Individual application dictamen
+```
+GET /api/reports/application/{applicationId}/dictamen.pdf
+Roles: ADMIN, COMPANY, EMPLOYEE
+```
+2. Company summary dictamen
+```
+GET /api/reports/company/{companyId}/dictamen-summary.pdf
+Roles: ADMIN, COMPANY
+```
+Optional query parameters for branding (any combination):
+- `title`
+- `subtitle`
+- `companyName`
+- `footerText`
+- `primaryHex` (e.g. %232196F3 for #2196F3)
+- `secondaryHex`
+- `logoClasspath` (classpath resource path, e.g. `/branding/logo.png` placed under `src/main/resources/branding/`)
+
+Example curl (replace TOKEN and IDs):
+```bash
+curl -H "Authorization: Bearer TOKEN" \
+     -H "Accept: application/pdf" \
+     "http://localhost:8080/api/reports/application/42/dictamen.pdf?title=Dictamen&companyName=Mi%20Empresa&primaryHex=%232196F3" \
+     --output dictamen-42.pdf
+```
+```bash
+curl -H "Authorization: Bearer TOKEN" \
+     -H "Accept: application/pdf" \
+     "http://localhost:8080/api/reports/company/7/dictamen-summary.pdf?title=Resumen&companyName=Mi%20Empresa" \
+     --output dictamen-summary-company-7.pdf
+```
+If no branding params are provided a default header/footer style is used.
+
 ## Database Initialization
 
 - On first run, the app will use `src/main/resources/data.sql` to seed the database with fake data (employees, surveys, questions, responses).
