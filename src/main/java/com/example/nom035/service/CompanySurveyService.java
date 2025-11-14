@@ -106,4 +106,41 @@ public class CompanySurveyService {
     public void deleteCompanySurvey(Long id) {
         companySurveyRepository.deleteById(id);
     }
+
+        /**
+         * Recalcula y actualiza el completionRate de una CompanySurvey
+         */
+        @org.springframework.beans.factory.annotation.Autowired
+        private com.example.nom035.repository.SurveyApplicationRepository surveyApplicationRepository;
+
+        public void recalculateCompletionRate(Long companySurveyId) {
+            Optional<CompanySurvey> opt = companySurveyRepository.findById(companySurveyId);
+            if (opt.isEmpty()) return;
+            CompanySurvey cs = opt.get();
+            List<com.example.nom035.entity.SurveyApplication> apps = surveyApplicationRepository.findByCompanySurveyId(companySurveyId);
+            if (apps == null || apps.isEmpty()) {
+                cs.setCompletionRate(java.math.BigDecimal.ZERO);
+                companySurveyRepository.save(cs);
+                return;
+            }
+            // Calcular empleados únicos asignados
+            java.util.Set<Long> empleadosAsignados = new java.util.HashSet<>();
+            java.util.Set<Long> empleadosCompletados = new java.util.HashSet<>();
+            for (com.example.nom035.entity.SurveyApplication app : apps) {
+                if (app.getEmployee() != null && app.getEmployee().getId() != null) {
+                    empleadosAsignados.add(app.getEmployee().getId());
+                    if (app.getCompletedAt() != null) {
+                        empleadosCompletados.add(app.getEmployee().getId());
+                    }
+                }
+            }
+            int totalAsignados = empleadosAsignados.size();
+            int totalCompletados = empleadosCompletados.size();
+            java.math.BigDecimal rate = java.math.BigDecimal.ZERO;
+            if (totalAsignados > 0) {
+                rate = java.math.BigDecimal.valueOf((double) totalCompletados / totalAsignados);
+            }
+            cs.setCompletionRate(rate);
+            companySurveyRepository.save(cs);
+        }
 }
