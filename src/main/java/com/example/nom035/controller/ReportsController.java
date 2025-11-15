@@ -82,7 +82,10 @@ public class ReportsController {
         DictamenDto dto = new DictamenDto();
         dto.setApplicationId(applicationId);
         dto.setEmployeeId(sa.getEmployee() != null ? sa.getEmployee().getId() : null);
+        // Populate employee name & company name
+        dto.setEmployeeName(sa.getEmployee() != null ? sa.getEmployee().getName() : null);
         dto.setCompanyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany()!=null ? sa.getCompanySurvey().getCompany().getId() : null);
+        dto.setCompanyName(sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany()!=null ? sa.getCompanySurvey().getCompany().getName() : null);
         dto.setSurveyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey()!=null ? sa.getCompanySurvey().getSurvey().getId() : null);
         dto.setGlobalScore(res.globalScore);
         dto.setGlobalLevel(res.globalLevel);

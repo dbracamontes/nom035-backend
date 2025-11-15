@@ -141,10 +141,14 @@ public class PdfReportService {
             meta.setWidthPercentage(100);
             addCell(meta, "Application ID", h2);
             addCell(meta, String.valueOf(dto.getApplicationId()), normal);
-            addCell(meta, "Employee ID", h2);
-            addCell(meta, String.valueOf(dto.getEmployeeId()), normal);
-            addCell(meta, "Company ID", h2);
-            addCell(meta, String.valueOf(dto.getCompanyId()), normal);
+            // Replace Employee ID with name display
+            addCell(meta, "Empleado", h2);
+            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() + (dto.getEmployeeId() != null ? " (ID " + dto.getEmployeeId() + ")" : "") : (dto.getEmployeeId()!=null? String.valueOf(dto.getEmployeeId()):"-");
+            addCell(meta, employeeDisplay, normal);
+            // Replace Company ID with name display
+            addCell(meta, "Empresa", h2);
+            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() + (dto.getCompanyId() != null ? " (ID " + dto.getCompanyId() + ")" : "") : (dto.getCompanyId()!=null? String.valueOf(dto.getCompanyId()):"-");
+            addCell(meta, companyDisplay, normal);
             addCell(meta, "Survey ID", h2);
             addCell(meta, String.valueOf(dto.getSurveyId()), normal);
             doc.add(meta);
@@ -209,10 +213,12 @@ public class PdfReportService {
             meta.setWidthPercentage(100);
             addCell(meta, "Application ID", h2);
             addCell(meta, String.valueOf(dto.getApplicationId()), normal);
-            addCell(meta, "Employee ID", h2);
-            addCell(meta, String.valueOf(dto.getEmployeeId()), normal);
-            addCell(meta, "Company ID", h2);
-            addCell(meta, String.valueOf(dto.getCompanyId()), normal);
+            addCell(meta, "Empleado", h2);
+            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() + (dto.getEmployeeId() != null ? " (ID " + dto.getEmployeeId() + ")" : "") : (dto.getEmployeeId()!=null? String.valueOf(dto.getEmployeeId()):"-");
+            addCell(meta, employeeDisplay, normal);
+            addCell(meta, "Empresa", h2);
+            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() + (dto.getCompanyId() != null ? " (ID " + dto.getCompanyId() + ")" : "") : (dto.getCompanyId()!=null? String.valueOf(dto.getCompanyId()):"-");
+            addCell(meta, companyDisplay, normal);
             addCell(meta, "Survey ID", h2);
             addCell(meta, String.valueOf(dto.getSurveyId()), normal);
             doc.add(meta);

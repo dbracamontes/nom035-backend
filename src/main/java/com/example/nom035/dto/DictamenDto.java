@@ -9,6 +9,9 @@ public class DictamenDto {
     private Long companyId;
     private Long surveyId;
 
+    private String employeeName; // Added display name fields
+    private String companyName;
+
     private int globalScore;
     private String globalLevel;
 
@@ -39,4 +42,8 @@ public class DictamenDto {
     public void setCategories(List<CategoryScoreDto> categories) { this.categories = categories; }
     public String getConclusion() { return conclusion; }
     public void setConclusion(String conclusion) { this.conclusion = conclusion; }
+    public String getEmployeeName() { return employeeName; }
+    public void setEmployeeName(String employeeName) { this.employeeName = employeeName; }
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 }
