@@ -191,6 +191,14 @@ public class ReportsController {
         }
         DictamenDto dto = (DictamenDto) jsonResp.getBody();
 
+        // Do NOT expose internal numeric IDs in the generated PDF payload/file name
+        // Clear identifiers from the DTO before passing to the PDF builder
+        dto.setEmployeeId(null);
+        dto.setCompanyId(null);
+        // Also clear application and survey identifiers to avoid any id leakage in PDF content
+        dto.setApplicationId(null);
+        dto.setSurveyId(null);
+
         boolean hasBrand = title != null || subtitle != null || companyName != null || footerText != null || primaryHex != null || secondaryHex != null || logoClasspath != null;
         byte[] pdf;
         if (hasBrand) {
@@ -206,8 +214,14 @@ public class ReportsController {
         } else {
             pdf = pdfReportService.buildApplicationDictamenPdf(dto);
         }
+
+        // Build a safe filename that does not include numeric IDs. Prefer the employee name if available.
+        String rawName = dto.getEmployeeName() != null ? dto.getEmployeeName() : "application";
+        String safeName = rawName.replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_.-]", "");
+        String filename = "dictamen-" + safeName + ".pdf";
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=dictamen-" + applicationId + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
@@ -231,6 +245,9 @@ public class ReportsController {
         @SuppressWarnings("unchecked")
         Map<String, Object> summary = (Map<String, Object>) jsonResp.getBody();
 
+        // Remove/clear any numeric company identifiers from the PDF payload so they are not exposed
+        summary.remove("companyId");
+
         boolean hasBrand = title != null || subtitle != null || companyName != null || footerText != null || primaryHex != null || secondaryHex != null || logoClasspath != null;
         byte[] pdf;
         if (hasBrand) {
@@ -246,8 +263,14 @@ public class ReportsController {
         } else {
             pdf = pdfReportService.buildCompanySummaryPdf(summary);
         }
+
+        // Build a safe filename that does not include the numeric companyId. Prefer provided companyName or the one in the summary.
+        String rawCompany = companyName != null ? companyName : (summary.get("companyName") instanceof String ? (String) summary.get("companyName") : "company");
+        String safeCompany = rawCompany.replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_.-]", "");
+        String filename = "dictamen-summary-company-" + safeCompany + ".pdf";
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=dictamen-summary-company-" + companyId + ".pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }

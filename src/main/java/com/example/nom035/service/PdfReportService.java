@@ -139,18 +139,13 @@ public class PdfReportService {
 
             PdfPTable meta = new PdfPTable(2);
             meta.setWidthPercentage(100);
-            addCell(meta, "Application ID", h2);
-            addCell(meta, String.valueOf(dto.getApplicationId()), normal);
-            // Replace Employee ID with name display
+            // Only include non-identifying human-readable information. Do NOT print numeric IDs.
             addCell(meta, "Empleado", h2);
-            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() + (dto.getEmployeeId() != null ? " (ID " + dto.getEmployeeId() + ")" : "") : (dto.getEmployeeId()!=null? String.valueOf(dto.getEmployeeId()):"-");
+            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() : "-";
             addCell(meta, employeeDisplay, normal);
-            // Replace Company ID with name display
             addCell(meta, "Empresa", h2);
-            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() + (dto.getCompanyId() != null ? " (ID " + dto.getCompanyId() + ")" : "") : (dto.getCompanyId()!=null? String.valueOf(dto.getCompanyId()):"-");
+            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() : "-";
             addCell(meta, companyDisplay, normal);
-            addCell(meta, "Survey ID", h2);
-            addCell(meta, String.valueOf(dto.getSurveyId()), normal);
             doc.add(meta);
             doc.add(new Paragraph(" "));
 
@@ -211,16 +206,13 @@ public class PdfReportService {
 
             PdfPTable meta = new PdfPTable(2);
             meta.setWidthPercentage(100);
-            addCell(meta, "Application ID", h2);
-            addCell(meta, String.valueOf(dto.getApplicationId()), normal);
+            // Only include non-identifying human-readable information. Do NOT print numeric IDs.
             addCell(meta, "Empleado", h2);
-            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() + (dto.getEmployeeId() != null ? " (ID " + dto.getEmployeeId() + ")" : "") : (dto.getEmployeeId()!=null? String.valueOf(dto.getEmployeeId()):"-");
+            String employeeDisplay = dto.getEmployeeName() != null ? dto.getEmployeeName() : "-";
             addCell(meta, employeeDisplay, normal);
             addCell(meta, "Empresa", h2);
-            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() + (dto.getCompanyId() != null ? " (ID " + dto.getCompanyId() + ")" : "") : (dto.getCompanyId()!=null? String.valueOf(dto.getCompanyId()):"-");
+            String companyDisplay = dto.getCompanyName() != null ? dto.getCompanyName() : "-";
             addCell(meta, companyDisplay, normal);
-            addCell(meta, "Survey ID", h2);
-            addCell(meta, String.valueOf(dto.getSurveyId()), normal);
             doc.add(meta);
             doc.add(new Paragraph(" "));
 
