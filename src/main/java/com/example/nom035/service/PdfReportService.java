@@ -161,7 +161,8 @@ public class PdfReportService {
             doc.add(global);
             doc.add(new Paragraph(" "));
 
-            Paragraph catTitle = new Paragraph("Resultados por categoría", h2);
+            Paragraph catTitle = new Paragraph("Resultados por\ncategoría", h2);
+            catTitle.setSpacingAfter(6f);
             doc.add(catTitle);
 
             PdfPTable table = new PdfPTable(3);
@@ -228,7 +229,8 @@ public class PdfReportService {
             doc.add(global);
             doc.add(new Paragraph(" "));
 
-            Paragraph catTitle = new Paragraph("Resultados por categoría", h2);
+            Paragraph catTitle = new Paragraph("Resultados por\ncategoría", h2);
+            catTitle.setSpacingAfter(6f);
             doc.add(catTitle);
 
             PdfPTable table = new PdfPTable(3);

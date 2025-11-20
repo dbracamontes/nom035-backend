@@ -70,44 +70,31 @@ public class Nom035ScoringService {
 
     public Result score(List<Response> responses) {
         if (responses == null) responses = List.of();
-
-        // Aggregate normalized scores per standard category
         Map<String, Integer> scores = new LinkedHashMap<>();
         initCategory(scores);
-
         int traumaticYes = 0;
-
         for (Response r : responses) {
             if (r == null || r.getQuestion() == null) continue;
             Integer raw = r.getValue();
             if (raw == null) continue;
-
             Question q = r.getQuestion();
             String stdCat = mapToStandardCategory(q.getCategory());
             if (stdCat == null) continue;
-
+            // Remap Jornada interference items to Interferencia
+            if (CAT_JORNADA.equals(stdCat) && isInterferenceQuestion(q)) {
+                stdCat = CAT_INTERFERENCIA;
+            }
             int norm = normalizeTo0to4(raw);
-            // Inverse for positive-phrased categories
             if (shouldInvert(q)) {
                 norm = 4 - norm;
             }
-
             scores.put(stdCat, scores.getOrDefault(stdCat, 0) + norm);
-
             if (isTraumaticEventQuestion(q) && isAffirmative(r)) {
                 traumaticYes++;
             }
         }
-
         int global = scores.values().stream().mapToInt(Integer::intValue).sum();
-        Map<String, String> levels = scores.entrySet().stream()
-            .collect(Collectors.toMap(
-                Map.Entry::getKey,
-                e -> interpretCategoryLevel(e.getKey(), e.getValue()),
-                (a, b) -> a,
-                LinkedHashMap::new
-            ));
-
+        Map<String, String> levels = scores.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> interpretCategoryLevel(e.getKey(), e.getValue()), (a, b) -> a, LinkedHashMap::new));
         String globalLevel = interpretGlobalLevel(global);
         return new Result(scores, levels, global, globalLevel, traumaticYes);
     }
@@ -139,17 +126,18 @@ public class Nom035ScoringService {
     }
 
     private boolean shouldInvert(Question q) {
-        // Invert if the dataset category is typically positive phrasing
         String cat = q.getCategory();
         if (cat != null) {
             for (String token : POSITIVE_CATEGORY_TOKENS) {
                 if (token.equalsIgnoreCase(cat)) return true;
             }
         }
-        // Also invert if the text appears clearly positive (heuristic)
         String t = q.getText();
         if (t == null) return false;
         String tl = t.toLowerCase(Locale.ROOT);
+        // Detect negated forms to avoid false inversion
+        boolean hasNegation = tl.contains("no le permite") || tl.contains("no puede") || tl.contains("no se le explica") || tl.contains("no le ayuda") || tl.contains("no le indic");
+        if (hasNegation) return false;
         return tl.contains("le ayuda") || tl.contains("le permite") || tl.contains("puede") || tl.contains("confía") || tl.contains("paga a tiempo") || tl.contains("orgullo") || tl.contains("se siente comprometido") || tl.contains("recibe capacitación") || tl.contains("le informan con claridad") || tl.contains("le indican a quien") || tl.contains("se le explica");
     }
 
@@ -184,6 +172,18 @@ public class Nom035ScoringService {
         // If normalized 0..4, consider >=1 as presence for traumatic items
         int norm = normalizeTo0to4(v);
         return norm >= 1;
+    }
+
+    private boolean isInterferenceQuestion(Question q) {
+        if (q == null) return false;
+        Long qid = q.getId();
+        if (qid != null) {
+            if (qid == 19L || qid == 20L || qid == 21L || qid == 22L) return true;
+        }
+        String text = q.getText();
+        if (text == null) return false;
+        String tl = text.toLowerCase(Locale.ROOT);
+        return tl.contains("vida personal") || tl.contains("famil") || tl.contains("casa") || tl.contains("responsabilidades familiares") || tl.contains("actividades personales") || tl.contains("equilibrio vida-trabajo") || tl.contains("trabajo en casa");
     }
 
     // Category range interpretation per provided spec
