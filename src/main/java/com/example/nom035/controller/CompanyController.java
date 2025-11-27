@@ -2,14 +2,20 @@ package com.example.nom035.controller;
 
 import com.example.nom035.entity.Company;
 import com.example.nom035.entity.Employee;
+import com.example.nom035.entity.MedicaLebenCompanyDocs;
+import com.example.nom035.entity.MedicaLebenCompanyWorkPhoto;
+import com.example.nom035.repository.MedicaLebenCompanyDocsRepository;
 import com.example.nom035.service.CompanyService;
 import com.example.nom035.service.EmployeeService;
+import com.example.nom035.service.MedicaLebenStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,11 +34,17 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final EmployeeService employeeService;
+    private final MedicaLebenCompanyDocsRepository mlDocsRepository;
+    private final MedicaLebenStorageService mlStorageService;
 
     @Autowired
-    public CompanyController(CompanyService companyService, EmployeeService employeeService) {
+    public CompanyController(CompanyService companyService, EmployeeService employeeService,
+                             MedicaLebenCompanyDocsRepository mlDocsRepository,
+                             MedicaLebenStorageService mlStorageService) {
         this.companyService = companyService;
         this.employeeService = employeeService;
+        this.mlDocsRepository = mlDocsRepository;
+        this.mlStorageService = mlStorageService;
     }
 
     /**
@@ -118,5 +130,69 @@ public class CompanyController {
         return ResponseEntity.ok(employees);
     }
 
-    // Puedes añadir otros endpoints aquí y protegerlos de la misma forma.
+    @GetMapping("/{companyId}/medica-leben/docs")
+    public ResponseEntity<MedicaLebenCompanyDocs> getMedicaLebenDocs(@PathVariable Long companyId) {
+        Company company = companyService.getCompanyById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+        return mlDocsRepository.findByCompany(company)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping(path = "/{companyId}/medica-leben/docs", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MedicaLebenCompanyDocs> uploadMedicaLebenDocs(
+            @PathVariable Long companyId,
+            @RequestPart(name = "acta_constitutiva", required = false) MultipartFile actaConstitutiva,
+            @RequestPart(name = "constancia_situacion_fiscal", required = false) MultipartFile constanciaSituacionFiscal,
+            @RequestPart(name = "poder_notarial", required = false) MultipartFile poderNotarial,
+            @RequestPart(name = "identificacion_representante", required = false) MultipartFile identificacionRepresentante,
+            @RequestPart(name = "comprobante_domicilio", required = false) MultipartFile comprobanteDomicilio,
+            @RequestPart(name = "estado_cuenta_bancaria", required = false) MultipartFile estadoCuentaBancaria,
+            @RequestPart(name = "comprobante_ema_eba", required = false) MultipartFile comprobanteEmaEba
+    ) throws Exception {
+        Company company = companyService.getCompanyById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        MedicaLebenCompanyDocs docs = mlStorageService.uploadDocs(
+                company,
+                actaConstitutiva,
+                constanciaSituacionFiscal,
+                poderNotarial,
+                identificacionRepresentante,
+                comprobanteDomicilio,
+                estadoCuentaBancaria,
+                comprobanteEmaEba
+        );
+        return ResponseEntity.ok(docs);
+    }
+
+    @PostMapping(path = "/{companyId}/medica-leben/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MedicaLebenCompanyWorkPhoto> uploadMedicaLebenPhoto(
+            @PathVariable Long companyId,
+            @RequestPart("photo") MultipartFile photo,
+            @RequestPart(name = "description", required = false) String description,
+            @RequestPart(name = "sortOrder", required = false) Integer sortOrder
+    ) throws Exception {
+        Company company = companyService.getCompanyById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        MedicaLebenCompanyDocs docs = mlDocsRepository.findByCompany(company)
+                .orElseThrow(() -> new RuntimeException("Medica LEBEN docs not initialized for company"));
+
+        int order = (sortOrder != null) ? sortOrder : 0;
+        MedicaLebenCompanyWorkPhoto saved = mlStorageService.uploadPhoto(docs, photo, description, order);
+        return ResponseEntity.ok(saved);
+    }
+
+    @GetMapping("/{companyId}/medica-leben/photos")
+    public ResponseEntity<List<MedicaLebenCompanyWorkPhoto>> listMedicaLebenPhotos(@PathVariable Long companyId) {
+        Company company = companyService.getCompanyById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        MedicaLebenCompanyDocs docs = mlDocsRepository.findByCompany(company)
+                .orElseThrow(() -> new RuntimeException("Medica LEBEN docs not initialized for company"));
+
+        List<MedicaLebenCompanyWorkPhoto> photos = mlStorageService.listPhotos(docs);
+        return ResponseEntity.ok(photos);
+    }
 }
