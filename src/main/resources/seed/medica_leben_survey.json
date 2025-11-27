@@ -1,0 +1,2440 @@
+{
+  "code": "MEDICA_LEBEN",
+  "title": "Encuesta Médica Leben",
+  "description": "Instrumento de 183 reactivos que combina antecedentes sociodemográficos, condiciones laborales y salud integral.",
+  "guideType": "Personalizado",
+  "totalQuestions": 183,
+  "generatedAt": "2025-11-26T21:24:58.842Z",
+  "questions": [
+    {
+      "number": 1,
+      "text": "Nombre",
+      "type": "text",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 2,
+      "text": "Fecha de Nacimiento",
+      "type": "date",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 3,
+      "text": "Departamento en el que labora",
+      "type": "text",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 4,
+      "text": "Puesto",
+      "type": "text",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 5,
+      "text": "Estado Civil",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Soltero",
+        "Casado",
+        "Viudo",
+        "Divorciado"
+      ]
+    },
+    {
+      "number": 6,
+      "text": "Sexo",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Femenino",
+        "Maculino"
+      ]
+    },
+    {
+      "number": 7,
+      "text": "Estudios realizados",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Primaria",
+        "Estudios Técnicos",
+        "Secundaria",
+        "Preparatoria",
+        "Universidad",
+        "Posgrado"
+      ]
+    },
+    {
+      "number": 8,
+      "text": "¿Cuál es su categoría dentro de la empresa?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Obrero General",
+        "Supervisor Administrativo",
+        "Oficial Calificado",
+        "Auxiliar Administrativo",
+        "Dirección",
+        "Mandos Medios"
+      ]
+    },
+    {
+      "number": 9,
+      "text": "¿Antigüedad en el puesto?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "menos de 1 año",
+        "1 a 3 años",
+        "3 a 6 años",
+        "6 a 9 años",
+        "9 a 12 años",
+        "12 a 15 años",
+        "15 a 18 años",
+        "18 a 21 años",
+        "mas de 21 años"
+      ]
+    },
+    {
+      "number": 10,
+      "text": "¿Cuánto tiempo hace que labora en el mismo lugar de trabajo (edificio, local o planta)?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "menos de 1 año",
+        "1 a 2 años",
+        "2 a 3 años",
+        "mas de 3 años"
+      ]
+    },
+    {
+      "number": 11,
+      "text": "Seleccione los días de la semana en trabaja usted",
+      "type": "multi_select",
+      "category": "Datos generales",
+      "allowMultiple": true,
+      "options": [
+        "Lunes a viernes",
+        "Lunes a sabado"
+      ]
+    },
+    {
+      "number": 12,
+      "text": "¿Cuántas horas trabaja al día?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "menos de 7 horas",
+        "8 horas",
+        "9 horas",
+        "10 horas",
+        "11 horas",
+        "12 o mas"
+      ]
+    },
+    {
+      "number": 13,
+      "text": "¿Qué medio de transporte utiliza para llegar a su trabajo?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Plataforma (Uber DIDI u otros)",
+        "Propio",
+        "Público"
+      ]
+    },
+    {
+      "number": 14,
+      "text": "En caso de tener vehículo propio, ¿Cuántos tiene?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "1",
+        "2",
+        "3",
+        "Mas de 3",
+        "No tengo"
+      ]
+    },
+    {
+      "number": 15,
+      "text": "En caso de contar con vehículo propio ¿Cuánto gasta en gasolina a la semana?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "De $300 a $500 pesos",
+        "De $500 a $1000 pesos",
+        "Mas de $1500 pesos",
+        "Menos de $300 pesos",
+        "No aplica"
+      ]
+    },
+    {
+      "number": 16,
+      "text": "¿Cuánto tiempo hace de traslado a su trabajo?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "0 a 15 minutos",
+        "16 a 30 minutos",
+        "31 a 45 minutos",
+        "45 a 60 minutos",
+        "mas de 1 hora"
+      ]
+    },
+    {
+      "number": 17,
+      "text": "En caso de usar transporte publico (taxi, Uber, camión) para llegar a su centro de trabajo, ¿Cuánto gasta diariamente?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "De $1 a $20 pesos",
+        "De $2 a $50 pesos",
+        "De $50 a $100 pesos",
+        "Más de $100 pesos",
+        "No aplica"
+      ]
+    },
+    {
+      "number": 18,
+      "text": "¿La casa o departamento en el que habita es?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Propia",
+        "Rentada",
+        "Prestada"
+      ]
+    },
+    {
+      "number": 19,
+      "text": "¿Cuántas veces a la semana consume los siguientes alimentos?",
+      "type": "matrix",
+      "category": "Datos generales",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Frutas y verduras",
+          "Carnes Rojas y Lácteos",
+          "Cereales (Tortilla Arroz Quinoa Papa)",
+          "Semillas (Cacahuate Almendras Pistache)"
+        ],
+        "columns": [
+          "No consumo",
+          "menos de 1 vez a la semana",
+          "1 a 2 veces a la semana",
+          "3 a 4 veces a la semana",
+          "5 o mas veces a la semana"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 20,
+      "text": "¿Tiene la posibilidad de acceder a una alimentación sana, variada e higiénica?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "No economicamente no me es posible",
+        "No el ritmo de trabajo no me permite comprar y preparar mis alimentos",
+        "Si cuento con las recursos economicos y el tiempo para acceder a mis alimentos"
+      ]
+    },
+    {
+      "number": 21,
+      "text": "¿Cuántas veces sale de vacaciones al año?",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "De 1 a 2 veces al año",
+        "Mas de 3 veces al año",
+        "Ninguna"
+      ]
+    },
+    {
+      "number": 22,
+      "text": "En caso de tener hijos, la Educación que reciben es",
+      "type": "single_choice",
+      "category": "Datos generales",
+      "allowMultiple": false,
+      "options": [
+        "Pública",
+        "Privada",
+        "No tengo hijos",
+        "No estudian"
+      ]
+    },
+    {
+      "number": 23,
+      "text": "¿En qué posición realizas la mayoría de tus actividades laborales?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "De pie",
+        "Sentado",
+        "Ambos"
+      ]
+    },
+    {
+      "number": 24,
+      "text": "¿Su lugar de trabajo cuenta con ventilación?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 25,
+      "text": "Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo",
+      "type": "multi_select",
+      "category": "Ambiente laboral",
+      "allowMultiple": true,
+      "options": [
+        "Aire acondicionado",
+        "Ventana",
+        "natural",
+        "Extractor de aire"
+      ]
+    },
+    {
+      "number": 26,
+      "text": "La temperatura de su lugar de trabajo es",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Frío",
+        "Caliente",
+        "Normal"
+      ]
+    },
+    {
+      "number": 27,
+      "text": "¿Qué le produce la temperatura de su lugar de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Alergia",
+        "Resequedad",
+        "Insolación",
+        "Deshidratación",
+        "No afecta"
+      ]
+    },
+    {
+      "number": 28,
+      "text": "En su lugar de trabajo se perciben olores de",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Comida",
+        "Agentes químicos",
+        "Humo de tabaco",
+        "Gas",
+        "Corporales (sudor mal aliento olor a pies orina heces flatulencias)",
+        "Drenaje",
+        "No se perciben olores",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 29,
+      "text": "¿Cómo es la iluminación en su lugar de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Demasiado intensa",
+        "Intensa",
+        "Adecuada a mis actividades",
+        "Escasa"
+      ]
+    },
+    {
+      "number": 30,
+      "text": "De las siguientes opciones ¿Qué le incomoda en su lugar de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "La distribución y orden del espacio",
+        "Perturbaciones",
+        "distracciones",
+        "La falta de limpieza",
+        "Sentimiento de encierro",
+        "La decoración",
+        "La alfombra en el suelo y/o pared",
+        "Falta de socialización laboral",
+        "Aislamiento",
+        "No le molestan estos aspectos",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 31,
+      "text": "¿En su lugar de trabajo existe ruido?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 32,
+      "text": "El nivel de ruido en su puesto de trabajo es",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Bajo – Hay algo de ruido pero no es molesto ni afecta la concentración",
+        "Alto – El ruido es notable y puede resultar molesto afectando la concentración y productividad",
+        "Muy alto – El ruido es muy fuerte y constante impidiendo la concentración y generando incomodidad"
+      ]
+    },
+    {
+      "number": 33,
+      "text": "El ruido en su lugar de trabajo procede de",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Maquinaria y/o equipos de producción",
+        "Sistema de ventilación",
+        "La calle",
+        "exterior",
+        "Equipos de oficina",
+        "Conversaciones",
+        "No hay ruido",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 34,
+      "text": "Aproximadamente ¿Cuánto tiempo está expuesto al ruido en su área de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 60 minutos",
+        "1 - 3 horas",
+        "3 - 5 horas",
+        "5 horas",
+        "más"
+      ]
+    },
+    {
+      "number": 35,
+      "text": "¿Conoce cuál es el nivel sonoro en decibeles en su área de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "70 dBA",
+        "80 dBA",
+        "Mas de 100 dBA",
+        "No lo conozco"
+      ]
+    },
+    {
+      "number": 36,
+      "text": "¿Existen vibraciones producidas por herramientas manuales, máquinas, vehículos, etc. en su puesto de trabajo?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Nunca",
+        "Algunas veces",
+        "Siempre"
+      ]
+    },
+    {
+      "number": 37,
+      "text": "¿Estás expuesto a radiaciones ionizantes o no ionizantes en tu jornada laboral?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 38,
+      "text": "Indique el tipo de  radiación ionizante y no ionizante, al que está usted expuesto",
+      "type": "multi_select",
+      "category": "Ambiente laboral",
+      "allowMultiple": true,
+      "options": [
+        "Luz ultravioleta (soldadura eléctrica al arco",
+        "lámparas",
+        "germicidas…)",
+        "excluida la luz solar",
+        "Luz infrarroja",
+        "Microondas (hornos de secado",
+        "antenas de telefonía móvil…)",
+        "Radiofrecuencias (soldaduras por radiofrecuencias",
+        "calentamiento de bajíos…)",
+        "Rayos lasser",
+        "Rayos X",
+        "rayos gamma",
+        "radioisótopos (radiodiagnóstico",
+        "radioterapia",
+        "diagnóstico de soldaduras)",
+        "No estoy expuesto a radiación"
+      ]
+    },
+    {
+      "number": 39,
+      "text": "¿En su área de trabajo existe algún tipo de radiación ionizante?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "No estoy seguro",
+        "lo desconozco"
+      ]
+    },
+    {
+      "number": 40,
+      "text": "¿Cuenta usted con equipo de protección personal para radiación ionizante?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "No estoy seguro",
+        "lo desconozco"
+      ]
+    },
+    {
+      "number": 41,
+      "text": "En caso de ser afirmativa la respuesta anterior, ¿Con qué tipo de equipo de protección personal cuenta?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Delantales",
+        "Guantes plomizos (para rayos x)",
+        "Trajes aluminizados",
+        "Trajes en fibras espaciales para prevenir el ingreso a radiación",
+        "Zapatos especiales",
+        "Protección Ocular",
+        "No estoy expuesto a radiación ionizante"
+      ]
+    },
+    {
+      "number": 42,
+      "text": "¿Desarrolla usted trabajos en alturas mayores a 1.80 metros?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 43,
+      "text": "En caso de ser afirmativa la respuesta anterior, ¿Con que tipo de equipo de protección personal cuenta?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Arnés de seguridad tipo paracaídas",
+        "Líneas de vida y de anclaje",
+        "Cinturón portaherramientas",
+        "Calzado contra - impactos",
+        "Casco contra - impactos",
+        "Guantes dieléctricos",
+        "Ninguno"
+      ]
+    },
+    {
+      "number": 44,
+      "text": "¿Qué riesgos asociados al trabajo en alturas conoce?",
+      "type": "single_choice",
+      "category": "Ambiente laboral",
+      "allowMultiple": false,
+      "options": [
+        "Caídas de distinto nivel en metros",
+        "Derrumbe de estructuras",
+        "Golpes por caída de objetos",
+        "Atrapamiento",
+        "Contactos eléctricos",
+        "Ninguno"
+      ]
+    },
+    {
+      "number": 45,
+      "text": "¿Desarrolla usted trabajos con soldadura? Si, No",
+      "type": "text",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 46,
+      "text": "¿Utiliza ropa adecuada y Equipo de protección especial para la soldadura?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 47,
+      "text": "Conoce los riesgos y medidas preventivas en los trabajos de soldaduras contaminantes, químicos en soldadura y tipo de contaminante químico que utiliza en su área laboral",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 48,
+      "text": "Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos. Si, No",
+      "type": "text",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 49,
+      "text": "¿Qué tipos de riesgos de trabajo en actividades de soldadura conoce?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Contacto con energía eléctrica",
+        "Contacto con superficies calientes",
+        "flamas",
+        "Exposición a humos metálicos y gases tóxicos",
+        "Ninguno",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 50,
+      "text": "¿Conoce las medidas de primeros auxilios básicos para quemaduras? Si, No",
+      "type": "text",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 51,
+      "text": "Su área de trabajo ¿Cuenta con botiquín de primeros auxilios?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 52,
+      "text": "Su área de trabajo ¿Cuenta con extintores?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 53,
+      "text": "Su área de trabajo ¿Cuenta con señaléticas de prevención de accidentes?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 54,
+      "text": "Independientemente de la labor que realice, su área de trabajo ¿Cuenta con Equipo de Protección Personal (EPP)?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 55,
+      "text": "En su área laboral ¿Cuenta con la capacitación suficiente para el manejo de herramientas y uso de máquinas según el tipo de área de producción y procesamiento?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 56,
+      "text": "En su trabajo ¿Se encuentra expuesto a temperaturas elevadas? (trabajos cerca de hornos, fogones, etc.)",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 57,
+      "text": "En su trabajo ¿Se encuentra expuesto a temperaturas abatidas? (trabajos en cuartos fríos o de refrigeración)",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 58,
+      "text": "En su puesto de trabajo, ¿Manipula sustancias o preparados nocivos o tóxicos?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 59,
+      "text": "En caso de ser afirmativa la respuesta anterior, indique que tipo de producto químico utiliza o está expuesto",
+      "type": "multi_select",
+      "category": "Condiciones laborales",
+      "allowMultiple": true,
+      "options": [
+        "Productos fitosanitarios plaguicidas",
+        "fertilizantes",
+        "Solventes (orgánicos o inorgánicos) tolueno xileno alcohol isopropílico",
+        "Hidrocarburos. (gasolina Diesel turbosina etc.)",
+        "Metales coma el plomo y el mercurio",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 60,
+      "text": "Estas sustancias o preparados ¿Tienen alguna etiqueta o leyenda que informe de su peligrosidad?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si todos",
+        "Si algunos",
+        "Ninguno"
+      ]
+    },
+    {
+      "number": 61,
+      "text": "En general, la información que contiene la etiqueta (símbolos, etc.) es",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Complicada",
+        "A veces complicada",
+        "Fácil de entender"
+      ]
+    },
+    {
+      "number": 62,
+      "text": "En su puesto de trabajo ¿Respira polvos, humos, aerosoles, gases o vapores nocivos o tóxicos? (excluido el humo del tabaco)",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 63,
+      "text": "En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales coma desechos, fluidos corporales, materiales de laboratorio, animales?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si de forma deliberada",
+        "intencionada laboratorios de diagnóstico microbiológico trabajo con animales obtención de vacunas insulina u otros medicamentos procesos de fermentación",
+        "Si de manera involuntaria habitual",
+        "esporádica actividad sanitaria tratamiento de residuos recogida de basura trabajos subterráneos",
+        "No"
+      ]
+    },
+    {
+      "number": 64,
+      "text": "¿Conoce usted los posibles efectos perjudiciales para su salud de la manipulación y/o respiración de esas sustancias nocivas o tóxicas?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 65,
+      "text": "¿Le han informado en su empresa de las medidas a adoptar para prevenir estos posibles efectos perjudiciales?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 66,
+      "text": "En general, el nivel de atención que debe mantener para realizar su trabajo es",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Alta",
+        "Media",
+        "Baja"
+      ]
+    },
+    {
+      "number": 67,
+      "text": "En los últimos 3 meses, la cantidad de trabajo que ha tenido generalmente es",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Suficiente",
+        "Insuficiente",
+        "Excesiva"
+      ]
+    },
+    {
+      "number": 68,
+      "text": "El ritmo de trabajo esta determinado por",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "El ritmo de una maquina",
+        "línea",
+        "El ritmo de otros compañeros",
+        "Causas externas publico/clientes",
+        "Objetivos que hay que alcanzar",
+        "No hay un ritmo prefijado"
+      ]
+    },
+    {
+      "number": 69,
+      "text": "El ritmo de trabajo es",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Apresurado",
+        "Normal",
+        "Lento"
+      ]
+    },
+    {
+      "number": 70,
+      "text": "Cuando en su puesto de trabajo se comete algún error, ¿Qué sucede?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Pasa desapercibido",
+        "Provoca problemas menores",
+        "Entorpece el trabajo",
+        "Produce consecuencias graves"
+      ]
+    },
+    {
+      "number": 71,
+      "text": "Le parece adecuado su horario de trabajo?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 72,
+      "text": "¿Considera que tiene que realizar tareas que no le corresponden?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "A menudo",
+        "A veces",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 73,
+      "text": "¿Hasta que punto puede tomar decisiones en su trabajo? Siempre, Algunas Veces, Nunca",
+      "type": "text",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 74,
+      "text": "¿Cómo considera que son las relaciones con las personas con las que debe trabajar?",
+      "type": "matrix",
+      "category": "Condiciones laborales",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Buena",
+          "Regular",
+          "Mala"
+        ],
+        "columns": [
+          "Jefes",
+          "Compañeros",
+          "Subordinados"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 75,
+      "text": "¿Existe algún obstáculo que dificulte la comunicación con sus compañeros?",
+      "type": "single_choice",
+      "category": "Condiciones laborales",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 76,
+      "text": "En caso de ser afirmativa la respuesta anterior, ¿Cuál de los siguientes aspectos dificulta esta comunicación? (Si es necesario marque mas de una respuesta)",
+      "type": "multi_select",
+      "category": "Condiciones laborales",
+      "allowMultiple": true,
+      "options": [
+        "La normatividad de la empresa",
+        "El inmediato superior",
+        "El ritmo de trabajo",
+        "No poder desviar la atención del trabajo",
+        "No hay obstáculos que dificulten la comuniación",
+        "{Otros:_______}"
+      ]
+    },
+    {
+      "number": 77,
+      "text": "¿Ha asistido a cursos de capacitación o formación complementaria para el desempeño de su trabajo?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 78,
+      "text": "En caso de ser afirmativa la respuesta anterior, a ¿Cuántos cursos ha asistido?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "Más de 4"
+      ]
+    },
+    {
+      "number": 79,
+      "text": "¿Le parece suficiente la formación que le ha proporcionado la empresa en la que actualmente labora, para el desempeño de su trabajo?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 80,
+      "text": "¿Conoce si hay algún procedimiento establecido para la promoción del personal?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 81,
+      "text": "¿Qué tipo de contrato de trabajo tiene celebrado con la empresa en la que actualmente labora?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Deterinado",
+        "Indeterminado"
+      ]
+    },
+    {
+      "number": 82,
+      "text": "¿Cómo cree que esta considerado su puesto de trabajo en la empresa?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "De los mas importantes",
+        "Importante",
+        "Poco importante"
+      ]
+    },
+    {
+      "number": 83,
+      "text": "¿Qué tipo de preparación necesita para desempeñar su puesto de trabajo?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Formación superior",
+        "Formación media",
+        "Formación técnica",
+        "Práctica en el puesto",
+        "Saber leer y escribir"
+      ]
+    },
+    {
+      "number": 84,
+      "text": "Además de su formación académica, ¿Para desarrollar su trabajo se requiere de aptitudes?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Bastantes",
+        "Muy pocas",
+        "Ninguna"
+      ]
+    },
+    {
+      "number": 85,
+      "text": "Usted fuma o fumaba?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 86,
+      "text": "Si la respuesta anterior fue \"Si\" podría especificar la cantidad de cigarros al día y los años que lleva fumando o que fumo?",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 87,
+      "text": "Si no es usted fumador, ¿Considera que el humo de tabaco de los demás perjudica su salud?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 88,
+      "text": "En caso de ser afirmativa la respuesta anterior, ¿Con qué frecuencia esta expuesto al humo de tabaco?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Ocasionalmente",
+        "(algunas veces al mes)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)",
+        "No aplica"
+      ]
+    },
+    {
+      "number": 89,
+      "text": "Consume o consumía alcohol?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 90,
+      "text": "Si la respuesta anterior fue \"Si\" pudieras especificar el tipo de alcohol (cerveza, tequila, etc.), la cantidad de consumo por semana (latas, vasos, botella) y el número de años que has consumido alcohol?",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 91,
+      "text": "Realiza actividad física?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 92,
+      "text": "Con que frecuencia realiza actividad física a la semana (Tomando en cuenta que mínimo son 30 min al día)",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "No realizo",
+        "1 o 2 días a la semana",
+        "3 o 5 días a la semana",
+        "Mas de 5 días a la semana"
+      ]
+    },
+    {
+      "number": 93,
+      "text": "Seleccione si en su familia ha habido casos de",
+      "type": "multi_select",
+      "category": "Hábitos y salud",
+      "allowMultiple": true,
+      "options": [
+        "Cáncer",
+        "Diabetes",
+        "Enfermedades del corazón",
+        "Presión arterial alta",
+        "Enfermedades de los riñones",
+        "Enfermedades cerebrovasculares",
+        "Enfermedades mentales",
+        "Intento de Suicidio",
+        "Enfermedades reumatológicas",
+        "Ninguna de las anteriores"
+      ]
+    },
+    {
+      "number": 94,
+      "text": "¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Hipertensión Arterial Esencial",
+        "Obesidad Mórbida",
+        "Diabetes Mellitus tipo II",
+        "Otros",
+        "Ninguna"
+      ]
+    },
+    {
+      "number": 95,
+      "text": "Si la respuesta anterior fue \"Otros\" favor de especificar la enfermedad que padece",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 96,
+      "text": "Si padece alguno o algunos de las padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?",
+      "type": "multi_select",
+      "category": "Hábitos y salud",
+      "allowMultiple": true,
+      "options": [
+        "Si",
+        "No",
+        "No aplica"
+      ]
+    },
+    {
+      "number": 97,
+      "text": "Favor de especificar el nombre del  medicamento (os) o suplementos que consume",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 98,
+      "text": "Alergias",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No y favor de especificar a que es alérgico"
+      ],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 99,
+      "text": "¿Alguna vez ha sufrido un accidente de trabajo?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 100,
+      "text": "En caso de ser afirmativa la respuesta anterior, mencione  ¿Cuál?",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 101,
+      "text": "En su historial de trabajo, ¿ha tenido alguna incapacidad?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 102,
+      "text": "En caso de ser afirmativa la respuesta anterior, mencione de qué tipo",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 103,
+      "text": "¿Consume mariguana, heroína, LSD, cocaína barbitúricos, anfetaminas o cualquier otro tipo de drogas psicoactivas?",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 104,
+      "text": "Tipo de droga",
+      "type": "text",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [],
+      "metadata": {
+        "otherPrompts": [
+          "Tu Respuesta:"
+        ]
+      }
+    },
+    {
+      "number": 105,
+      "text": "Frecuencia",
+      "type": "single_choice",
+      "category": "Hábitos y salud",
+      "allowMultiple": false,
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Ocasionalmente (algunas veces al mes)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
+    },
+    {
+      "number": 106,
+      "text": "Selecciona la última ocasión que consumiste",
+      "type": "multi_select",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [
+        "Hace más de un año",
+        "Hace entre 6 meses y un año",
+        "Hace entre 1 y 6 meses",
+        "Hace menos de un mes",
+        "En la última semana",
+        "No aplica"
+      ]
+    },
+    {
+      "number": 107,
+      "text": "¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "SI",
+        "No"
+      ]
+    },
+    {
+      "number": 108,
+      "text": "¿Pertenece o ha pertenecido a instituciones para su rehabilitación?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 109,
+      "text": "Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas oculares",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Sequedad ocular",
+          "Lagrimeo",
+          "Enrojecimiento",
+          "comezón ocular",
+          "Dolor ocular",
+          "Hinchazón ocular",
+          "Visión Borrosa"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 110,
+      "text": "Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas nasales",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Estornudos frecuentes",
+          "Sequedad nasal",
+          "Congestión nasal",
+          "Rinorrea (goteo",
+          "liquido nasal",
+          "Pérdida del olfato",
+          "Hemorragia nasal"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 111,
+      "text": "Síntomas de garganta",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Resequedad",
+          "Ronquera",
+          "Irritación",
+          "Dolor de garganta",
+          "Sensación de cuerpo extraño",
+          "Dificultad",
+          "dolor al tragar"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 112,
+      "text": "Síntomas bucales",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Halitosis",
+          "mal aliento",
+          "Sequedad bucal",
+          "Sangrado de encías",
+          "Ulceras bucales",
+          "Lesiones",
+          "placas blanquecinas"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 113,
+      "text": "Síntomas cutáneos",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Sequedad en la piel",
+          "Comezón en la piel",
+          "Enrojecimiento",
+          "Ampollas",
+          "vesículas",
+          "Ulceras",
+          "necrosis"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 114,
+      "text": "Síntomas digestivos",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Nauseas",
+          "Pérdida del apetito",
+          "Estreñimiento",
+          "Diarrea",
+          "vomito",
+          "Dolor abdominal",
+          "Heces",
+          "vomito con sangre"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 115,
+      "text": "Síntomas parecidos a la gripe",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
+        ],
+        "columns": [
+          "Cansancio",
+          "fatiga",
+          "Congestion nasal",
+          "Dolor de cabeza",
+          "Tos",
+          "Fiebre",
+          "Dificultad para respirar"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 116,
+      "text": "Sistemas dolorosos Indique si tiene molestia o dolor, su frecuencia, si le ha impedido realizar su trabajo actual, y si esa molestia o dolor se han producido coma consecuencia de las tareas que realiza en su puesto de trabajo",
+      "type": "matrix",
+      "category": "Síntomas y dolor",
+      "allowMultiple": true,
+      "options": [],
+      "metadata": {
+        "rows": [
+          "Si",
+          "No",
+          "Aveces",
+          "Nunca"
+        ],
+        "columns": [
+          "Tiene dolor en esta zona ? Cuello u hombros"
+        ],
+        "selection": "checkbox"
+      }
+    },
+    {
+      "number": 117,
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Ocasionalmente (algunas veces al mes)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
+    },
+    {
+      "number": 118,
+      "text": "Esta molestia ¿le ha impedido realizar su trabajo?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces"
+      ]
+    },
+    {
+      "number": 119,
+      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 120,
+      "text": "Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 121,
+      "text": "Tiene dolor en alguna de estas zonas? Sí, No, A veces, Nunca",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 122,
+      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 123,
+      "text": "Esta molestia ¿le ha impedido realizar su trabajo?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 124,
+      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 125,
+      "text": "Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 126,
+      "text": "Dolor de codos manos y/o muñecas",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 127,
+      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 128,
+      "text": "Esta molestia ¿le ha impedido realizar su trabajo?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 129,
+      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 130,
+      "text": "Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 131,
+      "text": "Dolor de piernas y pies",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 132,
+      "text": "¿Con qué frecuencia? Nunca, Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
+      "type": "text",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 133,
+      "text": "Esta molestia ¿le ha impedido realizar su trabajo?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No",
+        "Aveces"
+      ]
+    },
+    {
+      "number": 134,
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Frecuentemente (todos los días)"
+      ]
+    },
+    {
+      "number": 135,
+      "text": "Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?",
+      "type": "single_choice",
+      "category": "Síntomas y dolor",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 136,
+      "text": "En su trabajo,  ¿Cuánto tiempo tiene que adoptar o realizar estas posturas? Sentado",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 137,
+      "text": "De pie",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 138,
+      "text": "Caminando",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 139,
+      "text": "Caminando mientras subo o bajo niveles diferentes (peldaños, escalera, rampa, etc.)",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 140,
+      "text": "En postura de rodillas/en cuclillas",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 141,
+      "text": "Tumbado sobre la espalda o sobre un lado",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 min",
+        "Entre 30min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 142,
+      "text": "En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 143,
+      "text": "Inclinar el cuello/cabeza",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 144,
+      "text": "Inclinar el cuello/cabeza hacia un lado o ambos",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 145,
+      "text": "En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 146,
+      "text": "Inclinar la espalda/tronco hacia atrás",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 147,
+      "text": "Inclinar la espalda/tronco hacia un lado o ambos",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca",
+        "Otros"
+      ],
+      "metadata": {
+        "otherOption": true,
+        "otherPrompts": [
+          "Otros:"
+        ]
+      }
+    },
+    {
+      "number": 148,
+      "text": "Girar la espalda/tronco",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 149,
+      "text": "En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de hombros, muñecas y tobillos/pies, y ¿con que frecuencia? Las manos por encima de la cabeza o los codos por encima de los hombros",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 150,
+      "text": "Ejerciendo presión con uno de los pies",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 151,
+      "text": "En su trabajo, durante ¿Cuánto tiempo tiene que adoptar o realizar estas acciones con las manos? Sostener, presionar o levantar objetos o herramientas con los dedos en forma de pinza",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 152,
+      "text": "Agarrar o sujetar con fuerza objetos o herramientas con las manos",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 153,
+      "text": "Utilizar de manera intensiva los dedos, (ordenador, controles, botoneras, mando, calculadora, caja registradora, etc.)",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 154,
+      "text": "En su trabajo, ¿durante cuanto tiempo tiene que trabajar realizando estas acciones relacionadas con la exposición a vibraciones y/o impactos?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 155,
+      "text": "Trabajar sobre superficies vibrantes (asiento de vehículo, plataforma o suelo vibrante, etc.)",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 156,
+      "text": "Utilizar herramientas y máquinas de impacto o vibrantes (taladro, remachadora, amoladora, martillo, grapadora neumática, etc.)",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 157,
+      "text": "Utilizar la mano (el pie o la rodilla) como martillo, golpeando de forma repetida",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 158,
+      "text": "Levantar Manualmente , objetos, herramientas, materiales de mas de  3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 159,
+      "text": "Los pesos que con mayor frecuencia levantas son de",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Entre 3 y 5 kilos",
+        "Entre 5 y 15 kilos",
+        "Entre 15 y 25 kilos",
+        "Mas de 25 kilos",
+        "No levanto peso"
+      ]
+    },
+    {
+      "number": 160,
+      "text": "Señala si habitualmente",
+      "type": "multi_select",
+      "category": "Eventos críticos",
+      "allowMultiple": true,
+      "options": [
+        "Levantas la carga tu solo/a (sin ayuda de otra persona)",
+        "Levantas la carga por debajo de tus rodillas",
+        "Levantas la carga por encima de tus hombros",
+        "Mantienes los brazos extendidos sin poder apoyar la carga en tu cuerpo",
+        "Levantas la carga con dificultad por no tener buen agarre (sin asa)",
+        "Tienes que levantar la carga cada pocos segundos",
+        "No levanto peso"
+      ]
+    },
+    {
+      "number": 161,
+      "text": "Transportar manualmente objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 162,
+      "text": "Los pesos que con mayor frecuencia levantas son de",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Entre 3 y 5 kilos",
+        "Entre 5 y 15 kilos",
+        "Entre 15 y 25 kilos",
+        "Mas de 25 kilos",
+        "No levanto peso"
+      ]
+    },
+    {
+      "number": 163,
+      "text": "Señala si habitualmente",
+      "type": "multi_select",
+      "category": "Eventos críticos",
+      "allowMultiple": true,
+      "options": [
+        "Transportas la carga tu solo/a (sin ayuda de otra persona)",
+        "Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos",
+        "Transportas la carga con dificultad porno tener buen agarre (sin asa)",
+        "Caminas mas de 10 metros transportando la carga",
+        "Tienes que transportar la carga cada pocos segundos",
+        "No levanto peso"
+      ]
+    },
+    {
+      "number": 164,
+      "text": "Empujar y/o arrastrar manualmente utilizando algún equipo (carretilla, transpaleta, carro...) objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Menos de 30 minutos",
+        "Entre 30 min y 2 horas",
+        "Entre 2 y 4 horas",
+        "Mas de 4 horas",
+        "Nunca"
+      ]
+    },
+    {
+      "number": 165,
+      "text": "Señala si habitualmente",
+      "type": "multi_select",
+      "category": "Eventos críticos",
+      "allowMultiple": true,
+      "options": [
+        "Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre",
+        "Tienes que hacer mucha fuerza para desplazar la carga",
+        "La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta",
+        "muy baja",
+        "difícil de agarrar",
+        "etc.)",
+        "Tienes que empujar y/o arrastrar la carga cada pocos segundos",
+        "No empujo"
+      ]
+    },
+    {
+      "number": 166,
+      "text": "Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 167,
+      "text": "Actos violentos que derivaron de lesiones graves",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 168,
+      "text": "Asaltos",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 169,
+      "text": "Secuestros",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 170,
+      "text": "Si usted ha contestado que \"SI\" a una o más de las preguntas anteriores, favor de contestar las siguientes",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "¿Durante el último mes?: Si",
+        "No"
+      ]
+    },
+    {
+      "number": 171,
+      "text": "¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 172,
+      "text": "¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 173,
+      "text": "Durante el último mes ¿Se ha esforzado para evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 174,
+      "text": "¿Se ha esforzado para evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 175,
+      "text": "¿Ha tenido dificultad para recordar alguna parte importante del evento?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 176,
+      "text": "¿Ha disminuido su interés en sus actividades cotidianas?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 177,
+      "text": "¿Se ha sentido usted alejado o distante de las demás? Si, No",
+      "type": "text",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 178,
+      "text": "¿Ha notado que tiene dificultad para expresar sus sentimientos?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 179,
+      "text": "Ha tenido la impresión de que su vida se va a acortar, ¿Qué va a morir antes que otras personas o que tiene un futuro limitado?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 180,
+      "text": "¿Ha estado particularmente irritable o le han dado arranques de coraje?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 181,
+      "text": "¿Ha tenido dificultad para concentrarse?",
+      "type": "text",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": []
+    },
+    {
+      "number": 182,
+      "text": "¿Ha estado nervioso o constantemente en alerta?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    },
+    {
+      "number": 183,
+      "text": "¿Se ha sobresaltado fácilmente para cualquier cosa?",
+      "type": "single_choice",
+      "category": "Eventos críticos",
+      "allowMultiple": false,
+      "options": [
+        "Si",
+        "No"
+      ]
+    }
+  ]
+}

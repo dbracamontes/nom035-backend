@@ -26,6 +26,11 @@ public class OptionAnswer {
 
     private Integer sortOrder;
 
+    private Boolean requiresFreeText = Boolean.FALSE;
+
+    @Column(columnDefinition = "json")
+    private String metadata;
+
     @OneToMany(mappedBy = "optionAnswer")
     @JsonIgnore
     private List<Response> responses;

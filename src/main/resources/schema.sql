@@ -148,12 +148,13 @@ CREATE TABLE question (
     id BIGINT NOT NULL AUTO_INCREMENT,
     survey_id BIGINT NOT NULL,
     text VARCHAR(500) NOT NULL,
-    response_type ENUM('likert','multiple_choice','open') DEFAULT 'likert',
+    response_type VARCHAR(50) DEFAULT 'likert',
     sort_order INT,
     risk_factor VARCHAR(100),
     category VARCHAR(100),
-    guide_type VARCHAR(10),
+    guide_type VARCHAR(100),
     survey_title VARCHAR(200), -- denormalized survey title
+    metadata JSON NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_question_survey FOREIGN KEY (survey_id)
         REFERENCES survey(id) ON DELETE CASCADE
@@ -166,6 +167,8 @@ CREATE TABLE option_answer (
     text VARCHAR(200) NOT NULL,
     value INT,
     sort_order INT,
+    requires_free_text BOOLEAN DEFAULT FALSE,
+    metadata JSON NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_option_question FOREIGN KEY (question_id)
         REFERENCES question(id) ON DELETE CASCADE

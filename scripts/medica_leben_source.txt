@@ -1,0 +1,184 @@
+1.- Nombre
+2.- Fecha de Nacimiento
+3.- Departamento en el que labora
+4.- Puesto
+5.- Estado Civil: Soltero, Casado, Viudo, Divorciado
+6.- Sexo: Femenino, Maculino
+7.- Estudios realizados: Primaria, Estudios Técnicos, Secundaria, Preparatoria, Universidad, Posgrado
+8.- ¿Cuál es su categoría dentro de la empresa?: Obrero General, Supervisor Administrativo, Oficial  Calificado, Auxiliar Administrativo, Dirección, Mandos Medios
+9.- ¿Antigüedad en el puesto?: menos de 1 año, 1 a 3 años, 3 a 6 años, 6 a 9 años, 9 a 12 años, 12 a 15 años, 15 a 18 años, 18 a 21 años, mas de 21 años
+10.- ¿Cuánto tiempo hace que labora en el mismo lugar de trabajo (edificio, local o planta)?: menos de 1 año, 1 a 2 años, 2  a 3 años, mas de 3 años
+11.- Seleccione los días de la semana en trabaja usted: Lunes a viernes, Lunes a sabado
+12.- ¿Cuántas horas trabaja al día?: menos de 7 horas, 8 horas, 9 horas, 10 horas, 11 horas, 12 o mas
+13.- ¿Qué medio de transporte utiliza para llegar a su trabajo?: Plataforma (Uber DIDI u otros), Propio, Público
+14.- En caso de tener vehículo propio, ¿Cuántos tiene?: 1, 2, 3, Mas de 3, No tengo
+15.- En caso de contar con vehículo propio ¿Cuánto gasta en gasolina a la semana?: De $300 a $500 pesos, De $500 a $1000 pesos, Mas de $1500 pesos, Menos de $300 pesos, No aplica
+16.- ¿Cuánto tiempo hace de traslado a su trabajo?: 0 a 15 minutos, 16 a 30 minutos, 31 a 45 minutos, 45 a 60 minutos, mas de 1 hora
+17.- En caso de usar transporte publico (taxi, Uber, camión) para llegar a su centro de trabajo, ¿Cuánto gasta diariamente?: De $1 a $20 pesos, De $2 a $50 pesos, De $50 a $100 pesos, Más de $100 pesos, No aplica
+18.- ¿La casa o departamento en el que habita es?: Propia, Rentada, Prestada
+19.- ¿Cuántas veces a la semana consume los siguientes alimentos?: No consumo, menos de 1 vez a la semana, 1 a 2 veces a la semana, 3 a 4 veces a la semana, 5 o mas veces a la semana: [Frutas y verduras, Carnes Rojas y Lácteos, Cereales (Tortilla Arroz Quinoa Papa), Semillas (Cacahuate Almendras Pistache)]
+20.- ¿Tiene la posibilidad de acceder a una alimentación sana, variada e higiénica?: No economicamente no me es posible, No el ritmo de trabajo no me permite comprar y preparar mis alimentos, Si cuento con las recursos economicos y el tiempo para acceder a mis alimentos
+21.- ¿Cuántas veces sale de vacaciones al año?: De 1 a 2 veces al año, Mas de 3 veces al año, Ninguna
+22.- En caso de tener hijos, la Educación que reciben es: Pública, Privada, No tengo hijos, No estudian
+23.- ¿En qué posición realizas la mayoría de tus actividades laborales?: De pie, Sentado, Ambos
+24.- ¿Su lugar de trabajo cuenta con ventilación?: Si, No
+25.- Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo: Aire acondicionado, Ventana o natural, Extractor de aire
+26.- La temperatura de su lugar de trabajo es: Frío, Caliente, Normal
+27.- ¿Qué le produce la temperatura de su lugar de trabajo?: Alergia, Resequedad, Insolación, Deshidratación, No afecta
+28.- En su lugar de trabajo se perciben olores de: Comida, Agentes químicos, Humo de tabaco, Gas, Corporales (sudor mal aliento olor a pies orina heces flatulencias), Drenaje, No se perciben olores, {Otros:_______________}
+29.- ¿Cómo es la iluminación en su lugar de trabajo?: Demasiado intensa, Intensa, Adecuada a mis actividades, Escasa
+30.- De las siguientes opciones ¿Qué le incomoda en su lugar de trabajo?: La distribución y orden del espacio, Perturbaciones o distracciones, La falta de limpieza, Sentimiento de encierro, La decoración, La alfombra en el suelo y/o pared, Falta de socialización laboral, Aislamiento, No le molestan estos aspectos, {Otros:_______________}
+31.- ¿En su lugar de trabajo existe ruido?: Si, No
+32.- El nivel de ruido en su puesto de trabajo es: Bajo – Hay algo de ruido pero no es molesto ni afecta la concentración, Alto – El ruido es notable y puede resultar molesto afectando la concentración y productividad, Muy alto – El ruido es muy fuerte y constante impidiendo la concentración y generando incomodidad
+33.- El ruido en su lugar de trabajo procede de: Maquinaria y/o equipos de producción, Sistema de ventilación, La calle o exterior, Equipos de oficina, Conversaciones, No hay ruido, {Otros:______________}
+34.- Aproximadamente ¿Cuánto tiempo está expuesto al ruido en su área de trabajo?: Menos de 60 minutos, 1 - 3 horas, 3 - 5 horas, 5 horas o más
+35.- ¿Conoce cuál es el nivel sonoro en decibeles en su área de trabajo?: 70 dBA, 80 dBA, Mas de 100 dBA, No lo conozco
+36.- ¿Existen vibraciones producidas por herramientas manuales, máquinas, vehículos, etc. en su puesto de trabajo?: Nunca, Algunas veces, Siempre
+37.- ¿Estás expuesto a radiaciones ionizantes o no ionizantes en tu jornada laboral?: Si, No
+38.- Indique el tipo de  radiación ionizante y no ionizante, al que está usted expuesto: [Luz ultravioleta (soldadura eléctrica al arco, lámparas, germicidas…), excluida la luz solar, Luz infrarroja, Microondas (hornos de secado, antenas de telefonía móvil…), Radiofrecuencias (soldaduras por radiofrecuencias, calentamiento de bajíos…), Rayos lasser, Rayos X, rayos gamma, radioisótopos (radiodiagnóstico, radioterapia, diagnóstico de soldaduras), No estoy expuesto a radiación]
+39.- ¿En su área de trabajo existe algún tipo de radiación ionizante?: Si, No, No estoy seguro o lo desconozco
+40.- ¿Cuenta usted con equipo de protección personal para radiación ionizante?: Si, No, No estoy seguro o lo desconozco
+41.- En caso de ser afirmativa la respuesta anterior, ¿Con qué tipo de equipo de protección personal cuenta?: Delantales, Guantes plomizos (para rayos x), Trajes aluminizados, Trajes en fibras espaciales para prevenir el ingreso a radiación, Zapatos especiales, Protección Ocular, No estoy expuesto a radiación ionizante
+42.- ¿Desarrolla usted trabajos en alturas mayores a 1.80 metros?: Si, No
+43.- En caso de ser afirmativa la respuesta anterior, ¿Con que tipo de equipo de protección personal cuenta?: Arnés de seguridad tipo paracaídas, Líneas de vida y de anclaje, Cinturón portaherramientas, Calzado contra - impactos, Casco contra - impactos, Guantes dieléctricos, Ninguno
+44.- ¿Qué riesgos asociados al trabajo en alturas conoce?: Caídas de distinto nivel en metros, Derrumbe de estructuras, Golpes por caída de objetos, Atrapamiento, Contactos eléctricos, Ninguno
+45.-¿Desarrolla usted trabajos con soldadura? Si, No
+46.- ¿Utiliza ropa adecuada y Equipo de protección especial para la soldadura?: Si, No
+47.- Conoce los riesgos y medidas preventivas en los trabajos de soldaduras contaminantes, químicos en soldadura y tipo de contaminante químico que utiliza en su área laboral: Si, No
+48.- Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos. Si, No
+49.- ¿Qué tipos de riesgos de trabajo en actividades de soldadura conoce?: Contacto con energía eléctrica, Contacto con superficies calientes o flamas, Exposición a humos metálicos y gases tóxicos, Ninguno, {Otros:______________}
+50.- ¿Conoce las medidas de primeros auxilios básicos para quemaduras? Si, No
+51.- Su área de trabajo ¿Cuenta con botiquín de primeros auxilios?: Si, No
+52.- Su área de trabajo ¿Cuenta con extintores?: Si, No
+53.- Su área de trabajo ¿Cuenta con señaléticas de prevención de accidentes?: Si, No
+54.- Independientemente de la labor que realice, su área de trabajo ¿Cuenta con Equipo de Protección Personal (EPP)?: Si, No
+55.- En su área laboral ¿Cuenta con la capacitación suficiente para el manejo de herramientas y uso de máquinas según el tipo de área de producción y procesamiento?: Si, No
+56.- En su trabajo ¿Se encuentra expuesto a temperaturas elevadas? (trabajos cerca de hornos, fogones, etc.): Si,  No
+57.- En su trabajo ¿Se encuentra expuesto a temperaturas abatidas? (trabajos en cuartos fríos o de refrigeración): Si,No
+58.- En su puesto de trabajo, ¿Manipula sustancias o preparados nocivos o tóxicos?: Si, No
+59.- En caso de ser afirmativa la respuesta anterior, indique que tipo de producto químico utiliza o está expuesto: Productos fitosanitarios plaguicidas o fertilizantes, Solventes (orgánicos o inorgánicos) tolueno xileno alcohol isopropílico, Hidrocarburos. (gasolina Diesel turbosina etc.), Metales coma el plomo y el mercurio, {Otros:______________}
+60.- Estas sustancias o preparados ¿Tienen alguna etiqueta o leyenda que informe de su peligrosidad?: Si todos, Si algunos, Ninguno
+61.- En general, la información que contiene la etiqueta (símbolos, etc.) es: Complicada, A veces complicada, Fácil de entender
+62.- En su puesto de trabajo ¿Respira polvos, humos, aerosoles, gases o vapores nocivos o tóxicos? (excluido el humo del tabaco): Si, No
+63.- En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales coma desechos, fluidos corporales, materiales de laboratorio, animales?: Si de forma deliberada o intencionada laboratorios de diagnóstico microbiológico trabajo con animales obtención de vacunas insulina u otros medicamentos procesos de fermentación, Si de manera involuntaria habitual o esporádica actividad sanitaria tratamiento de residuos recogida de basura trabajos subterráneos, No
+64.- ¿Conoce usted los posibles efectos perjudiciales para su salud de la manipulación y/o respiración de esas sustancias nocivas o tóxicas?: Si, No
+65.- ¿Le han informado en su empresa de las medidas a adoptar para prevenir estos posibles efectos perjudiciales?: Si, No
+66.- En general, el nivel de atención que debe mantener para realizar su trabajo es: Alta, Media, Baja
+67.- En los últimos 3 meses, la cantidad de trabajo que ha tenido generalmente es: Suficiente, Insuficiente, Excesiva
+68.- El ritmo de trabajo esta determinado por: El ritmo de una maquina o línea, El ritmo de otros compañeros, Causas externas publico/clientes, Objetivos que hay que alcanzar, No hay un ritmo prefijado
+69.- El ritmo de trabajo es: Apresurado, Normal, Lento
+70.- Cuando en su puesto de trabajo se comete algún error, ¿Qué sucede?: Pasa desapercibido, Provoca problemas menores, Entorpece el trabajo, Produce consecuencias graves
+71.- Le parece adecuado su horario de trabajo?: Si, No
+72.- ¿Considera que tiene que realizar tareas que no le corresponden?: A menudo, A veces, Nunca
+73.- ¿Hasta que punto puede tomar decisiones en su trabajo? Siempre, Algunas Veces, Nunca
+74.- ¿Cómo considera que son las relaciones con las personas con las que debe trabajar?: Jefes, Compañeros, Subordinados: [Buena, Regular, Mala]
+75.- ¿Existe algún obstáculo que dificulte la comunicación con sus compañeros?: Si, No
+76.- En caso de ser afirmativa la respuesta anterior, ¿Cuál de los siguientes aspectos dificulta esta comunicación? (Si es necesario marque mas de una respuesta): [La normatividad de la empresa, El inmediato superior, El ritmo de trabajo, No poder desviar la atención del trabajo, No hay obstáculos que dificulten la comuniación, {Otros:_______}]
+77.- ¿Ha asistido a cursos de capacitación o formación complementaria para el desempeño de su trabajo?: Si, No
+78.- En caso de ser afirmativa la respuesta anterior, a ¿Cuántos cursos ha asistido?: 1, 2, 3, 4, Más de 4
+79.- ¿Le parece suficiente la formación que le ha proporcionado la empresa en la que actualmente labora, para el desempeño de su trabajo?: Si, No
+80.- ¿Conoce si hay algún procedimiento establecido para la promoción del personal?: Si, No
+81.- ¿Qué tipo de contrato de trabajo tiene celebrado con la empresa en la que actualmente labora?: Deterinado, Indeterminado
+82.- ¿Cómo cree que esta considerado su puesto de trabajo en la empresa?: De los mas importantes, Importante, Poco importante
+83.- ¿Qué tipo de preparación necesita para desempeñar su puesto de trabajo?: Formación superior, Formación media, Formación técnica, Práctica en el puesto, Saber leer y escribir
+84.- Además de su formación académica, ¿Para desarrollar su trabajo se requiere de aptitudes?: Bastantes, Muy pocas, Ninguna
+85.- Usted fuma o fumaba?: Si, No
+86.- Si la respuesta anterior fue "Si" podría especificar la cantidad de cigarros al día y los años que lleva fumando o que fumo?: {Tu Respuesta:______________}
+87.- Si no es usted fumador, ¿Considera que el humo de tabaco de los demás perjudica su salud?: Si, No
+88.- En caso de ser afirmativa la respuesta anterior, ¿Con qué frecuencia esta expuesto al humo de tabaco?: Nunca, Rara vez (una vez al mes o menos), Ocasionalmente, (algunas veces al mes), 
+Regularmente (algunas veces a la semana), Frecuentemente (todos los días), No aplica
+89.- Consume o consumía alcohol?: Si, No
+90.- Si la respuesta anterior fue "Si" pudieras especificar el tipo de alcohol (cerveza, tequila, etc.), la cantidad de consumo por semana (latas, vasos, botella) y el número de años que has consumido alcohol?: {Tu Respuesta:______________}
+91.- Realiza actividad física?: Si, No
+92.- Con que frecuencia realiza actividad física a la semana (Tomando en cuenta que mínimo son 30 min al día): No realizo, 1 o 2 días a la semana, 3 o 5 días a la semana, Mas de 5 días a la semana
+93.- Seleccione si en su familia ha habido casos de: Cáncer, Diabetes, Enfermedades del corazón, Presión arterial alta, Enfermedades de los riñones, Enfermedades cerebrovasculares, Enfermedades mentales, Intento de Suicidio, Enfermedades reumatológicas, Ninguna de las anteriores
+94.- ¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: Hipertensión Arterial Esencial, Obesidad Mórbida, Diabetes Mellitus tipo II, Otros, Ninguna
+95.- Si la respuesta anterior fue "Otros" favor de especificar la enfermedad que padece: {Tu Respuesta:______________}
+96.- Si padece alguno o algunos de las padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?: Si, No, No aplica
+97.- Favor de especificar el nombre del  medicamento (os) o suplementos que consume: {Tu Respuesta:______________}
+98.- Alergias: Si o No y  favor de especificar a que es alérgico: {Tu Respuesta:______________}
+99.- ¿Alguna vez ha sufrido un accidente de trabajo?: Si, No
+100.- En caso de ser afirmativa la respuesta anterior, mencione  ¿Cuál?: {Tu Respuesta:______________}
+101.- En su historial de trabajo, ¿ha tenido alguna incapacidad?: Si, No
+102.- En caso de ser afirmativa la respuesta anterior, mencione de qué tipo: {Tu Respuesta:______________}
+103.- ¿Consume mariguana, heroína, LSD, cocaína barbitúricos, anfetaminas o cualquier otro tipo de drogas psicoactivas?: Si, No
+104.- Tipo de droga: {Tu Respuesta:______________}
+105.- Frecuencia: Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+106.- Selecciona la última ocasión que consumiste: Hace más de un año, Hace entre 6 meses y un año, Hace entre 1 y 6 meses, Hace menos de un mes, En la última semana, No aplica
+107.- ¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?: SI, No
+108.- ¿Pertenece o ha pertenecido a instituciones para su rehabilitación?: Si, No
+109.- Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas oculares: Sequedad ocular, Lagrimeo, Enrojecimiento o comezón ocular, Dolor ocular, Hinchazón ocular, Visión Borrosa: [Muchas veces, A veces, Nunca]
+110.- Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas nasales: Estornudos frecuentes, Sequedad nasal, Congestión nasal , Rinorrea (goteo o liquido nasal,  Pérdida del olfato, Hemorragia nasal: [Muchas veces, A veces, Nunca]
+111.- Síntomas de garganta: Resequedad, Ronquera, Irritación, Dolor de garganta, Sensación de cuerpo extraño, Dificultad o dolor al tragar: [Muchas veces, A veces, Nunca]
+112.- Síntomas bucales: Halitosis o mal aliento, Sequedad bucal, Sangrado de encías, Ulceras bucales, Lesiones o placas blanquecinas: [Muchas veces, A veces, Nunca]
+113.- Síntomas cutáneos: Sequedad en la piel, Comezón en la piel, Enrojecimiento, Ampollas o vesículas, Ulceras o necrosis: [Muchas veces, A veces, Nunca]
+114.- Síntomas digestivos: Nauseas, Pérdida del apetito, Estreñimiento, Diarrea o vomito, Dolor abdominal, Heces o vomito con sangre: [Muchas veces, A veces, Nunca]
+115.- Síntomas parecidos a la gripe: Cansancio o fatiga, Congestion nasal, Dolor de cabeza, Tos, Fiebre, Dificultad para respirar: [Muchas veces, A veces, Nunca]
+116.- Sistemas dolorosos Indique si tiene molestia o dolor, su frecuencia, si le ha impedido realizar su trabajo actual, y si esa molestia o dolor se han producido coma consecuencia de las tareas que realiza en su puesto de trabajo: Tiene dolor en esta zona ? Cuello u hombros: [Si, No, Aveces, Nunca]
+117.- ¿Con qué frecuencia?: Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+118.- Esta molestia ¿le ha impedido realizar su trabajo?: Si, No, Aveces
+119.- ¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+120.- Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?: Si, No
+121.- Tiene dolor en alguna de estas zonas? Sí, No, A veces, Nunca
+122.- ¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+123.- Esta molestia ¿le ha impedido realizar su trabajo?: Si, No, Aveces, Nunca
+124.- ¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+125.- Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?: Si, No
+126.- Dolor de codos manos y/o muñecas: Si, No, Aveces, Nunca
+127.- ¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+128.- Esta molestia ¿le ha impedido realizar su trabajo?: Si, No, Aveces, Nunca
+129.- ¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+130.- Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?: Si, No
+131.- Dolor de piernas y pies: Si, No, Aveces, Nunca
+132.- ¿Con qué frecuencia? Nunca, Regularmente (algunas veces a la semana), Frecuentemente (todos los días)
+133.- Esta molestia ¿le ha impedido realizar su trabajo?: Si, No, Aveces
+134.- ¿Con qué frecuencia?: Nunca, Rara vez (una vez al mes o menos), Frecuentemente (todos los días)
+135.- Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?: Si, No
+136.- En su trabajo,  ¿Cuánto tiempo tiene que adoptar o realizar estas posturas? Sentado: Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+137.- De pie: Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+138.- Caminando: Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+139.- Caminando mientras subo o bajo niveles diferentes (peldaños, escalera, rampa, etc.): Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+140.- En postura de rodillas/en cuclillas: Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+141.- Tumbado sobre la espalda o sobre un lado: Menos de 30 min, Entre 30min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+142.- En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+143.- Inclinar el cuello/cabeza: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+144.- Inclinar el cuello/cabeza hacia un lado o ambos: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+145.- En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+146.- Inclinar la espalda/tronco hacia atrás: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+147.- Inclinar la espalda/tronco hacia un lado o ambos: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca, {Otros:______________}
+148.- Girar la espalda/tronco: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+149.- En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de hombros, muñecas y tobillos/pies, y ¿con que frecuencia? Las manos por encima de la cabeza o los codos por encima de los hombros:  Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+150.- Ejerciendo presión con uno de los pies: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+151.- En su trabajo, durante ¿Cuánto tiempo tiene que adoptar o realizar estas acciones con las manos? Sostener, presionar o levantar objetos o herramientas con los dedos en forma de pinza: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+152.- Agarrar o sujetar con fuerza objetos o herramientas con las manos: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+153.- Utilizar de manera intensiva los dedos, (ordenador, controles, botoneras, mando, calculadora, caja registradora, etc.): Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+154.- En su trabajo, ¿durante cuanto tiempo tiene que trabajar realizando estas acciones relacionadas con la exposición a vibraciones y/o impactos?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+155.- Trabajar sobre superficies vibrantes (asiento de vehículo, plataforma o suelo vibrante, etc.): Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+156.- Utilizar herramientas y máquinas de impacto o vibrantes (taladro, remachadora, amoladora, martillo, grapadora neumática, etc.): Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+157.- Utilizar la mano (el pie o la rodilla) como martillo, golpeando de forma repetida: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+158.- Levantar Manualmente , objetos, herramientas, materiales de mas de  3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+159.- Los pesos que con mayor frecuencia levantas son de: Entre 3 y 5 kilos, Entre 5 y 15 kilos, Entre 15 y 25 kilos, Mas de 25 kilos, No levanto peso
+160.- Señala si habitualmente: Levantas la carga tu solo/a (sin ayuda de otra persona), Levantas la carga por debajo de tus rodillas, Levantas la carga por encima de tus hombros, Mantienes los brazos extendidos sin poder apoyar la carga en tu cuerpo, Levantas la carga con dificultad por no tener buen agarre (sin asa), Tienes que levantar la carga cada pocos segundos, No levanto peso
+161.- Transportar manualmente objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+162.- Los pesos que con mayor frecuencia levantas son de: Entre 3 y 5 kilos, Entre 5 y 15 kilos, Entre 15 y 25 kilos, Mas de 25 kilos, No levanto peso
+163.- Señala si habitualmente: Transportas la carga tu solo/a (sin ayuda de otra persona), Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos, Transportas la carga con dificultad porno tener buen agarre (sin asa), Caminas mas de 10 metros transportando la carga, Tienes que transportar la carga cada pocos segundos, No levanto peso
+164.- Empujar y/o arrastrar manualmente utilizando algún equipo (carretilla, transpaleta, carro...) objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?: Menos de 30 minutos, Entre 30 min y 2 horas, Entre 2 y 4 horas, Mas de 4 horas, Nunca
+165.- Señala si habitualmente: Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre, Tienes que hacer mucha fuerza para desplazar la carga, La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.), Tienes que empujar y/o arrastrar la carga cada pocos segundos, No empujo
+166.- Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave: Si, No
+167.- Actos violentos que derivaron de lesiones graves: Si, No
+168.- Asaltos: Si, No
+169.- Secuestros: Si,  No
+170.- Si usted ha contestado que "SI" a una o más de las preguntas anteriores, favor de contestar las siguientes: ¿Durante el último mes?: Si, No
+171.- ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?: Si, No
+172.- ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?: Si, No
+173.- Durante el último mes ¿Se ha esforzado para evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?: Si, No
+174.- ¿Se ha esforzado para evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?: Si, No
+175.- ¿Ha tenido dificultad para recordar alguna parte importante del evento?: Si, No
+176.- ¿Ha disminuido su interés en sus actividades cotidianas?: Si, No
+177.- ¿Se ha sentido usted alejado o distante de las demás? Si, No
+178.- ¿Ha notado que tiene dificultad para expresar sus sentimientos?: Si, No
+179.- Ha tenido la impresión de que su vida se va a acortar, ¿Qué va a morir antes que otras personas o que tiene un futuro limitado?: Si, No
+180.- ¿Ha estado particularmente irritable o le han dado arranques de coraje?: Si, No
+181.- ¿Ha tenido dificultad para concentrarse?
+182.- ¿Ha estado nervioso o constantemente en alerta?: Si,  No
+183.- ¿Se ha sobresaltado fácilmente para cualquier cosa?: Si, No

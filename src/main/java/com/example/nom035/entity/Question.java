@@ -34,7 +34,7 @@ public class Question {
     @Column(name = "response_type")
     private String type;
 
-    @Column(name = "guide_type")
+    @Column(name = "guide_type", length = 100)
     private String guideType;
 
     private Integer sortOrder;
@@ -43,6 +43,9 @@ public class Question {
 
     @Column(name = "survey_title")
     private String surveyTitle; // denormalized survey title
+
+    @Column(columnDefinition = "json")
+    private String metadata;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OptionAnswer> options;
