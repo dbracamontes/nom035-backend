@@ -11,6 +11,8 @@ import com.example.nom035.service.MedicaLebenStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -47,6 +49,48 @@ public class CompanyController {
         this.mlStorageService = mlStorageService;
     }
 
+    // Helpers para respuestas de error de validación
+    private ResponseEntity<?> badRequest(String message) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(java.util.Map.of(
+                        "error", "VALIDATION_ERROR",
+                        "message", message
+                ));
+    }
+
+    private String validateCompany(Company company) {
+        if (company.getName() == null || company.getName().trim().isEmpty()) {
+            return "El nombre de la empresa es obligatorio.";
+        }
+        if (company.getName().length() > 150) {
+            return "El nombre de la empresa no puede exceder 150 caracteres.";
+        }
+        if (company.getTaxId() == null || company.getTaxId().trim().isEmpty()) {
+            return "El RFC/Tax ID es obligatorio.";
+        }
+        if (company.getTaxId().length() > 20) {
+            return "El RFC/Tax ID no puede exceder 20 caracteres.";
+        }
+        return null;
+    }
+
+    private String resolveCompanyConstraintMessage(DataIntegrityViolationException ex) {
+        String lower = ex.getMostSpecificCause() != null
+                ? ex.getMostSpecificCause().getMessage().toLowerCase()
+                : ex.getMessage().toLowerCase();
+
+        if (lower.contains("uq_company_name")) {
+            return "El nombre de la empresa ya está registrado.";
+        }
+        if (lower.contains("uq_company_tax_id")) {
+            return "El RFC/Tax ID ya está registrado.";
+        }
+        if (lower.contains("tax_id") && lower.contains("null")) {
+            return "El RFC/Tax ID es obligatorio.";
+        }
+        return "No se pudo guardar la empresa por un error de datos (nombre/RFC).";
+    }
+
     /**
      * Obtener todas las companies.
      * Permitido a ROLE_COMPANY y ROLE_ADMIN.
@@ -78,13 +122,23 @@ public class CompanyController {
      */
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+    public ResponseEntity<?> createCompany(@RequestBody Company company) {
         log.debug("Request to create company: {}", company.getName());
         if (company.getId() != null) {
-            return ResponseEntity.badRequest().build();
+            return badRequest("No se debe enviar ID al crear una empresa nueva.");
         }
-        Company saved = companyService.saveCompany(company);
-        return ResponseEntity.ok(saved);
+        String validationError = validateCompany(company);
+        if (validationError != null) {
+            return badRequest(validationError);
+        }
+        try {
+            Company saved = companyService.saveCompany(company);
+            return ResponseEntity.ok(saved);
+        } catch (DataIntegrityViolationException ex) {
+            log.warn("Data integrity violation when creating company", ex);
+            String msg = resolveCompanyConstraintMessage(ex);
+            return badRequest(msg);
+        }
     }
 
     /**
@@ -93,14 +147,24 @@ public class CompanyController {
      */
     @PutMapping("/{id}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company company) {
+    public ResponseEntity<?> updateCompany(@PathVariable Long id, @RequestBody Company company) {
         log.debug("Request to update company with id={}", id);
         if (!companyService.getCompanyById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
         company.setId(id);
-        Company updated = companyService.saveCompany(company);
-        return ResponseEntity.ok(updated);
+        String validationError = validateCompany(company);
+        if (validationError != null) {
+            return badRequest(validationError);
+        }
+        try {
+            Company updated = companyService.saveCompany(company);
+            return ResponseEntity.ok(updated);
+        } catch (DataIntegrityViolationException ex) {
+            log.warn("Data integrity violation when updating company", ex);
+            String msg = resolveCompanyConstraintMessage(ex);
+            return badRequest(msg);
+        }
     }
 
     /**
