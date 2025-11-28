@@ -27,6 +27,7 @@ CREATE TABLE company (
     name VARCHAR(150) NOT NULL,
     tax_id VARCHAR(20) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+    has_medica_leben_docs BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),
     UNIQUE KEY uq_company_name (name),
     UNIQUE KEY uq_company_tax_id (tax_id)

@@ -35,6 +35,9 @@ public class Company {
     @OneToMany(mappedBy = "company")
     @JsonIgnore
     private List<CompanySurvey> companySurveys;
+
+    @Column(name = "has_medica_leben_docs", nullable = false)
+    private boolean hasMedicaLebenDocs = false;
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
         public String getName() { return name; }

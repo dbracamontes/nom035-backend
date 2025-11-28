@@ -3,6 +3,7 @@ package com.example.nom035.service;
 import com.example.nom035.entity.Company;
 import com.example.nom035.entity.MedicaLebenCompanyDocs;
 import com.example.nom035.entity.MedicaLebenCompanyWorkPhoto;
+import com.example.nom035.repository.CompanyRepository;
 import com.example.nom035.repository.MedicaLebenCompanyDocsRepository;
 import com.example.nom035.repository.MedicaLebenCompanyWorkPhotoRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class MedicaLebenStorageService {
 
     private final MedicaLebenCompanyDocsRepository docsRepository;
     private final MedicaLebenCompanyWorkPhotoRepository photoRepository;
+    private final CompanyRepository companyRepository;
 
     @Value("${medica.leben.upload.base-path}")
     private String basePath;
@@ -91,7 +93,15 @@ public class MedicaLebenStorageService {
             docs.setComprobanteEmaEba(path);
         }
 
-        return docsRepository.save(docs);
+        MedicaLebenCompanyDocs savedDocs = docsRepository.save(docs);
+
+        // Marca a nivel company que ya tiene documentos Médica LEBEN
+        if (!company.isHasMedicaLebenDocs()) {
+            company.setHasMedicaLebenDocs(true);
+            companyRepository.save(company);
+        }
+
+        return savedDocs;
     }
 
     @Transactional
