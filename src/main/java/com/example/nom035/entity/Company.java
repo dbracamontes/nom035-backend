@@ -26,6 +26,10 @@ public class Company {
     @Column(length = 20)
     private String taxId;
 
+    // Optional folio mercantil field
+    @Column(length = 50)
+    private String folioMercantil;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "company")
@@ -46,4 +50,6 @@ public class Company {
         public void setTaxId(String taxId) { this.taxId = taxId; }
         public LocalDateTime getCreatedAt() { return createdAt; }
         public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getFolioMercantil() { return folioMercantil; }
+    public void setFolioMercantil(String folioMercantil) { this.folioMercantil = folioMercantil; }
 }

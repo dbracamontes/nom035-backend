@@ -26,6 +26,7 @@ CREATE TABLE company (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
     tax_id VARCHAR(20) NOT NULL,
+    folio_mercantil VARCHAR(50) NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     has_medica_leben_docs BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),

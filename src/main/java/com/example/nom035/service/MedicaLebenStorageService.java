@@ -29,16 +29,27 @@ public class MedicaLebenStorageService {
     @Value("${medica.leben.upload.base-path}")
     private String basePath;
 
-    private Path resolveCompanyDir(Long companyId) {
-        return Paths.get(basePath, "company-" + companyId);
+    private String resolveCompanyFolderName(Company company) {
+        String taxId = company.getTaxId();
+        if (taxId != null && !taxId.isBlank()) {
+            // sanitize taxId to be safe for filesystem paths
+            return taxId.replaceAll("[^a-zA-Z0-9_-]", "_");
+        }
+        // fallback when there is no taxId
+        return "company-" + company.getId();
     }
 
-    private Path resolveDocsDir(Long companyId) {
-        return resolveCompanyDir(companyId).resolve("docs");
+    private Path resolveCompanyDir(Company company) {
+        String folderName = resolveCompanyFolderName(company);
+        return Paths.get(basePath, folderName);
     }
 
-    private Path resolvePhotosDir(Long companyId) {
-        return resolveCompanyDir(companyId).resolve("photos");
+    private Path resolveDocsDir(Company company) {
+        return resolveCompanyDir(company).resolve("docs");
+    }
+
+    private Path resolvePhotosDir(Company company) {
+        return resolveCompanyDir(company).resolve("photos");
     }
 
     private String storeFile(MultipartFile file, Path targetDir, String targetFilename) throws IOException {
@@ -62,7 +73,7 @@ public class MedicaLebenStorageService {
                 .findByCompany(company)
                 .orElseGet(() -> MedicaLebenCompanyDocs.builder().company(company).build());
 
-        Path docsDir = resolveDocsDir(company.getId());
+        Path docsDir = resolveDocsDir(company);
 
         if (actaConstitutiva != null && !actaConstitutiva.isEmpty()) {
             String path = storeFile(actaConstitutiva, docsDir, "acta_constitutiva_" + actaConstitutiva.getOriginalFilename());
@@ -109,7 +120,7 @@ public class MedicaLebenStorageService {
                                                    MultipartFile photo,
                                                    String description,
                                                    int sortOrder) throws IOException {
-        Path photosDir = resolvePhotosDir(docs.getCompany().getId());
+        Path photosDir = resolvePhotosDir(docs.getCompany());
         String path = storeFile(photo, photosDir, "foto_" + System.currentTimeMillis() + "_" + photo.getOriginalFilename());
 
         MedicaLebenCompanyWorkPhoto entity = MedicaLebenCompanyWorkPhoto.builder()
