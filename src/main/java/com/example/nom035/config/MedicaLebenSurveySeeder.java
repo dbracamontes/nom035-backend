@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -63,7 +64,29 @@ public class MedicaLebenSurveySeeder implements CommandLineRunner {
                 .orElseGet(() -> createSurvey(definition));
 
         List<Question> existingQuestions = questionRepository.findBySurveyId(survey.getId());
-        if (existingQuestions.size() >= definition.getQuestions().size()) {
+        boolean needsRefresh = existingQuestions.size() != definition.getQuestions().size();
+
+        if (!needsRefresh && !existingQuestions.isEmpty()) {
+            Map<Integer, QuestionDefinition> definitionByNumber = definition
+                    .getQuestions()
+                    .stream()
+                    .collect(Collectors.toMap(QuestionDefinition::getNumber, q -> q));
+
+            needsRefresh = existingQuestions.stream().anyMatch(existing -> {
+                QuestionDefinition expected = definitionByNumber.get(existing.getSortOrder());
+                if (expected == null) {
+                    return true;
+                }
+                List<String> expectedOptions = Optional.ofNullable(expected.getOptions()).orElse(Collections.emptyList());
+                if (expectedOptions.isEmpty()) {
+                    return false;
+                }
+                int existingCount = existing.getOptions() != null ? existing.getOptions().size() : 0;
+                return existingCount < expectedOptions.size();
+            });
+        }
+
+        if (!needsRefresh && !existingQuestions.isEmpty()) {
             log.info("Medica Leben survey already seeded ({} questions)", existingQuestions.size());
             return;
         }

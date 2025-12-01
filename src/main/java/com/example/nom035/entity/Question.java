@@ -48,6 +48,7 @@ public class Question {
     private String metadata;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("sortOrder ASC")
     private List<OptionAnswer> options;
 
     @PrePersist
