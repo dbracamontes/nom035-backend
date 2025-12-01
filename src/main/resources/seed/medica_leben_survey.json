@@ -320,10 +320,9 @@
       "category": "Ambiente laboral",
       "allowMultiple": true,
       "options": [
-        "Aire acondicionado",
-        "Ventana",
-        "natural",
-        "Extractor de aire"
+          "Aire acondicionado",
+          "Ventana o natural",
+          "Extractor de aire"
       ]
     },
     {
@@ -391,28 +390,27 @@
     {
       "number": 30,
       "text": "De las siguientes opciones ¿Qué le incomoda en su lugar de trabajo?",
-      "type": "single_choice",
-      "category": "Ambiente laboral",
-      "allowMultiple": false,
-      "options": [
-        "La distribución y orden del espacio",
-        "Perturbaciones",
-        "distracciones",
-        "La falta de limpieza",
-        "Sentimiento de encierro",
-        "La decoración",
-        "La alfombra en el suelo y/o pared",
-        "Falta de socialización laboral",
-        "Aislamiento",
-        "No le molestan estos aspectos",
-        "Otros"
-      ],
-      "metadata": {
-        "otherOption": true,
-        "otherPrompts": [
+        "type": "multi_select",
+        "category": "Ambiente laboral",
+        "allowMultiple": true,
+        "options": [
+          "La distribución y orden del espacio",
+          "Perturbaciones o distracciones",
+          "La falta de limpieza",
+          "Sentimiento de encierro",
+          "La decoración",
+          "La alfombra en el suelo y/o pared",
+          "Falta de socialización laboral",
+          "Aislamiento",
+          "No le molestan estos aspectos",
           "Otros:"
-        ]
-      }
+        ],
+        "metadata": {
+          "otherOption": true,
+          "otherPrompts": [
+            "Otros:"
+          ]
+        }
     },
     {
       "number": 31,
