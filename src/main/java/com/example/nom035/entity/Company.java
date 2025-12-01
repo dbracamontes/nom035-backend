@@ -26,6 +26,10 @@ public class Company {
     @Column(length = 20)
     private String taxId;
 
+    // Optional folio mercantil field
+    @Column(length = 50)
+    private String folioMercantil;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "company")
@@ -35,6 +39,9 @@ public class Company {
     @OneToMany(mappedBy = "company")
     @JsonIgnore
     private List<CompanySurvey> companySurveys;
+
+    @Column(name = "has_medica_leben_docs", nullable = false)
+    private boolean hasMedicaLebenDocs = false;
         public Long getId() { return id; }
         public void setId(Long id) { this.id = id; }
         public String getName() { return name; }
@@ -43,4 +50,6 @@ public class Company {
         public void setTaxId(String taxId) { this.taxId = taxId; }
         public LocalDateTime getCreatedAt() { return createdAt; }
         public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getFolioMercantil() { return folioMercantil; }
+    public void setFolioMercantil(String folioMercantil) { this.folioMercantil = folioMercantil; }
 }
