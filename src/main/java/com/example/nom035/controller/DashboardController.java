@@ -201,7 +201,7 @@ public class DashboardController {
         List<Map<String, Object>> statusCounts = new ArrayList<>();
         for (Object[] row : statusCountsRaw) {
             String statusStr = (String) row[0];
-            long count = (row[1] instanceof Long) ? (Long) row[1] : ((Number) row[1]).longValue();
+            long count = (row[1] instanceof Long l) ? l : ((Number) row[1]).longValue();
             String statusLabel;
             try {
                 statusLabel = com.example.nom035.entity.ApplicationStatus.from(statusStr).getValue();

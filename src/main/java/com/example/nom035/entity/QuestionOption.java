@@ -1,7 +1,9 @@
 package com.example.nom035.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "option_answer") // Mantengo el nombre de tabla que ya existe

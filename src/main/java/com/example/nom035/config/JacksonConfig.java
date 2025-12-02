@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfig {
 
     @Bean
-    public Module hibernate6Module() {
+    Module hibernate6Module() {
         Hibernate6Module module = new Hibernate6Module();
         // No forzamos la carga de propiedades lazy por defecto; evita excepciones si la relación no está inicializada.
         module.disable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);

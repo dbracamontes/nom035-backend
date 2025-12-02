@@ -10,7 +10,6 @@ import com.example.nom035.service.EmployeeService;
 import com.example.nom035.service.MedicaLebenStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,7 +38,6 @@ public class CompanyController {
     private final MedicaLebenCompanyDocsRepository mlDocsRepository;
     private final MedicaLebenStorageService mlStorageService;
 
-    @Autowired
     public CompanyController(CompanyService companyService, EmployeeService employeeService,
                              MedicaLebenCompanyDocsRepository mlDocsRepository,
                              MedicaLebenStorageService mlStorageService) {
@@ -149,7 +147,7 @@ public class CompanyController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<?> updateCompany(@PathVariable Long id, @RequestBody Company company) {
         log.debug("Request to update company with id={}", id);
-        if (!companyService.getCompanyById(id).isPresent()) {
+        if (companyService.getCompanyById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         company.setId(id);
@@ -175,7 +173,7 @@ public class CompanyController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         log.debug("Request to delete company with id={}", id);
-        if (!companyService.getCompanyById(id).isPresent()) {
+        if (companyService.getCompanyById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         companyService.deleteCompany(id);

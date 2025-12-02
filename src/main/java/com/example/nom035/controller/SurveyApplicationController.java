@@ -115,8 +115,8 @@ public class SurveyApplicationController {
 
     @GetMapping("/check")
     @Secured({"ROLE_EMPLOYEE", "ROLE_ADMIN", "ROLE_COMPANY"})
-    public ResponseEntity<SurveyApplicationCheckDto> check(@RequestParam("employeeId") Long employeeId,
-                                                           @RequestParam("surveyId") Long surveyId) {
+    public ResponseEntity<SurveyApplicationCheckDto> check(@RequestParam Long employeeId,
+                                                           @RequestParam Long surveyId) {
         try {
             // Company scoping: verify the employee belongs to the same company
             if (isCompany()) {

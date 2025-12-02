@@ -27,7 +27,7 @@ public class DbStartupRetryConfig {
 
     @Bean
     @Primary
-    public DataSource dataSource(DataSourceProperties properties) {
+    DataSource dataSource(DataSourceProperties properties) {
         HikariDataSource ds = properties.initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
                 .build();

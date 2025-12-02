@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -41,7 +40,7 @@ public class MedicaLebenStorageService {
 
     private Path resolveCompanyDir(Company company) {
         String folderName = resolveCompanyFolderName(company);
-        return Paths.get(basePath, folderName);
+        return Path.of(basePath, folderName);
     }
 
     private Path resolveDocsDir(Company company) {
