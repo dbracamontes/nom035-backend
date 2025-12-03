@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Configuración de seguridad principal.
@@ -21,7 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
  */
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
-public class WebSecurityConfig {
+public class WebSecurityConfig implements WebMvcConfigurer {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -80,6 +82,16 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Mapear /uploads/** a la carpeta "uploads" que está un nivel arriba del directorio del proyecto backend
+        // Estructura esperada: <workspace-root>/uploads/...
+        String uploadsPath = System.getProperty("user.dir") + "/../uploads/";
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:" + uploadsPath)
+                .setCachePeriod(0);
+    }
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -94,7 +106,9 @@ public class WebSecurityConfig {
                     "/public/**",
                     "/api/auth/**",
                     "/api/public/**",
-                    "/favicon.ico").permitAll()
+                    "/favicon.ico",
+                    "/uploads/**"    // permitir acceso público a archivos subidos
+                ).permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 // ADMIN y COMPANY pueden crear, editar o eliminar empleados (el controller valida el alcance por empresa)
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/employees", "/api/employees/**").hasAnyRole("ADMIN", "COMPANY")

@@ -10,6 +10,7 @@ import com.example.nom035.service.EmployeeService;
 import com.example.nom035.service.MedicaLebenStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +38,9 @@ public class CompanyController {
     private final EmployeeService employeeService;
     private final MedicaLebenCompanyDocsRepository mlDocsRepository;
     private final MedicaLebenStorageService mlStorageService;
+
+    @Value("${app.public-base-url:http://localhost:8080}")
+    private String publicBaseUrl;
 
     public CompanyController(CompanyService companyService, EmployeeService employeeService,
                              MedicaLebenCompanyDocsRepository mlDocsRepository,
@@ -193,11 +197,12 @@ public class CompanyController {
     }
 
     @GetMapping("/{companyId}/medica-leben/docs")
-    public ResponseEntity<MedicaLebenCompanyDocs> getMedicaLebenDocs(@PathVariable Long companyId) {
+    public ResponseEntity<MedicaLebenCompanyDocsResponse> getMedicaLebenDocs(@PathVariable Long companyId) {
         Company company = companyService.getCompanyById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
+
         return mlDocsRepository.findByCompany(company)
-                .map(ResponseEntity::ok)
+                .map(docs -> ResponseEntity.ok(toDocsResponse(companyId, docs)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -256,5 +261,72 @@ public class CompanyController {
 
         List<MedicaLebenCompanyWorkPhoto> photos = mlStorageService.listPhotos(docs);
         return ResponseEntity.ok(photos);
+    }
+
+    private MedicaLebenCompanyDocsResponse toDocsResponse(Long companyId, MedicaLebenCompanyDocs docs) {
+        MedicaLebenCompanyDocsResponse dto = new MedicaLebenCompanyDocsResponse();
+        dto.setId(docs.getId());
+        dto.setCompanyId(companyId);
+
+        // Use stored filenames directly from entity fields
+        dto.setActaConstitutiva(buildUrl(companyId, docs.getActaConstitutiva()));
+        dto.setConstanciaSituacionFiscal(buildUrl(companyId, docs.getConstanciaSituacionFiscal()));
+        dto.setPoderNotarial(buildUrl(companyId, docs.getPoderNotarial()));
+        dto.setIdentificacionRepresentante(buildUrl(companyId, docs.getIdentificacionRepresentante()));
+        dto.setComprobanteDomicilio(buildUrl(companyId, docs.getComprobanteDomicilio()));
+        dto.setEstadoCuentaBancaria(buildUrl(companyId, docs.getEstadoCuentaBancaria()));
+        dto.setComprobanteEmaEba(buildUrl(companyId, docs.getComprobanteEmaEba()));
+
+        return dto;
+    }
+
+    private String buildUrl(Long companyId, String filename) {
+        if (filename == null || filename.isBlank()) {
+            return null;
+        }
+        String base = publicBaseUrl != null ? publicBaseUrl.trim() : "";
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/api/medica-leben/companies/" + companyId + "/docs/" + filename;
+    }
+
+    public static class MedicaLebenCompanyDocsResponse {
+        private Long id;
+        private Long companyId;
+        private String actaConstitutiva;
+        private String constanciaSituacionFiscal;
+        private String poderNotarial;
+        private String identificacionRepresentante;
+        private String comprobanteDomicilio;
+        private String estadoCuentaBancaria;
+        private String comprobanteEmaEba;
+
+        public Long getId() { return id; }
+        public void setId(Long id) { this.id = id; }
+
+        public Long getCompanyId() { return companyId; }
+        public void setCompanyId(Long companyId) { this.companyId = companyId; }
+
+        public String getActaConstitutiva() { return actaConstitutiva; }
+        public void setActaConstitutiva(String actaConstitutiva) { this.actaConstitutiva = actaConstitutiva; }
+
+        public String getConstanciaSituacionFiscal() { return constanciaSituacionFiscal; }
+        public void setConstanciaSituacionFiscal(String constanciaSituacionFiscal) { this.constanciaSituacionFiscal = constanciaSituacionFiscal; }
+
+        public String getPoderNotarial() { return poderNotarial; }
+        public void setPoderNotarial(String poderNotarial) { this.poderNotarial = poderNotarial; }
+
+        public String getIdentificacionRepresentante() { return identificacionRepresentante; }
+        public void setIdentificacionRepresentante(String identificacionRepresentante) { this.identificacionRepresentante = identificacionRepresentante; }
+
+        public String getComprobanteDomicilio() { return comprobanteDomicilio; }
+        public void setComprobanteDomicilio(String comprobanteDomicilio) { this.comprobanteDomicilio = comprobanteDomicilio; }
+
+        public String getEstadoCuentaBancaria() { return estadoCuentaBancaria; }
+        public void setEstadoCuentaBancaria(String estadoCuentaBancaria) { this.estadoCuentaBancaria = estadoCuentaBancaria; }
+
+        public String getComprobanteEmaEba() { return comprobanteEmaEba; }
+        public void setComprobanteEmaEba(String comprobanteEmaEba) { this.comprobanteEmaEba = comprobanteEmaEba; }
     }
 }
