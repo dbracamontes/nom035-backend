@@ -514,24 +514,15 @@
       "type": "multi_select",
       "category": "Ambiente laboral",
       "allowMultiple": true,
-      "options": [
-        "Luz ultravioleta (soldadura eléctrica al arco",
-        "lámparas",
-        "germicidas…)",
-        "excluida la luz solar",
-        "Luz infrarroja",
-        "Microondas (hornos de secado",
-        "antenas de telefonía móvil…)",
-        "Radiofrecuencias (soldaduras por radiofrecuencias",
-        "calentamiento de bajíos…)",
-        "Rayos lasser",
-        "Rayos X",
-        "rayos gamma",
-        "radioisótopos (radiodiagnóstico",
-        "radioterapia",
-        "diagnóstico de soldaduras)",
-        "No estoy expuesto a radiación"
-      ]
+        "options": [
+          "Luz ultravioleta (soldadura eléctrica al arco, lámparas, germicidas…) excluida la luz solar",
+          "Luz infrarroja",
+          "Microondas (hornos de secado, antenas de telefonía móvil…)",
+          "Radiofrecuencias (soldaduras por radiofrecuencias, calentamiento de bajíos…)",
+          "Rayos lasser",
+          "Rayos X, rayos gamma, radioisótopos (radiodiagnóstico, radioterapia, diagnóstico de soldaduras)",
+          "No estoy expuesto a radiación"
+        ]
     },
     {
       "number": 39,
@@ -539,12 +530,11 @@
       "type": "single_choice",
       "category": "Ambiente laboral",
       "allowMultiple": false,
-      "options": [
-        "Si",
-        "No",
-        "No estoy seguro",
-        "lo desconozco"
-      ]
+        "options": [
+          "Si",
+          "No",
+          "No estoy seguro o lo desconozco"
+        ]
     },
     {
       "number": 40,
@@ -552,12 +542,11 @@
       "type": "single_choice",
       "category": "Ambiente laboral",
       "allowMultiple": false,
-      "options": [
-        "Si",
-        "No",
-        "No estoy seguro",
-        "lo desconozco"
-      ]
+        "options": [
+          "Sí",
+          "No",
+          "No estoy expuesto a radiación ionizante"
+        ]
     },
     {
       "number": 41,
@@ -619,11 +608,11 @@
     },
     {
       "number": 45,
-      "text": "¿Desarrolla usted trabajos con soldadura? Si, No",
-      "type": "text",
+      "text": "¿Desarrolla usted trabajos con soldadura?",
+      "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
-      "options": []
+      "options": ["Si", "No"]
     },
     {
       "number": 46,
@@ -649,11 +638,11 @@
     },
     {
       "number": 48,
-      "text": "Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos. Si, No",
-      "type": "text",
+      "text": "Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos?",
+      "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
-      "options": []
+      "options": ["Si", "No"]
     },
     {
       "number": 49,
@@ -663,26 +652,19 @@
       "allowMultiple": false,
       "options": [
         "Contacto con energía eléctrica",
-        "Contacto con superficies calientes",
-        "flamas",
+        "Contacto con superficies calientes o flamas",
         "Exposición a humos metálicos y gases tóxicos",
         "Ninguno",
-        "Otros"
-      ],
-      "metadata": {
-        "otherOption": true,
-        "otherPrompts": [
-          "Otros:"
-        ]
-      }
+        "Otros:"
+      ]
     },
     {
       "number": 50,
-      "text": "¿Conoce las medidas de primeros auxilios básicos para quemaduras? Si, No",
-      "type": "text",
+      "text": "¿Conoce las medidas de primeros auxilios básicos para quemaduras?",
+      "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
-      "options": []
+      "options": ["Si", "No"]
     },
     {
       "number": 51,
@@ -775,23 +757,16 @@
     {
       "number": 59,
       "text": "En caso de ser afirmativa la respuesta anterior, indique que tipo de producto químico utiliza o está expuesto",
-      "type": "multi_select",
+      "type": "single_choice",
       "category": "Condiciones laborales",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
-        "Productos fitosanitarios plaguicidas",
-        "fertilizantes",
-        "Solventes (orgánicos o inorgánicos) tolueno xileno alcohol isopropílico",
-        "Hidrocarburos. (gasolina Diesel turbosina etc.)",
+        "Productos fitosanitarios, plaguicidas o fertilizantes",
+        "Solventes (orgánicos o inorgánicos) tolueno, xileno, alcohol isopropílico",
+        "Hidrocarburos. (gasolina, Diesel, turbosina, etc.)",
         "Metales coma el plomo y el mercurio",
-        "Otros"
-      ],
-      "metadata": {
-        "otherOption": true,
-        "otherPrompts": [
-          "Otros:"
-        ]
-      }
+        "Otros:"
+      ]
     },
     {
       "number": 60,
@@ -830,15 +805,13 @@
     },
     {
       "number": 63,
-      "text": "En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales coma desechos, fluidos corporales, materiales de laboratorio, animales?",
+      "text": "En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales como desechos, fluidos corporales, materiales de laboratorio, animales?",
       "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
       "options": [
-        "Si de forma deliberada",
-        "intencionada laboratorios de diagnóstico microbiológico trabajo con animales obtención de vacunas insulina u otros medicamentos procesos de fermentación",
-        "Si de manera involuntaria habitual",
-        "esporádica actividad sanitaria tratamiento de residuos recogida de basura trabajos subterráneos",
+        "Si, de forma deliberada o intencionada: laboratorios de diagnóstico microbiológico, trabajo con animales, obtención de vacunas, insulina u otros medicamentos, procesos de fermentación.",
+        "Si, de manera involuntaria, habitual o esporádica: actividad sanitaria, tratamiento de residuos, recogida de basura, trabajos subterráneos.",
         "No"
       ]
     },
@@ -890,15 +863,14 @@
     },
     {
       "number": 68,
-      "text": "El ritmo de trabajo esta determinado por",
+      "text": "El ritmo de trabajo está determinado por",
       "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
       "options": [
-        "El ritmo de una maquina",
-        "línea",
+        "El ritmo de una maquina o línea",
         "El ritmo de otros compañeros",
-        "Causas externas publico/clientes",
+        "Causas externas: publico/clientes",
         "Objetivos que hay que alcanzar",
         "No hay un ritmo prefijado"
       ]
@@ -953,11 +925,11 @@
     },
     {
       "number": 73,
-      "text": "¿Hasta que punto puede tomar decisiones en su trabajo? Siempre, Algunas Veces, Nunca",
-      "type": "text",
+      "text": "¿Hasta qué punto puede tomar decisiones en su trabajo?",
+      "type": "single_choice",
       "category": "Condiciones laborales",
       "allowMultiple": false,
-      "options": []
+      "options": ["Siempre", "Algunas Veces", "Nunca"]
     },
     {
       "number": 74,
@@ -968,14 +940,14 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Buena",
-          "Regular",
-          "Mala"
-        ],
-        "columns": [
           "Jefes",
           "Compañeros",
           "Subordinados"
+        ],
+        "columns": [
+          "Buena",
+          "Regular",
+          "Mala"
         ],
         "selection": "checkbox"
       }
@@ -1139,15 +1111,14 @@
     },
     {
       "number": 88,
-      "text": "En caso de ser afirmativa la respuesta anterior, ¿Con qué frecuencia esta expuesto al humo de tabaco?",
+      "text": "En caso de ser afirmativa la respuesta anterior, ¿Con qué frecuencia está expuesto al humo de tabaco?",
       "type": "single_choice",
       "category": "Hábitos y salud",
       "allowMultiple": false,
       "options": [
         "Nunca",
         "Rara vez (una vez al mes o menos)",
-        "Ocasionalmente",
-        "(algunas veces al mes)",
+        "Ocasionalmente (algunas veces al mes)",
         "Regularmente (algunas veces a la semana)",
         "Frecuentemente (todos los días)",
         "No aplica"
@@ -1249,10 +1220,10 @@
     },
     {
       "number": 96,
-      "text": "Si padece alguno o algunos de las padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?",
-      "type": "multi_select",
+      "text": "Si padece alguno o algunos de los padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?",
+      "type": "single_choice",
       "category": "Hábitos y salud",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
         "Si",
         "No",
@@ -1274,17 +1245,14 @@
     },
     {
       "number": 98,
-      "text": "Alergias",
-      "type": "single_choice",
+      "text": "Alergias: Si o No y favor de especificar a que es alérgico:",
+      "type": "text",
       "category": "Hábitos y salud",
       "allowMultiple": false,
-      "options": [
-        "Si",
-        "No y favor de especificar a que es alérgico"
-      ],
+      "options": [],
       "metadata": {
         "otherPrompts": [
-          "Tu Respuesta:"
+          "Favor de especificar a qué es alérgico:"
         ]
       }
     },
@@ -1420,18 +1388,17 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
           "Sequedad ocular",
           "Lagrimeo",
-          "Enrojecimiento",
-          "comezón ocular",
+          "Enrojecimiento o comezón ocular",
           "Dolor ocular",
           "Hinchazón ocular",
           "Visión Borrosa"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1445,18 +1412,17 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
           "Estornudos frecuentes",
           "Sequedad nasal",
           "Congestión nasal",
-          "Rinorrea (goteo",
-          "liquido nasal",
+          "Rinorrea (goteo o liquido nasal)",
           "Pérdida del olfato",
           "Hemorragia nasal"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1470,18 +1436,17 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
           "Resequedad",
           "Ronquera",
           "Irritación",
           "Dolor de garganta",
           "Sensación de cuerpo extraño",
-          "Dificultad",
-          "dolor al tragar"
+          "Dificultad o dolor al tragar"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1495,18 +1460,16 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
-          "Halitosis",
-          "mal aliento",
+          "Halitosis o mal aliento",
           "Sequedad bucal",
           "Sangrado de encías",
           "Ulceras bucales",
-          "Lesiones",
-          "placas blanquecinas"
+          "Lesiones o placas blanquecinas"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1520,18 +1483,16 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
           "Sequedad en la piel",
           "Comezón en la piel",
           "Enrojecimiento",
-          "Ampollas",
-          "vesículas",
-          "Ulceras",
-          "necrosis"
+          "Ampollas o vesículas",
+          "Ulceras o necrosis"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1545,19 +1506,17 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
           "Nauseas",
           "Pérdida del apetito",
           "Estreñimiento",
-          "Diarrea",
-          "vomito",
+          "Diarrea o vomito",
           "Dolor abdominal",
-          "Heces",
-          "vomito con sangre"
+          "Heces o vomito con sangre"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1571,18 +1530,17 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Muchas veces",
-          "A veces",
-          "Nunca"
-        ],
-        "columns": [
-          "Cansancio",
-          "fatiga",
+          "Cansancio o fatiga",
           "Congestion nasal",
           "Dolor de cabeza",
           "Tos",
           "Fiebre",
           "Dificultad para respirar"
+        ],
+        "columns": [
+          "Muchas veces",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1596,13 +1554,13 @@
       "options": [],
       "metadata": {
         "rows": [
-          "Si",
-          "No",
-          "Aveces",
-          "Nunca"
+          "Tiene dolor en esta zona ? Cuello, hombros o espalda alta"
         ],
         "columns": [
-          "Tiene dolor en esta zona ? Cuello u hombros"
+          "Si",
+          "No",
+          "A veces",
+          "Nunca"
         ],
         "selection": "checkbox"
       }
@@ -1630,16 +1588,22 @@
       "options": [
         "Si",
         "No",
-        "Aveces"
+        "A veces"
       ]
     },
     {
       "number": 119,
-      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Ocasionalmente (algunas veces al mes)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 120,
@@ -1654,19 +1618,29 @@
     },
     {
       "number": 121,
-      "text": "Tiene dolor en alguna de estas zonas? Sí, No, A veces, Nunca",
-      "type": "text",
+      "text": "Tiene dolor en alguna de estas zonas abdomen, pecho o espalda baja?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Sí",
+        "No",
+        "A veces",
+        "Nunca"
+      ]
     },
     {
       "number": 122,
-      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 123,
@@ -1677,17 +1651,23 @@
       "options": [
         "Si",
         "No",
-        "Aveces",
+        "A veces",
         "Nunca"
       ]
     },
     {
       "number": 124,
-      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Ocasionalmente (algunas veces al mes)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 125,
@@ -1709,17 +1689,22 @@
       "options": [
         "Si",
         "No",
-        "Aveces",
+        "A veces",
         "Nunca"
       ]
     },
     {
       "number": 127,
-      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 128,
@@ -1730,17 +1715,22 @@
       "options": [
         "Si",
         "No",
-        "Aveces",
+        "A veces",
         "Nunca"
       ]
     },
     {
       "number": 129,
-      "text": "¿Con qué frecuencia? Nunca, Rara vez (una vez al mes o menos), Ocasionalmente (algunas veces al mes), Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Rara vez (una vez al mes o menos)",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 130,
@@ -1762,17 +1752,21 @@
       "options": [
         "Si",
         "No",
-        "Aveces",
+        "A veces",
         "Nunca"
       ]
     },
     {
       "number": 132,
-      "text": "¿Con qué frecuencia? Nunca, Regularmente (algunas veces a la semana), Frecuentemente (todos los días)",
-      "type": "text",
+      "text": "¿Con qué frecuencia?",
+      "type": "single_choice",
       "category": "Síntomas y dolor",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Nunca",
+        "Regularmente (algunas veces a la semana)",
+        "Frecuentemente (todos los días)"
+      ]
     },
     {
       "number": 133,
@@ -1783,7 +1777,7 @@
       "options": [
         "Si",
         "No",
-        "Aveces"
+        "A veces"
       ]
     },
     {
@@ -1895,7 +1889,7 @@
     },
     {
       "number": 142,
-      "text": "En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia?",
+      "text": "En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia? Inclinar el cuello/ cabeza a hacia delante.",
       "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
@@ -1937,7 +1931,7 @@
     },
     {
       "number": 145,
-      "text": "En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia?",
+      "text": "En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia? Inclinar la espalda/tronco hacia delante",
       "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
@@ -2365,11 +2359,11 @@
     },
     {
       "number": 177,
-      "text": "¿Se ha sentido usted alejado o distante de las demás? Si, No",
-      "type": "text",
+      "text": "¿Se ha sentido usted alejado o distante de las demás?",
+      "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
-      "options": []
+      "options": ["Si", "No"]
     },
     {
       "number": 178,
