@@ -51,11 +51,22 @@ public class MedicaLebenStorageService {
         return resolveCompanyDir(company).resolve("photos");
     }
 
+    private String buildDocsUrl(Company company, String storedFilename) {
+        // Now we treat docs like simple stored filenames as well
+        return storedFilename;
+    }
+
+    private String buildPhotoUrl(Company company, String storedFilename) {
+        // Work photos should store only the filename (document name), same as docs
+        return storedFilename;
+    }
+
     private String storeFile(MultipartFile file, Path targetDir, String targetFilename) throws IOException {
         Files.createDirectories(targetDir);
         Path target = targetDir.resolve(targetFilename);
         file.transferTo(target.toFile());
-        return target.toString().replace('\\', '/');
+        // Still only return the filename so DB stores just the document name
+        return targetFilename;
     }
 
     @Transactional
@@ -75,32 +86,39 @@ public class MedicaLebenStorageService {
         Path docsDir = resolveDocsDir(company);
 
         if (actaConstitutiva != null && !actaConstitutiva.isEmpty()) {
-            String path = storeFile(actaConstitutiva, docsDir, "acta_constitutiva_" + actaConstitutiva.getOriginalFilename());
-            docs.setActaConstitutiva(path);
+            String filename = "acta_constitutiva_" + actaConstitutiva.getOriginalFilename();
+            storeFile(actaConstitutiva, docsDir, filename);
+            docs.setActaConstitutiva(buildDocsUrl(company, filename));
         }
         if (constanciaSituacionFiscal != null && !constanciaSituacionFiscal.isEmpty()) {
-            String path = storeFile(constanciaSituacionFiscal, docsDir, "constancia_situacion_fiscal_" + constanciaSituacionFiscal.getOriginalFilename());
-            docs.setConstanciaSituacionFiscal(path);
+            String filename = "constancia_situacion_fiscal_" + constanciaSituacionFiscal.getOriginalFilename();
+            storeFile(constanciaSituacionFiscal, docsDir, filename);
+            docs.setConstanciaSituacionFiscal(buildDocsUrl(company, filename));
         }
         if (poderNotarial != null && !poderNotarial.isEmpty()) {
-            String path = storeFile(poderNotarial, docsDir, "poder_notarial_" + poderNotarial.getOriginalFilename());
-            docs.setPoderNotarial(path);
+            String filename = "poder_notarial_" + poderNotarial.getOriginalFilename();
+            storeFile(poderNotarial, docsDir, filename);
+            docs.setPoderNotarial(buildDocsUrl(company, filename));
         }
         if (identificacionRepresentante != null && !identificacionRepresentante.isEmpty()) {
-            String path = storeFile(identificacionRepresentante, docsDir, "identificacion_representante_" + identificacionRepresentante.getOriginalFilename());
-            docs.setIdentificacionRepresentante(path);
+            String filename = "identificacion_representante_" + identificacionRepresentante.getOriginalFilename();
+            storeFile(identificacionRepresentante, docsDir, filename);
+            docs.setIdentificacionRepresentante(buildDocsUrl(company, filename));
         }
         if (comprobanteDomicilio != null && !comprobanteDomicilio.isEmpty()) {
-            String path = storeFile(comprobanteDomicilio, docsDir, "comprobante_domicilio_" + comprobanteDomicilio.getOriginalFilename());
-            docs.setComprobanteDomicilio(path);
+            String filename = "comprobante_domicilio_" + comprobanteDomicilio.getOriginalFilename();
+            storeFile(comprobanteDomicilio, docsDir, filename);
+            docs.setComprobanteDomicilio(buildDocsUrl(company, filename));
         }
         if (estadoCuentaBancaria != null && !estadoCuentaBancaria.isEmpty()) {
-            String path = storeFile(estadoCuentaBancaria, docsDir, "estado_cuenta_bancaria_" + estadoCuentaBancaria.getOriginalFilename());
-            docs.setEstadoCuentaBancaria(path);
+            String filename = "estado_cuenta_bancaria_" + estadoCuentaBancaria.getOriginalFilename();
+            storeFile(estadoCuentaBancaria, docsDir, filename);
+            docs.setEstadoCuentaBancaria(buildDocsUrl(company, filename));
         }
         if (comprobanteEmaEba != null && !comprobanteEmaEba.isEmpty()) {
-            String path = storeFile(comprobanteEmaEba, docsDir, "comprobante_ema_eba_" + comprobanteEmaEba.getOriginalFilename());
-            docs.setComprobanteEmaEba(path);
+            String filename = "comprobante_ema_eba_" + comprobanteEmaEba.getOriginalFilename();
+            storeFile(comprobanteEmaEba, docsDir, filename);
+            docs.setComprobanteEmaEba(buildDocsUrl(company, filename));
         }
 
         MedicaLebenCompanyDocs savedDocs = docsRepository.save(docs);
@@ -120,11 +138,15 @@ public class MedicaLebenStorageService {
                                                    String description,
                                                    int sortOrder) throws IOException {
         Path photosDir = resolvePhotosDir(docs.getCompany());
-        String path = storeFile(photo, photosDir, "foto_" + System.currentTimeMillis() + "_" + photo.getOriginalFilename());
+        String filename = "foto_" + System.currentTimeMillis() + "_" + photo.getOriginalFilename();
+        storeFile(photo, photosDir, filename);
+
+        // Store only the filename (document name) in the DB, just like docs
+        String url = buildPhotoUrl(docs.getCompany(), filename);
 
         MedicaLebenCompanyWorkPhoto entity = MedicaLebenCompanyWorkPhoto.builder()
                 .companyDocs(docs)
-                .url(path)
+                .url(url)
                 .description(description)
                 .sortOrder(sortOrder)
                 .build();
@@ -133,6 +155,7 @@ public class MedicaLebenStorageService {
     }
 
     public List<MedicaLebenCompanyWorkPhoto> listPhotos(MedicaLebenCompanyDocs docs) {
+        // workPhotos already store just the document name in url field
         return photoRepository.findByCompanyDocsOrderBySortOrderAsc(docs);
     }
 }

@@ -237,8 +237,8 @@ public class CompanyController {
     public ResponseEntity<MedicaLebenCompanyWorkPhoto> uploadMedicaLebenPhoto(
             @PathVariable Long companyId,
             @RequestPart("photo") MultipartFile photo,
-            @RequestPart(name = "description", required = false) String description,
-            @RequestPart(name = "sortOrder", required = false) Integer sortOrder
+            @RequestParam(name = "description", required = false) String description,
+            @RequestParam(name = "sortOrder", required = false) Integer sortOrder
     ) throws Exception {
         Company company = companyService.getCompanyById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));

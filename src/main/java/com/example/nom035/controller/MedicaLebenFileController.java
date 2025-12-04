@@ -72,4 +72,48 @@ public class MedicaLebenFileController {
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
+
+    /**
+     * Serve a specific photo for a company.
+     * Example URL:
+     *   GET /api/medica-leben/companies/1/photos/logo.png
+     *
+     * Files are expected under: {basePath}/company-{id}/photos/{filename}
+     */
+    @GetMapping("/companies/{companyId}/photos/{filename}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    public ResponseEntity<Resource> getCompanyPhoto(
+            @PathVariable("companyId") Long companyId,
+            @PathVariable("filename") String filename
+    ) {
+        // Build path: {basePath}/company-{id}/photos/{filename}
+        File file = new File(
+                basePath,
+                "company-" + companyId + File.separator + "photos" + File.separator + filename
+        );
+
+        if (!file.exists() || !file.isFile()) {
+            log.warn("Medica LEBEN photo not found: {}", file.getAbsolutePath());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Resource resource = new FileSystemResource(file);
+
+        // Basic content type detection by file extension (images only)
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        String nameLower = filename.toLowerCase();
+        if (nameLower.endsWith(".png")) {
+            mediaType = MediaType.IMAGE_PNG;
+        } else if (nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg")) {
+            mediaType = MediaType.IMAGE_JPEG;
+        } else if (nameLower.endsWith(".gif")) {
+            mediaType = MediaType.IMAGE_GIF;
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(mediaType);
+        headers.setContentDispositionFormData("inline", filename);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
 }
