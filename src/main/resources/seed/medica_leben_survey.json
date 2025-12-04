@@ -2149,9 +2149,9 @@
     {
       "number": 160,
       "text": "Señala si habitualmente",
-      "type": "multi_select",
+      "type": "single_choice",
       "category": "Eventos críticos",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
         "Levantas la carga tu solo/a (sin ayuda de otra persona)",
         "Levantas la carga por debajo de tus rodillas",
@@ -2193,9 +2193,9 @@
     {
       "number": 163,
       "text": "Señala si habitualmente",
-      "type": "multi_select",
+      "type": "single_choice",
       "category": "Eventos críticos",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
         "Transportas la carga tu solo/a (sin ayuda de otra persona)",
         "Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos",
@@ -2222,16 +2222,13 @@
     {
       "number": 165,
       "text": "Señala si habitualmente",
-      "type": "multi_select",
+      "type": "single_choice",
       "category": "Eventos críticos",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
         "Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre",
         "Tienes que hacer mucha fuerza para desplazar la carga",
-        "La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta",
-        "muy baja",
-        "difícil de agarrar",
-        "etc.)",
+        "La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)",
         "Tienes que empujar y/o arrastrar la carga cada pocos segundos",
         "No empujo"
       ]
@@ -2282,12 +2279,12 @@
     },
     {
       "number": 170,
-      "text": "Si usted ha contestado que \"SI\" a una o más de las preguntas anteriores, favor de contestar las siguientes",
+      "text": "Si usted ha contestado que 'SI' a una o más de las preguntas anteriores, favor de contestar las siguientes:\n¿Durante el último mes?",
       "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
       "options": [
-        "¿Durante el último mes?: Si",
+        "Si",
         "No"
       ]
     },
@@ -2401,10 +2398,13 @@
     {
       "number": 181,
       "text": "¿Ha tenido dificultad para concentrarse?",
-      "type": "text",
+      "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
-      "options": []
+      "options": [
+        "Si",
+        "No"
+      ]
     },
     {
       "number": 182,
