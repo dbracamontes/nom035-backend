@@ -19,7 +19,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Controller para operaciones de companies.
@@ -261,6 +263,69 @@ public class CompanyController {
 
         List<MedicaLebenCompanyWorkPhoto> photos = mlStorageService.listPhotos(docs);
         return ResponseEntity.ok(photos);
+    }
+
+    @DeleteMapping("/{companyId}/medica-leben/docs/{field}")
+    public ResponseEntity<?> deleteMedicaLebenDoc(@PathVariable Long companyId,
+                                                  @PathVariable String field) {
+        try {
+            Company company = companyService.getCompanyById(companyId)
+                    .orElseThrow(() -> new RuntimeException("Company not found"));
+
+            // Accept both camelCase (frontend DTO) and snake_case (storage) names
+            String normalized = field.trim();
+            String snake;
+            switch (normalized) {
+                case "actaConstitutiva", "acta_constitutiva" -> snake = "acta_constitutiva";
+                case "constanciaSituacionFiscal", "constancia_situacion_fiscal" -> snake = "constancia_situacion_fiscal";
+                case "poderNotarial", "poder_notarial" -> snake = "poder_notarial";
+                case "identificacionRepresentante", "identificacion_representante" -> snake = "identificacion_representante";
+                case "comprobanteDomicilio", "comprobante_domicilio" -> snake = "comprobante_domicilio";
+                case "estadoCuentaBancaria", "estado_cuenta_bancaria" -> snake = "estado_cuenta_bancaria";
+                case "comprobanteEmaEba", "comprobante_ema_eba" -> snake = "comprobante_ema_eba";
+                default -> throw new IllegalArgumentException("Unknown document field: " + field);
+            }
+
+            MedicaLebenCompanyDocs updated = mlStorageService.deleteDoc(company, snake);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(java.util.Map.of(
+                            "error", "INVALID_FIELD",
+                            "message", ex.getMessage()
+                    ));
+        } catch (IOException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(java.util.Map.of(
+                            "error", "IO_ERROR",
+                            "message", "No se pudo eliminar el archivo físico"
+                    ));
+        }
+    }
+
+    @DeleteMapping("/{companyId}/medica-leben/photos/{photoId}")
+    public ResponseEntity<?> deleteMedicaLebenPhoto(@PathVariable Long companyId,
+                                                    @PathVariable Long photoId) {
+        try {
+            // Validate that company exists to avoid deleting from wrong context
+            companyService.getCompanyById(companyId)
+                    .orElseThrow(() -> new RuntimeException("Company not found"));
+
+            mlStorageService.deletePhotoById(photoId);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(java.util.Map.of(
+                            "error", "NOT_FOUND",
+                            "message", ex.getMessage()
+                    ));
+        } catch (IOException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(java.util.Map.of(
+                            "error", "IO_ERROR",
+                            "message", "No se pudo eliminar el archivo físico"
+                    ));
+        }
     }
 
     private MedicaLebenCompanyDocsResponse toDocsResponse(Long companyId, MedicaLebenCompanyDocs docs) {

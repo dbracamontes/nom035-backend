@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
@@ -67,6 +68,18 @@ public class MedicaLebenStorageService {
         file.transferTo(target.toFile());
         // Still only return the filename so DB stores just the document name
         return targetFilename;
+    }
+
+    private void deletePhysicalFileIfExists(Path dir, String filename) {
+        if (filename == null || filename.isBlank()) {
+            return;
+        }
+        try {
+            Path target = dir.resolve(filename);
+            Files.deleteIfExists(target);
+        } catch (IOException ex) {
+            // swallow exception to avoid breaking API if disk delete fails
+        }
     }
 
     @Transactional
@@ -157,5 +170,60 @@ public class MedicaLebenStorageService {
     public List<MedicaLebenCompanyWorkPhoto> listPhotos(MedicaLebenCompanyDocs docs) {
         // workPhotos already store just the document name in url field
         return photoRepository.findByCompanyDocsOrderBySortOrderAsc(docs);
+    }
+
+    @Transactional
+    public MedicaLebenCompanyDocs deleteDoc(Company company, String fieldName) throws IOException {
+        MedicaLebenCompanyDocs docs = docsRepository
+                .findByCompany(company)
+                .orElseThrow(() -> new IllegalArgumentException("Medica LEBEN docs not found for company"));
+
+        Path docsDir = resolveDocsDir(company);
+
+        switch (fieldName) {
+            case "acta_constitutiva" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getActaConstitutiva());
+                docs.setActaConstitutiva(null);
+            }
+            case "constancia_situacion_fiscal" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getConstanciaSituacionFiscal());
+                docs.setConstanciaSituacionFiscal(null);
+            }
+            case "poder_notarial" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getPoderNotarial());
+                docs.setPoderNotarial(null);
+            }
+            case "identificacion_representante" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getIdentificacionRepresentante());
+                docs.setIdentificacionRepresentante(null);
+            }
+            case "comprobante_domicilio" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getComprobanteDomicilio());
+                docs.setComprobanteDomicilio(null);
+            }
+            case "estado_cuenta_bancaria" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getEstadoCuentaBancaria());
+                docs.setEstadoCuentaBancaria(null);
+            }
+            case "comprobante_ema_eba" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getComprobanteEmaEba());
+                docs.setComprobanteEmaEba(null);
+            }
+            default -> throw new IllegalArgumentException("Unknown document field: " + fieldName);
+        }
+
+        return docsRepository.save(docs);
+    }
+
+    @Transactional
+    public void deletePhotoById(Long photoId) throws IOException {
+        MedicaLebenCompanyWorkPhoto photo = photoRepository.findById(photoId)
+                .orElseThrow(() -> new IllegalArgumentException("Photo not found"));
+
+        Company company = photo.getCompanyDocs().getCompany();
+        Path photosDir = resolvePhotosDir(company);
+        deletePhysicalFileIfExists(photosDir, photo.getUrl());
+
+        photoRepository.delete(photo);
     }
 }

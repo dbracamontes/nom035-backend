@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -115,5 +116,35 @@ public class MedicaLebenFileController {
         headers.setContentDispositionFormData("inline", filename);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    /**
+     * Delete a specific photo for a company.
+     * Example URL:
+     *   DELETE /api/medica-leben/companies/1/photos/logo.png
+     */
+    @DeleteMapping("/companies/{companyId}/photos/{filename}")
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+    public ResponseEntity<Void> deleteCompanyPhotoFile(
+            @PathVariable("companyId") Long companyId,
+            @PathVariable("filename") String filename
+    ) {
+        File file = new File(
+                basePath,
+                "company-" + companyId + File.separator + "photos" + File.separator + filename
+        );
+
+        if (!file.exists() || !file.isFile()) {
+            log.warn("Medica LEBEN photo for delete not found: {}", file.getAbsolutePath());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (!file.delete()) {
+            log.warn("Medica LEBEN photo could not be deleted: {}", file.getAbsolutePath());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        log.info("Medica LEBEN photo deleted: {}", file.getAbsolutePath());
+        return ResponseEntity.noContent().build();
     }
 }
