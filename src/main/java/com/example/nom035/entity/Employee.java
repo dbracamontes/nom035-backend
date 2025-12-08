@@ -49,6 +49,9 @@ public class Employee {
 	    @OneToMany(mappedBy = "employee")
 	    private List<SurveyApplication> surveyApplications;
 
+	    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+	    private java.util.List<EmployeeDocs> documents = new java.util.ArrayList<>();
+
     public enum Gender {
         M, F, Other
     }
@@ -79,4 +82,6 @@ public class Employee {
 	public void setCompany(Company company) { this.company = company; }
 	public String getCurp() { return curp; }
 	public void setCurp(String curp) { this.curp = curp; }
+	public java.util.List<EmployeeDocs> getDocuments() { return documents; }
+	public void setDocuments(java.util.List<EmployeeDocs> documents) { this.documents = documents; }
 }

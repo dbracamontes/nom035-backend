@@ -18,6 +18,8 @@ DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `privilege`;
 DROP TABLE IF EXISTS `role_privilege`;
 DROP TABLE IF EXISTS `password_reset_token`;
+DROP TABLE IF EXISTS `document_type`;
+DROP TABLE IF EXISTS `employee_docs`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -213,4 +215,31 @@ CREATE TABLE response (
     CONSTRAINT fk_response_option FOREIGN KEY (option_answer_id)
         REFERENCES option_answer(id) ON DELETE SET NULL,
     UNIQUE KEY uq_response_surveyapp_question (survey_application_id, question_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== DOCUMENT_TYPE ==========
+CREATE TABLE document_type (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========== EMPLOYEE_DOCS ==========
+CREATE TABLE employee_docs (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active',
+    created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deactivated_date TIMESTAMP NULL,
+    employee_id BIGINT NOT NULL,
+    type_id BIGINT NOT NULL,
+    file_name VARCHAR(255),
+    content_type VARCHAR(100),
+    file_size BIGINT,
+    file_path VARCHAR(500),
+    PRIMARY KEY (id),
+    CONSTRAINT fk_employee_docs_employee FOREIGN KEY (employee_id)
+        REFERENCES employee(id) ON DELETE CASCADE,
+    CONSTRAINT fk_employee_docs_type FOREIGN KEY (type_id)
+        REFERENCES document_type(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

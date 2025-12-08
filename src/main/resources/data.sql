@@ -13,6 +13,14 @@ DELETE FROM survey;
 DELETE FROM company;
 
 -- ================================
+-- DOCUMENT_TYPE
+-- ================================
+INSERT INTO document_type (id, name) VALUES
+(1, 'Constancia de Situación Fiscal'),
+(2, 'Comprobante de Domicilio'),
+(3, 'Estado de Cuenta Bancario');
+
+-- ================================
 -- COMPANY
 -- ================================
 INSERT INTO company (id, name, tax_id, created_at) VALUES
