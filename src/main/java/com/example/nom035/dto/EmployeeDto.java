@@ -14,6 +14,7 @@ public class EmployeeDto {
     private String status;
     private Long companyId;
     private String companyName;
+    private String curp;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -37,6 +38,8 @@ public class EmployeeDto {
     public void setCompanyId(Long companyId) { this.companyId = companyId; }
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public String getCurp() { return curp; }
+    public void setCurp(String curp) { this.curp = curp; }
 
     public static EmployeeDto fromEntity(Employee employee) {
         EmployeeDto dto = new EmployeeDto();
@@ -51,6 +54,7 @@ public class EmployeeDto {
         dto.setStatus(employee.getStatus() != null ? employee.getStatus().name() : null);
         dto.setCompanyId(employee.getCompany() != null ? employee.getCompany().getId() : null);
         dto.setCompanyName(employee.getCompany() != null ? employee.getCompany().getName() : null);
+        dto.setCurp(employee.getCurp());
         return dto;
     }
 }

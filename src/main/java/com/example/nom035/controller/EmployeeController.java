@@ -207,6 +207,7 @@ public class EmployeeController {
         if (employee.getGender() != null) existing.setGender(employee.getGender());
         if (employee.getAge() != null) existing.setAge(employee.getAge());
         if (employee.getStatus() != null) existing.setStatus(employee.getStatus());
+        if (employee.getCurp() != null) existing.setCurp(employee.getCurp());
         if (employee.getCompany() != null) {
             Long cid = employee.getCompany().getId();
             if (cid == null) {

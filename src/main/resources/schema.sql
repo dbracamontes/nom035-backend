@@ -45,6 +45,7 @@ CREATE TABLE employee (
     seniority_years INT,
     gender ENUM('M','F','Otro'),
     age INT,
+    curp VARCHAR(18),
     status ENUM('activo','inactivo') DEFAULT 'activo',
     PRIMARY KEY (id),
     CONSTRAINT fk_employee_company FOREIGN KEY (company_id)

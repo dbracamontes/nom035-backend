@@ -25,38 +25,38 @@ INSERT INTO company (id, name, tax_id, created_at) VALUES
 -- ================================
 -- EMPLOYEE
 -- ================================
-INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, status) VALUES
-(1, 1, 'Carlos Pérez', 'carlos.perez@technova.com', 'Developer', 'IT', 3, 'M', 28, 'activo'),
-(2, 1, 'Laura Gómez', 'laura.gomez@technova.com', 'QA Engineer', 'IT', 2, 'F', 26, 'activo'),
-(3, 2, 'Miguel Torres', 'miguel.torres@ecoworld.com', 'Analyst', 'Operations', 5, 'M', 34, 'activo'),
-(4, 3, 'Sofía Ramírez', 'sofia.ramirez@healthcorp.com', 'HR Manager', 'HR', 6, 'F', 40, 'activo'),
-(5, 3, 'Andrés López', 'andres.lopez@healthcorp.com', 'Nurse', 'Medical', 4, 'M', 30, 'activo'),
-(6, 4, 'Elena Vargas', 'elena.vargas@buildit.com', 'Architect', 'Design', 7, 'F', 37, 'activo'),
-(7, 4, 'Luis Fernández', 'luis.fernandez@buildit.com', 'Engineer', 'Production', 5, 'M', 32, 'activo'),
-(8, 4, 'Paula Jiménez', 'paula.jimenez@buildit.com', 'Supervisor', 'Production', 8, 'F', 38, 'activo'),
-(9, 5, 'Ricardo Soto', 'ricardo.soto@softlogic.com', 'Project Manager', 'PMO', 9, 'M', 41, 'activo'),
-(10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'activo'),
-(11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'activo');
+INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, curp, status) VALUES
+(1, 1, 'Carlos Pérez', 'carlos.perez@technova.com', 'Developer', 'IT', 3, 'M', 28, 'PEGC900101HDFRRL01', 'activo'),
+(2, 1, 'Laura Gómez', 'laura.gomez@technova.com', 'QA Engineer', 'IT', 2, 'F', 26, 'GOLR910202MDFRRS02', 'activo'),
+(3, 2, 'Miguel Torres', 'miguel.torres@ecoworld.com', 'Analyst', 'Operations', 5, 'M', 34, 'TOMI880303HDFRRL03', 'activo'),
+(4, 3, 'Sofía Ramírez', 'sofia.ramirez@healthcorp.com', 'HR Manager', 'HR', 6, 'F', 40, 'RASO850404MDFRRS04', 'activo'),
+(5, 3, 'Andrés López', 'andres.lopez@healthcorp.com', 'Nurse', 'Medical', 4, 'M', 30, 'LOAA920505HDFRRL05', 'activo'),
+(6, 4, 'Elena Vargas', 'elena.vargas@buildit.com', 'Architect', 'Design', 7, 'F', 37, 'VAEG830606MDFRRS06', 'activo'),
+(7, 4, 'Luis Fernández', 'luis.fernandez@buildit.com', 'Engineer', 'Production', 5, 'M', 32, 'FELU930707HDFRRL07', 'activo'),
+(8, 4, 'Paula Jiménez', 'paula.jimenez@buildit.com', 'Supervisor', 'Production', 8, 'F', 38, 'JIPA840808MDFRRS08', 'activo'),
+(9, 5, 'Ricardo Soto', 'ricardo.soto@softlogic.com', 'Project Manager', 'PMO', 9, 'M', 41, 'SORI820909HDFRRL09', 'activo'),
+(10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'CRMA940101MDFRRS10', 'activo'),
+(11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'TEME950202HDFRRL11', 'activo');
 
 -- Agregar empleados adicionales para TechNova SA (company_id = 1) hasta tener 20 en total
-INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, status) VALUES
-(12, 1, 'Jorge Martínez', 'jorge.martinez@technova.com', 'Backend Developer', 'IT', 4, 'M', 29, 'activo'),
-(13, 1, 'Natalia Reyes', 'natalia.reyes@technova.com', 'Frontend Developer', 'IT', 3, 'F', 27, 'activo'),
-(14, 1, 'Diego Hernández', 'diego.hernandez@technova.com', 'DevOps Engineer', 'IT', 5, 'M', 33, 'activo'),
-(15, 1, 'Valeria Castro', 'valeria.castro@technova.com', 'Product Owner', 'PMO', 6, 'F', 35, 'activo'),
-(16, 1, 'Sebastián Ortiz', 'sebastian.ortiz@technova.com', 'Data Analyst', 'Operations', 2, 'M', 26, 'activo'),
-(17, 1, 'Daniela Rojas', 'daniela.rojas@technova.com', 'UX Designer', 'Design', 4, 'F', 31, 'activo'),
-(18, 1, 'Fernando Álvarez', 'fernando.alvarez@technova.com', 'QA Analyst', 'QA', 3, 'M', 28, 'activo'),
-(19, 1, 'Adriana Méndez', 'adriana.mendez@technova.com', 'Scrum Master', 'PMO', 5, 'F', 34, 'activo'),
-(20, 1, 'Pablo Navarro', 'pablo.navarro@technova.com', 'Support Engineer', 'IT', 2, 'M', 25, 'activo'),
-(21, 1, 'Camila Aguilar', 'camila.aguilar@technova.com', 'HR Specialist', 'HR', 4, 'F', 30, 'activo'),
-(22, 1, 'Rodrigo Vega', 'rodrigo.vega@technova.com', 'Security Engineer', 'IT', 7, 'M', 38, 'activo'),
-(23, 1, 'Andrea Ruiz', 'andrea.ruiz@technova.com', 'Business Analyst', 'Operations', 5, 'F', 32, 'activo'),
-(24, 1, 'Mauricio León', 'mauricio.leon@technova.com', 'Mobile Developer', 'IT', 3, 'M', 29, 'activo'),
-(25, 1, 'Paola Salas', 'paola.salas@technova.com', 'Data Engineer', 'IT', 4, 'F', 33, 'activo'),
-(26, 1, 'Iván Castillo', 'ivan.castillo@technova.com', 'SysAdmin', 'IT', 6, 'M', 36, 'activo'),
-(27, 1, 'Karen Silva', 'karen.silva@technova.com', 'Technical Writer', 'PMO', 3, 'F', 28, 'activo'),
-(28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'activo');
+INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, curp, status) VALUES
+(12, 1, 'Jorge Martínez', 'jorge.martinez@technova.com', 'Backend Developer', 'IT', 4, 'M', 29, 'MAJO900303HDFRRL12', 'activo'),
+(13, 1, 'Natalia Reyes', 'natalia.reyes@technova.com', 'Frontend Developer', 'IT', 3, 'F', 27, 'RENA910404MDFRRS13', 'activo'),
+(14, 1, 'Diego Hernández', 'diego.hernandez@technova.com', 'DevOps Engineer', 'IT', 5, 'M', 33, 'HEDI880505HDFRRL14', 'activo'),
+(15, 1, 'Valeria Castro', 'valeria.castro@technova.com', 'Product Owner', 'PMO', 6, 'F', 35, 'CAVA860606MDFRRS15', 'activo'),
+(16, 1, 'Sebastián Ortiz', 'sebastian.ortiz@technova.com', 'Data Analyst', 'Operations', 2, 'M', 26, 'ORSE920707HDFRRL16', 'activo'),
+(17, 1, 'Daniela Rojas', 'daniela.rojas@technova.com', 'UX Designer', 'Design', 4, 'F', 31, 'RODA890808MDFRRS17', 'activo'),
+(18, 1, 'Fernando Álvarez', 'fernando.alvarez@technova.com', 'QA Analyst', 'QA', 3, 'M', 28, 'ALFE930909HDFRRL18', 'activo'),
+(19, 1, 'Adriana Méndez', 'adriana.mendez@technova.com', 'Scrum Master', 'PMO', 5, 'F', 34, 'MEAD850101MDFRRS19', 'activo'),
+(20, 1, 'Pablo Navarro', 'pablo.navarro@technova.com', 'Support Engineer', 'IT', 2, 'M', 25, 'NAPO950202HDFRRL20', 'activo'),
+(21, 1, 'Camila Aguilar', 'camila.aguilar@technova.com', 'HR Specialist', 'HR', 4, 'F', 30, 'AGCA890303MDFRRS21', 'activo'),
+(22, 1, 'Rodrigo Vega', 'rodrigo.vega@technova.com', 'Security Engineer', 'IT', 7, 'M', 38, 'VERO870404HDFRRL22', 'activo'),
+(23, 1, 'Andrea Ruiz', 'andrea.ruiz@technova.com', 'Business Analyst', 'Operations', 5, 'F', 32, 'RUAN910505MDFRRS23', 'activo'),
+(24, 1, 'Mauricio León', 'mauricio.leon@technova.com', 'Mobile Developer', 'IT', 3, 'M', 29, 'LEMA900606HDFRRL24', 'activo'),
+(25, 1, 'Paola Salas', 'paola.salas@technova.com', 'Data Engineer', 'IT', 4, 'F', 33, 'SAPA880707MDFRRS25', 'activo'),
+(26, 1, 'Iván Castillo', 'ivan.castillo@technova.com', 'SysAdmin', 'IT', 6, 'M', 36, 'CAIV830808HDFRRL26', 'activo'),
+(27, 1, 'Karen Silva', 'karen.silva@technova.com', 'Technical Writer', 'PMO', 3, 'F', 28, 'SIKA940909MDFRRS27', 'activo'),
+(28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'CABR930101HDFRRL28', 'activo');
 
 -- ================================
 -- SURVEY (solo uno: Encuesta NOM-035 Integral ahora id=1)

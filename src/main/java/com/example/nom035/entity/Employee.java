@@ -26,6 +26,37 @@ public class Employee {
 	    @Column(nullable = false)
 	    private String name;
 
+	    @Column(unique = true)
+	    private String email;
+
+	    private String position;
+
+	    private String department;
+
+	    private Integer seniorityYears;
+
+	    @Enumerated(EnumType.STRING)
+	    private Gender gender;
+
+	    private Integer age;
+
+	    @Enumerated(EnumType.STRING)
+	    private EmployeeStatus status;
+
+	    @Column(length = 18)
+	    private String curp;
+
+	    @OneToMany(mappedBy = "employee")
+	    private List<SurveyApplication> surveyApplications;
+
+    public enum Gender {
+        M, F, Other
+    }
+    
+    public enum EmployeeStatus {
+        activo, inactivo
+    }
+
 	public Long getId() { return id; }
 	public void setId(Long id) { this.id = id; }
 	public String getName() { return name; }
@@ -46,31 +77,6 @@ public class Employee {
 	public void setStatus(EmployeeStatus status) { this.status = status; }
 	public Company getCompany() { return company; }
 	public void setCompany(Company company) { this.company = company; }
-	    @Column(unique = true)
-	    private String email;
-
-	    private String position;
-
-	    private String department;
-
-	    private Integer seniorityYears;
-
-	    @Enumerated(EnumType.STRING)
-	    private Gender gender;
-
-	    private Integer age;
-
-	    @Enumerated(EnumType.STRING)
-	    private EmployeeStatus status;
-
-	    @OneToMany(mappedBy = "employee")
-	    private List<SurveyApplication> surveyApplications;
-
-    public enum Gender {
-        M, F, Other
-    }
-    
-    public enum EmployeeStatus {
-        activo, inactivo
-    }
+	public String getCurp() { return curp; }
+	public void setCurp(String curp) { this.curp = curp; }
 }
