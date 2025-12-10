@@ -16,6 +16,7 @@ public class EmployeeDocsDto {
     private String contentType;
     private Long fileSize;
     private String filePath;
+    private boolean hasFile;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -39,4 +40,6 @@ public class EmployeeDocsDto {
     public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
     public String getFilePath() { return filePath; }
     public void setFilePath(String filePath) { this.filePath = filePath; }
+    public boolean isHasFile() { return hasFile; }
+    public void setHasFile(boolean hasFile) { this.hasFile = hasFile; }
 }

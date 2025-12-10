@@ -141,11 +141,16 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
             java.nio.file.Files.createDirectories(baseDir);
             String originalName = file.getOriginalFilename();
             String safeName = (originalName != null ? originalName.replaceAll("[^a-zA-Z0-9._-]", "_") : "file");
-            String storedName = java.util.UUID.randomUUID() + "_" + safeName;
+
+            // build new stored name: employeeId_date_documentName
+            String datePrefix = java.time.LocalDateTime.now()
+                    .format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+            String storedName = employeeId + "_" + datePrefix + "_" + safeName;
+
             java.nio.file.Path target = baseDir.resolve(storedName);
             java.nio.file.Files.copy(file.getInputStream(), target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 
-            entity.setFileName(originalName);
+            entity.setFileName(storedName);
             entity.setContentType(file.getContentType());
             entity.setFileSize(file.getSize());
             entity.setFilePath(target.toString());
@@ -190,6 +195,8 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
         dto.setContentType(entity.getContentType());
         dto.setFileSize(entity.getFileSize());
         dto.setFilePath(entity.getFilePath());
+        // new: flag to indicate if document currently has an associated file
+        dto.setHasFile(entity.getFilePath() != null && !entity.getFilePath().isBlank());
         return dto;
     }
 }
