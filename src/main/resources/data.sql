@@ -86,7 +86,9 @@ INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, co
 INSERT INTO role (id, name) VALUES
     (1, 'ROLE_ADMIN'),
     (2, 'ROLE_COMPANY'),
-    (3, 'ROLE_EMPLOYEE')
+  (3, 'ROLE_EMPLOYEE'),
+  (4, 'ROLE_GENERADOR'),
+  (5, 'ROLE_COTIZADOR')
 ON DUPLICATE KEY UPDATE name=VALUES(name);
 
 -- Passwords en texto plano para pruebas: admin123, company123, employee123
@@ -99,7 +101,9 @@ ON DUPLICATE KEY UPDATE name=VALUES(name);
 INSERT INTO `user` (id, username, password, email, company_id, employee_id, enabled) VALUES
 	(1, 'admin', 'admin123', 'admin@demo.com', NULL, NULL, TRUE),
 	(2, 'company', 'company123', 'company@demo.com', 1, NULL, TRUE),
-	(3, 'employee', 'employee123', 'employee@demo.com', NULL, 11, TRUE)
+  (3, 'employee', 'employee123', 'employee@demo.com', NULL, 11, TRUE),
+  (4, 'generador', 'generador123', 'generador@demo.com', NULL, NULL, TRUE),
+  (5, 'cotizador', 'cotizador123', 'cotizador@demo.com', NULL, NULL, TRUE)
 ON DUPLICATE KEY UPDATE username=VALUES(username);
 
 UPDATE `user` u
@@ -111,7 +115,9 @@ WHERE u.email IS NOT NULL AND u.employee_id IS NULL;
 INSERT INTO user_role (user_id, role_id) VALUES
 	(1, 1), -- admin -> ROLE_ADMIN
 	(2, 2), -- company -> ROLE_COMPANY
-	(3, 3)
+  (3, 3),
+  (4, 4), -- generador -> ROLE_GENERADOR
+  (5, 5)
 ON DUPLICATE KEY UPDATE role_id=VALUES(role_id);
 
 -- ================================
