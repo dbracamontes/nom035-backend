@@ -59,7 +59,7 @@
       "allowMultiple": false,
       "options": [
         "Femenino",
-        "Maculino"
+        "Masculino"
       ]
     },
     {
@@ -314,16 +314,17 @@
       ]
     },
     {
-      "number": 25,
-      "text": "Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo",
-      "type": "multi_select",
-      "category": "Ambiente laboral",
-      "allowMultiple": true,
-      "options": [
+        "id": 25,
+        "number": 25,
+        "text": "Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo",
+        "type": "single_choice",
+        "category": "Ambiente laboral",
+        "allowMultiple": false,
+        "options": [
           "Aire acondicionado",
           "Ventana o natural",
           "Extractor de aire"
-      ]
+        ]
     },
     {
       "number": 26,
