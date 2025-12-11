@@ -13,9 +13,16 @@ import com.example.nom035.repository.DocumentTypeRepository;
 import com.example.nom035.repository.EmployeeDocsRepository;
 import com.example.nom035.repository.EmployeeRepository;
 import com.example.nom035.service.EmployeeDocsService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -180,6 +187,40 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
         entity.setFileSize(null);
         entity.setFilePath(null);
         employeeDocsRepository.save(entity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<byte[]> downloadFile(Long employeeId, Long docId) {
+        EmployeeDocs entity = employeeDocsRepository.findById(docId)
+                .orElseThrow(() -> new ResourceNotFoundException("EmployeeDocs not found with id " + docId));
+        if (entity.getEmployee() == null || !entity.getEmployee().getId().equals(employeeId)) {
+            throw new ResourceNotFoundException("Document does not belong to employee " + employeeId);
+        }
+        if (entity.getFilePath() == null || entity.getFilePath().isBlank()) {
+            throw new ResourceNotFoundException("Document has no associated file");
+        }
+        try {
+            Path path = Paths.get(entity.getFilePath());
+            if (!Files.exists(path)) {
+                throw new ResourceNotFoundException("Stored file not found on disk");
+            }
+            byte[] bytes = Files.readAllBytes(path);
+
+            String contentType = entity.getContentType();
+            if (contentType == null || contentType.isBlank()) {
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            String downloadName = entity.getFileName() != null ? entity.getFileName() : path.getFileName().toString();
+            headers.setContentDispositionFormData("attachment", downloadName);
+
+            return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+        } catch (java.io.IOException ex) {
+            throw new BadRequestException("Failed to read file: " + ex.getMessage());
+        }
     }
 
     private EmployeeDocsDto toDto(EmployeeDocs entity) {

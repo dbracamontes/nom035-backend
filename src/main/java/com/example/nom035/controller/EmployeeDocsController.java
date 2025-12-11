@@ -97,6 +97,13 @@ public class EmployeeDocsController {
         return ResponseEntity.ok(updated);
     }
 
+    // GET /api/employees/{employeeId}/documents/{docId}/file - download file
+    @GetMapping("/{docId}/file")
+    public ResponseEntity<byte[]> downloadDocumentFile(@PathVariable Long employeeId,
+                                                       @PathVariable Long docId) {
+        return employeeDocsService.downloadFile(employeeId, docId);
+    }
+
     // DELETE /api/employees/{employeeId}/documents/{docId}/file
     @DeleteMapping("/{docId}/file")
     public ResponseEntity<Void> deleteDocumentFile(@PathVariable Long employeeId,
