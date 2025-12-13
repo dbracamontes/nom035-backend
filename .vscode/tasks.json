@@ -4,7 +4,7 @@
 		{
 			"label": "Run Backend (Maven)",
 			"type": "shell",
-			"command": "cd ../nom035-backend && mvn -DskipTests spring-boot:run",
+			"command": "cd ../nom035-backend; mvn -DskipTests spring-boot:run",
 			"isBackground": false,
 			"group": "build",
 			"presentation": {
@@ -14,7 +14,7 @@
 		{
 			"label": "Run Frontend (npm start)",
 			"type": "shell",
-			"command": "cd ../nom035-frontend && npm install && npm start",
+			"command": "cd ../nom035-frontend; npm install --legacy-peer-deps; npm start",
 			"isBackground": false,
 			"group": "build",
 			"presentation": {

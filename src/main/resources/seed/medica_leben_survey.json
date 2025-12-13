@@ -126,9 +126,9 @@
     {
       "number": 11,
       "text": "Seleccione los días de la semana en trabaja usted",
-      "type": "multi_select",
+      "type": "single_choice",
       "category": "Datos generales",
-      "allowMultiple": true,
+      "allowMultiple": false,
       "options": [
         "Lunes a viernes",
         "Lunes a sabado"
@@ -1033,7 +1033,7 @@
       "category": "Hábitos y salud",
       "allowMultiple": false,
       "options": [
-        "Deterinado",
+        "Determinado",
         "Indeterminado"
       ]
     },
