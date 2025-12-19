@@ -45,6 +45,7 @@ public class Response {
     @JoinColumn(name = "option_answer_id")
     private OptionAnswer optionAnswer;
 
+    @Column(columnDefinition = "TEXT")
     private String freeText;
 
     private Integer value; // copiar el valor de optionAnswer.value para reportes rápidos
