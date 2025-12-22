@@ -1,4 +1,4 @@
-{
+﻿{
   "code": "MEDICA_LEBEN",
   "title": "Encuesta Médica Leben",
   "description": "Instrumento de 183 reactivos que combina antecedentes sociodemográficos, condiciones laborales y salud integral.",
@@ -59,7 +59,7 @@
       "allowMultiple": false,
       "options": [
         "Femenino",
-        "Masculino"
+        "Maculino"
       ]
     },
     {
@@ -126,9 +126,9 @@
     {
       "number": 11,
       "text": "Seleccione los días de la semana en trabaja usted",
-      "type": "single_choice",
+      "type": "multi_select",
       "category": "Datos generales",
-      "allowMultiple": false,
+      "allowMultiple": true,
       "options": [
         "Lunes a viernes",
         "Lunes a sabado"
@@ -314,17 +314,16 @@
       ]
     },
     {
-        "id": 25,
-        "number": 25,
-        "text": "Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo",
-        "type": "single_choice",
-        "category": "Ambiente laboral",
-        "allowMultiple": false,
-        "options": [
+      "number": 25,
+      "text": "Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo",
+      "type": "multi_select",
+      "category": "Ambiente laboral",
+      "allowMultiple": true,
+      "options": [
           "Aire acondicionado",
           "Ventana o natural",
           "Extractor de aire"
-        ]
+      ]
     },
     {
       "number": 26,
@@ -404,7 +403,7 @@
           "Falta de socialización laboral",
           "Aislamiento",
           "No le molestan estos aspectos",
-          "Otros"
+          "Otros:"
         ],
         "metadata": {
           "otherOption": true,
@@ -976,7 +975,7 @@
         "El ritmo de trabajo",
         "No poder desviar la atención del trabajo",
         "No hay obstáculos que dificulten la comuniación",
-        "Otros"
+        "{Otros:_______}"
       ]
     },
     {
@@ -1033,7 +1032,7 @@
       "category": "Hábitos y salud",
       "allowMultiple": false,
       "options": [
-        "Determinado",
+        "Deterinado",
         "Indeterminado"
       ]
     },
@@ -2150,9 +2149,9 @@
     {
       "number": 160,
       "text": "Señala si habitualmente",
-      "type": "single_choice",
+      "type": "multi_select",
       "category": "Eventos críticos",
-      "allowMultiple": false,
+      "allowMultiple": true,
       "options": [
         "Levantas la carga tu solo/a (sin ayuda de otra persona)",
         "Levantas la carga por debajo de tus rodillas",
@@ -2194,9 +2193,9 @@
     {
       "number": 163,
       "text": "Señala si habitualmente",
-      "type": "single_choice",
+      "type": "multi_select",
       "category": "Eventos críticos",
-      "allowMultiple": false,
+      "allowMultiple": true,
       "options": [
         "Transportas la carga tu solo/a (sin ayuda de otra persona)",
         "Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos",
@@ -2223,13 +2222,16 @@
     {
       "number": 165,
       "text": "Señala si habitualmente",
-      "type": "single_choice",
+      "type": "multi_select",
       "category": "Eventos críticos",
-      "allowMultiple": false,
+      "allowMultiple": true,
       "options": [
         "Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre",
         "Tienes que hacer mucha fuerza para desplazar la carga",
-        "La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)",
+        "La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta",
+        "muy baja",
+        "difícil de agarrar",
+        "etc.)",
         "Tienes que empujar y/o arrastrar la carga cada pocos segundos",
         "No empujo"
       ]
@@ -2280,12 +2282,12 @@
     },
     {
       "number": 170,
-      "text": "Si usted ha contestado que 'SI' a una o más de las preguntas anteriores, favor de contestar las siguientes:\n¿Durante el último mes?",
+      "text": "Si usted ha contestado que \"SI\" a una o más de las preguntas anteriores, favor de contestar las siguientes",
       "type": "single_choice",
       "category": "Eventos críticos",
       "allowMultiple": false,
       "options": [
-        "Si",
+        "¿Durante el último mes?: Si",
         "No"
       ]
     },
@@ -2399,13 +2401,10 @@
     {
       "number": 181,
       "text": "¿Ha tenido dificultad para concentrarse?",
-      "type": "single_choice",
+      "type": "text",
       "category": "Eventos críticos",
       "allowMultiple": false,
-      "options": [
-        "Si",
-        "No"
-      ]
+      "options": []
     },
     {
       "number": 182,
