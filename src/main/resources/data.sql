@@ -860,8 +860,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (438,95,'Privada',3,2,0,NULL),
 	 (439,95,'No tengo hijos',1,3,0,NULL),
 	 (440,95,'No estudian',1,4,0,NULL);
-	 ##################GENERAL		
+	 ##################GENERAL		 validado
 	 
+	 ###############Ambiente Laboral sin validar
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (441,96,'De pie',1,1,0,NULL),
 	 (442,96,'Sentado',2,2,0,NULL),
@@ -1073,6 +1074,17 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (647,157,'Bastantes',1,1,0,NULL),
 	 (648,157,'Muy pocas',2,2,0,NULL),
 	 (649,157,'Ninguna',3,3,0,NULL),
+	 (686,172,'Si',1,1,0,NULL),
+	 (687,172,'No',2,2,0,NULL),
+	 (688,174,'Si',1,1,0,NULL),
+	 (689,174,'No',2,2,0,NULL),
+	 // falta 175
+	  ###############Ambiente Laboral sin validar 
+	  
+	  
+	 ################habitos 
+	 	 
+	  ################habitos 
 	 (650,158,'Si',1,1,0,NULL),
 	 (651,158,'No',2,2,0,NULL),
 	 (652,160,'Si',1,1,0,NULL),
@@ -1111,10 +1123,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (683,169,'Si',1,1,0,NULL),
 	 (684,169,'No',2,2,0,NULL),
 	 (685,169,'No aplica',3,3,0,NULL),
-	 (686,172,'Si',1,1,0,NULL),
-	 (687,172,'No',2,2,0,NULL),
-	 (688,174,'Si',1,1,0,NULL),
-	 (689,174,'No',2,2,0,NULL),
+	 falta 170 y 171
+	  ################habitos sin validar
+	  
 	 (690,176,'Si',1,1,0,NULL),
 	 (691,176,'No',2,2,0,NULL),
 	 (692,178,'Nunca',1,1,0,NULL),
@@ -1132,6 +1143,11 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (704,180,'No',2,2,0,NULL),
 	 (705,181,'Si',1,1,0,NULL),
 	 (706,181,'No',2,2,0,NULL),
+	  ################habitos  sin validar
+	  
+	  
+	 ############  Ponderacion Medica sin validar
+	 falta de 182 a 189
 	 (707,190,'Nunca',1,1,0,NULL),
 	 (708,190,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
 	 (709,190,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
@@ -1159,6 +1175,8 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (730,196,'Si',1,1,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (731,196,'No',2,2,0,NULL),
+	 
+	 
 	 (732,196,'A veces',3,3,0,NULL),
 	 (733,196,'Nunca',4,4,0,NULL),
 	 (734,197,'Nunca',1,1,0,NULL),
@@ -1355,9 +1373,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (924,238,'La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)',3,3,0,NULL),
 	 (925,238,'Tienes que empujar y/o arrastrar la carga cada pocos segundos',4,4,0,NULL),
 	 (926,238,'No empujo',5,5,0,NULL),
+	 ################## ponderacion medica sin validar
 	 
-	 
-	 #####psicologicos 166
+	 #####psicologicos 166 validado
 	 (927,239,'Si',3,1,0,NULL),
 	 (928,239,'No',0,2,0,NULL),
 	 (929,240,'Si',2,1,0,NULL),
@@ -1394,7 +1412,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (960,255,'No',1,2,0,NULL),
 	 (961,256,'Si',2,1,0,NULL),
 	 (962,256,'No',0,2,0,NULL);
-	 #####psicologicos 183
+	 #####psicologicos 183 validado
 
 -- ================================
 -- SURVEY_APPLICATION (all TechNova SA employees, pending & unanswered)
