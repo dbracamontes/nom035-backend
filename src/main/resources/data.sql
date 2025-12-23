@@ -1081,28 +1081,36 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 // falta 175
 	  ###############Ambiente Laboral sin validar 
 	  
-	  
-	 ################habitos 
 	 	 
-	  ################habitos 
-	 (650,158,'Si',1,1,0,NULL),
-	 (651,158,'No',2,2,0,NULL),
-	 (652,160,'Si',1,1,0,NULL),
-	 (653,160,'No',2,2,0,NULL),
+	  ################habitos
+	 (650,158,'Si',0,1,0,NULL),
+	 (651,158,'No',1,2,0,NULL),
+	 
+	 //validar 159 NO existe preguinta 86 excel
+	 
+	 (652,160,'Si',2,1,0,NULL),
+	 (653,160,'No',1,2,0,NULL),
 	 (654,161,'Nunca',1,1,0,NULL),
 	 (655,161,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
-	 (656,161,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
-	 (657,161,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
-	 (658,161,'Frecuentemente (todos los días)',5,5,0,NULL),
-	 (659,161,'No aplica',6,6,0,NULL),
-	 (660,162,'Si',1,1,0,NULL),
-	 (661,162,'No',2,2,0,NULL),
+	 (656,161,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
+	 (657,161,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
+	 (658,161,'Frecuentemente (todos los días)',3,5,0,NULL),
+	 (659,161,'No aplica',0,6,0,NULL),
+	 (660,162,'Si',2,1,0,NULL),
+	 (661,162,'No',1,2,0,NULL),
+	 
+	 
+	 //validar 163 NO existe preguinta 90 excel
+	 
 	 (662,164,'Si',1,1,0,NULL),
 	 (663,164,'No',2,2,0,NULL),
 	 (664,165,'No realizo',1,1,0,NULL),
 	 (665,165,'1 o 2 días a la semana',2,2,0,NULL),
 	 (666,165,'3 o 5 días a la semana',3,3,0,NULL),
 	 (667,165,'Mas de 5 días a la semana',4,4,0,NULL),
+	 
+	 
+	 //revisar 166 pregunta excel 93
 	 (668,166,'Cáncer',1,1,0,NULL),
 	 (669,166,'Diabetes',2,2,0,NULL),
 	 (670,166,'Enfermedades del corazón',3,3,0,NULL);
@@ -1114,36 +1122,47 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (675,166,'Intento de Suicidio',8,8,0,NULL),
 	 (676,166,'Enfermedades reumatológicas',9,9,0,NULL),
 	 (677,166,'Ninguna de las anteriores',10,10,0,NULL),
+	 
+	 //revisar 166 pregunta excel 94
 	 (678,167,'Hipertensión Arterial Esencial',1,1,0,NULL),
 	 (679,167,'Obesidad Mórbida',2,2,0,NULL),
 	 (680,167,'Diabetes Mellitus tipo II',3,3,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (681,167,'Otros',4,4,0,NULL),
 	 (682,167,'Ninguna',5,5,0,NULL),
-	 (683,169,'Si',1,1,0,NULL),
-	 (684,169,'No',2,2,0,NULL),
-	 (685,169,'No aplica',3,3,0,NULL),
-	 falta 170 y 171
-	  ################habitos sin validar
+	 
+	 //revisar 168 pregunta excel 95 NO existe
+	 
+	 
+	 (683,169,'Si',2,1,0,NULL),
+	 (684,169,'No',0,2,0,NULL),
+	 (685,169,'No aplica',0,3,0,NULL),
 	  
-	 (690,176,'Si',1,1,0,NULL),
-	 (691,176,'No',2,2,0,NULL),
-	 (692,178,'Nunca',1,1,0,NULL),
-	 (693,178,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
-	 (694,178,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
-	 (695,178,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
-	 (696,178,'Frecuentemente (todos los días)',5,5,0,NULL),
+	 //falta 170 y 171  - 97 y 98 excel
+	  ################habitos
+	  
+	 (690,176,'Si',2,1,0,NULL),
+	 (691,176,'No',0,2,0,NULL),
+	 
+	 
+	 //177 falta - excel 104
+	 
+	 (692,178,'Nunca',0,1,0,NULL),
+	 (693,178,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
+	 (694,178,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
+	 (695,178,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
+	 (696,178,'Frecuentemente (todos los días)',4,5,0,NULL),
 	 (697,179,'Hace más de un año',1,1,0,NULL),
 	 (698,179,'Hace entre 6 meses y un año',2,2,0,NULL),
-	 (699,179,'Hace entre 1 y 6 meses',3,3,0,NULL),
-	 (700,179,'Hace menos de un mes',4,4,0,NULL),
-	 (701,179,'En la última semana',5,5,0,NULL),
-	 (702,179,'No aplica',6,6,0,NULL),
+	 (699,179,'Hace entre 1 y 6 meses',2,3,0,NULL),
+	 (700,179,'Hace menos de un mes',3,4,0,NULL),
+	 (701,179,'En la última semana',3,5,0,NULL),
+	 (702,179,'No aplica',0,6,0,NULL),
 	 (703,180,'SI',1,1,0,NULL),
-	 (704,180,'No',2,2,0,NULL),
+	 (704,180,'No',0,2,0,NULL),
 	 (705,181,'Si',1,1,0,NULL),
-	 (706,181,'No',2,2,0,NULL),
-	  ################habitos  sin validar
+	 (706,181,'No',0,2,0,NULL),
+	  ################habitos
 	  
 	  
 	 ############  Ponderacion Medica sin validar
