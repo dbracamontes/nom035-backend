@@ -778,8 +778,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (364,73,'Frecuentemente',4,4,0,NULL),
 	 (365,73,'Siempre',5,5,0,NULL),
 	 
-	 
-	  ##################GENERAL		
+	 /*
+	  ##################GENERAL	
+	  */	
 	 (366,78,'Soltero',1,1,0,NULL),
 	 (367,78,'Casado',1,2,0,NULL),
 	 (368,78,'Viudo',1,3,0,NULL),
@@ -846,9 +847,10 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (429,91,'Rentada',2,2,0,NULL),
 	 (430,91,'Prestada',3,3,0,NULL),
 
+	 /*
 	 //validar
 	 92 falta preguntas
-	 
+	 */
 	 
 	 (431,93,'No economicamente no me es posible',3,1,0,NULL),
 	 (432,93,'No el ritmo de trabajo no me permite comprar y preparar mis alimentos',2,2,0,NULL),
@@ -860,9 +862,14 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (438,95,'Privada',3,2,0,NULL),
 	 (439,95,'No tengo hijos',1,3,0,NULL),
 	 (440,95,'No estudian',1,4,0,NULL);
-	 ##################GENERAL		 validado
 	 
-	 ###############Ambiente Laboral sin validar
+	 /*
+	 ##################GENERAL		 validado
+	 */
+	 
+	 /*
+	 ###############Ambiente Laboral
+	 */
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (441,96,'De pie',3,1,0,NULL),
 	 (442,96,'Sentado',1,2,0,NULL),
@@ -894,7 +901,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (467,102,'Adecuada a mis actividades',0,3,0,NULL),
 	 (468,102,'Escasa',3,4,0,NULL),
 	 
+	 /*
 	 // revisar excel 30 - 103
+	 */
 	 (469,103,'La distribución y orden del espacio',1,1,0,NULL),
 	 (470,103,'Perturbaciones o distracciones',2,2,0,NULL),
 	 (471,103,'La falta de limpieza',3,3,0,NULL),
@@ -935,7 +944,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (504,110,'Si',2,1,0,NULL),
 	 (505,110,'No',1,2,0,NULL),
 	 
+	 /*
 	 //revisar excel 38 - 111
+	 */
 	 (506,111,'Luz ultravioleta (soldadura eléctrica al arco, lámparas, germicidas…) excluida la luz solar',1,1,0,NULL),
 	 (507,111,'Luz infrarroja',2,2,0,NULL),
 	 (508,111,'Microondas (hornos de secado, antenas de telefonía móvil…)',3,3,0,NULL),
@@ -952,7 +963,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (518,113,'No estoy expuesto a radiación ionizante',3,3,0,NULL),
 	 
 	 
+	 /*
 	 //revisar excel 41- 114
+	 */
 	 (519,114,'Delantales',1,1,0,NULL),
 	 (520,114,'Guantes plomizos (para rayos x)',2,2,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
@@ -1073,14 +1086,17 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (616,146,'Algunas Veces',2,2,0,NULL),
 	 (617,146,'Nunca',3,3,0,NULL),
 	 
-	 
+	 /*
 	 //revisar pregunta 74 excel -- 147
+	 */
 	 
 	 (618,148,'Si',1,1,0,NULL),
 	 (619,148,'No',0,2,0,NULL),
 	 
 	 
+	 /*
 	 //revisar preungta 76 excel -- 149
+	 */
 	 (620,149,'La normatividad de la empresa',1,1,0,NULL),
 	 (621,149,'El inmediato superior',2,2,0,NULL),
 	 (622,149,'El ritmo de trabajo',3,3,0,NULL),
@@ -1123,20 +1139,27 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (686,172,'Si',0,1,0,NULL),
 	 (687,172,'No',1,2,0,NULL),
 	 
+	 /*
 	 //falta 173 - exceel 100
+	 */
 	 
 	 (688,174,'Si',2,1,0,NULL),
 	 (689,174,'No',0,2,0,NULL),
 	 
+	 /*
 	 // falta 175 - excel 102
-	  ###############Ambiente Laboral sin validar 
+	  ###############Ambiente Laboral
+	  */
 	  
-	 	 
+	 /*	 
 	  ################habitos
+	  */
 	 (650,158,'Si',0,1,0,NULL),
 	 (651,158,'No',1,2,0,NULL),
 	 
+	 /*
 	 //validar 159 NO existe preguinta 86 excel
+	 */
 	 
 	 (652,160,'Si',2,1,0,NULL),
 	 (653,160,'No',1,2,0,NULL),
@@ -1149,8 +1172,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (660,162,'Si',2,1,0,NULL),
 	 (661,162,'No',1,2,0,NULL),
 	 
-	 
+	 /*
 	 //validar 163 NO existe preguinta 90 excel
+	 */
 	 
 	 (662,164,'Si',1,1,0,NULL),
 	 (663,164,'No',2,2,0,NULL),
@@ -1159,8 +1183,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (666,165,'3 o 5 días a la semana',3,3,0,NULL),
 	 (667,165,'Mas de 5 días a la semana',4,4,0,NULL),
 	 
-	 
+	 /*
 	 //revisar 166 pregunta excel 93
+	 */
 	 (668,166,'Cáncer',1,1,0,NULL),
 	 (669,166,'Diabetes',2,2,0,NULL),
 	 (670,166,'Enfermedades del corazón',3,3,0,NULL);
@@ -1173,7 +1198,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (676,166,'Enfermedades reumatológicas',9,9,0,NULL),
 	 (677,166,'Ninguna de las anteriores',10,10,0,NULL),
 	 
+	 /*
 	 //revisar 166 pregunta excel 94
+	 */
 	 (678,167,'Hipertensión Arterial Esencial',1,1,0,NULL),
 	 (679,167,'Obesidad Mórbida',2,2,0,NULL),
 	 (680,167,'Diabetes Mellitus tipo II',3,3,0,NULL);
@@ -1181,21 +1208,25 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (681,167,'Otros',4,4,0,NULL),
 	 (682,167,'Ninguna',5,5,0,NULL),
 	 
+	 /*
 	 //revisar 168 pregunta excel 95 NO existe
-	 
+	 */
 	 
 	 (683,169,'Si',2,1,0,NULL),
 	 (684,169,'No',0,2,0,NULL),
 	 (685,169,'No aplica',0,3,0,NULL),
 	  
+	 /*
 	 //falta 170 y 171  - 97 y 98 excel
 	  ################habitos
+	  */
 	  
 	 (690,176,'Si',2,1,0,NULL),
 	 (691,176,'No',0,2,0,NULL),
 	 
-	 
+	 /*
 	 //177 falta - excel 104
+	 */
 	 
 	 (692,178,'Nunca',0,1,0,NULL),
 	 (693,178,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
@@ -1212,11 +1243,16 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (704,180,'No',0,2,0,NULL),
 	 (705,181,'Si',1,1,0,NULL),
 	 (706,181,'No',0,2,0,NULL),
-	  ################habitos
+	 /*################habitos
+	  * 
+	  */
 	  
-	  
+	  /*
 	 ############  Ponderacion Medica sin validar
+	 */
+	/*	
 	 falta de 182 a 189
+	 */
 	 (707,190,'Nunca',1,1,0,NULL),
 	 (708,190,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
 	 (709,190,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
@@ -1442,9 +1478,9 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (924,238,'La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)',3,3,0,NULL),
 	 (925,238,'Tienes que empujar y/o arrastrar la carga cada pocos segundos',4,4,0,NULL),
 	 (926,238,'No empujo',5,5,0,NULL),
-	 ################## ponderacion medica sin validar
+	/* ################## ponderacion medica sin validar*/
 	 
-	 #####psicologicos 166 validado
+	/* #####psicologicos 166 validado*/
 	 (927,239,'Si',3,1,0,NULL),
 	 (928,239,'No',0,2,0,NULL),
 	 (929,240,'Si',2,1,0,NULL),
@@ -1481,7 +1517,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (960,255,'No',1,2,0,NULL),
 	 (961,256,'Si',2,1,0,NULL),
 	 (962,256,'No',0,2,0,NULL);
-	 #####psicologicos 183 validado
+	/* #####psicologicos 183 validado*/
 
 -- ================================
 -- SURVEY_APPLICATION (all TechNova SA employees, pending & unanswered)
