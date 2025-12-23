@@ -779,6 +779,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (365,73,'Siempre',5,5,0,NULL),
 	 
 	 
+	  ##################GENERAL		
 	 (366,78,'Soltero',1,1,0,NULL),
 	 (367,78,'Casado',1,2,0,NULL),
 	 (368,78,'Viudo',1,3,0,NULL),
@@ -826,7 +827,6 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (410,87,'3',1,3,0,NULL),
 	 (411,87,'Mas de 3',0,4,0,NULL),
 	 (412,87,'No tengo',4,5,0,NULL),
-	 
 	 (413,88,'De $300 a $500 pesos',2,1,0,NULL),
 	 (414,88,'De $500 a $1000 pesos',3,2,0,NULL),
 	 (415,88,'Mas de $1500 pesos',4,3,0,NULL),
@@ -860,7 +860,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (438,95,'Privada',3,2,0,NULL),
 	 (439,95,'No tengo hijos',1,3,0,NULL),
 	 (440,95,'No estudian',1,4,0,NULL);
-	 
+	 ##################GENERAL		
 	 
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (441,96,'De pie',1,1,0,NULL),
@@ -1355,42 +1355,46 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (924,238,'La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)',3,3,0,NULL),
 	 (925,238,'Tienes que empujar y/o arrastrar la carga cada pocos segundos',4,4,0,NULL),
 	 (926,238,'No empujo',5,5,0,NULL),
-	 (927,239,'Si',1,1,0,NULL),
-	 (928,239,'No',2,2,0,NULL),
-	 (929,240,'Si',1,1,0,NULL),
-	 (930,240,'No',2,2,0,NULL),
+	 
+	 
+	 #####psicologicos 166
+	 (927,239,'Si',3,1,0,NULL),
+	 (928,239,'No',0,2,0,NULL),
+	 (929,240,'Si',2,1,0,NULL),
+	 (930,240,'No',0,2,0,NULL),
 	 (931,241,'Si',1,1,0,NULL),
-	 (932,241,'No',2,2,0,NULL),
-	 (933,242,'Si',1,1,0,NULL),
-	 (934,242,'No',2,2,0,NULL),
-	 (935,243,'Si',1,1,0,NULL),
-	 (936,243,'No',2,2,0,NULL),
-	 (937,244,'Si',1,1,0,NULL),
-	 (938,244,'No',2,2,0,NULL),
-	 (939,245,'Si',1,1,0,NULL),
-	 (940,245,'No',2,2,0,NULL),
-	 (941,246,'Si',1,1,0,NULL),
-	 (942,246,'No',2,2,0,NULL),
-	 (943,247,'Si',1,1,0,NULL),
-	 (944,247,'No',2,2,0,NULL),
-	 (945,248,'Si',1,1,0,NULL),
-	 (946,248,'No',2,2,0,NULL),
-	 (947,249,'Si',1,1,0,NULL),
-	 (948,249,'No',2,2,0,NULL),
-	 (949,250,'Si',1,1,0,NULL),
-	 (950,250,'No',2,2,0,NULL),
+	 (932,241,'No',0,2,0,NULL), 
+	 (933,242,'Si',2,1,0,NULL),
+	 (934,242,'No',0,2,0,NULL),
+	 (935,243,'Si',3,1,0,NULL),
+	 (936,243,'No',1,2,0,NULL),
+	 (937,244,'Si',2,1,0,NULL),
+	 (938,244,'No',1,2,0,NULL), 
+	 (939,245,'Si',2,1,0,NULL),
+	 (940,245,'No',1,2,0,NULL),
+	 (941,246,'Si',2,1,0,NULL),
+	 (942,246,'No',0,2,0,NULL),
+	 (943,247,'Si',2,1,0,NULL),
+	 (944,247,'No',0,2,0,NULL),
+	 (945,248,'Si',2,1,0,NULL),
+	 (946,248,'No',0,2,0,NULL),
+	 (947,249,'Si',2,1,0,NULL),
+	 (948,249,'No',0,2,0,NULL),
+	 (949,250,'Si',2,1,0,NULL),
+	 (950,250,'No',0,2,0,NULL),
 	 (951,251,'Si',1,1,0,NULL),
-	 (952,251,'No',2,2,0,NULL),
-	 (953,252,'Si',1,1,0,NULL),
-	 (954,252,'No',2,2,0,NULL),
-	 (955,253,'Si',1,1,0,NULL),
-	 (956,253,'No',2,2,0,NULL),
-	 (957,254,'Si',1,1,0,NULL),
-	 (958,254,'No',2,2,0,NULL),
-	 (959,255,'Si',1,1,0,NULL),
-	 (960,255,'No',2,2,0,NULL),
-	 (961,256,'Si',1,1,0,NULL),
-	 (962,256,'No',2,2,0,NULL);
+	 (952,251,'No',0,2,0,NULL),
+	 (953,252,'Si',3,1,0,NULL),
+	 (954,252,'No',0,2,0,NULL),
+	 (955,253,'Si',2,1,0,NULL),
+	 (956,253,'No',0,2,0,NULL),
+	 (957,254,'Si',2,1,0,NULL),
+	 (958,254,'No',0,2,0,NULL),
+	 (959,255,'Si',3,1,0,NULL),
+	 (960,255,'No',1,2,0,NULL),
+	 (961,256,'Si',2,1,0,NULL),
+	 (962,256,'No',0,2,0,NULL);
+	 #####psicologicos 183
 
 -- ================================
 -- SURVEY_APPLICATION (all TechNova SA employees, pending & unanswered)
