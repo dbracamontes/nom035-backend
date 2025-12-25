@@ -847,10 +847,14 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (429,91,'Rentada',2,2,0,NULL),
 	 (430,91,'Prestada',3,3,0,NULL),
 
-	 /*
-	 //validar
-	 92 falta preguntas
-	 */
+	 
+	 /**id duplicado arreglar al final*/
+	 (425,90,'No consumo',5,1,0,NULL),
+	 (426,90,'Menos de 1 vez a la semana',4,2,0,NULL),
+	 (427,90,'1 a 2 veces a la semana',3,3,0,NULL),
+	 (428,91,'3 a 4 veces a la semana',2,4,0,NULL),
+	 (429,91,'5 o mas veces a la semana',1,5,0,NULL),
+	 
 	 
 	 (431,93,'No economicamente no me es posible',3,1,0,NULL),
 	 (432,93,'No el ritmo de trabajo no me permite comprar y preparar mis alimentos',2,2,0,NULL),
@@ -902,18 +906,18 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (468,102,'Escasa',3,4,0,NULL),
 	 
 	 /*
-	 // revisar excel 30 - 103
+	 // Esta pregunt es multple opcion para ponderar se realiza la suma de los valores selccionads
 	 */
 	 (469,103,'La distribución y orden del espacio',1,1,0,NULL),
-	 (470,103,'Perturbaciones o distracciones',2,2,0,NULL),
-	 (471,103,'La falta de limpieza',3,3,0,NULL),
-	 (472,103,'Sentimiento de encierro',4,4,0,NULL),
-	 (473,103,'La decoración',5,5,0,NULL),
-	 (474,103,'La alfombra en el suelo y/o pared',6,6,0,NULL),
-	 (475,103,'Falta de socialización laboral',7,7,0,NULL),
-	 (476,103,'Aislamiento',8,8,0,NULL),
-	 (477,103,'No le molestan estos aspectos',9,9,0,NULL),
-	 (478,103,'Otros',10,10,1,NULL),
+	 (470,103,'Perturbaciones o distracciones',1,2,0,NULL),
+	 (471,103,'La falta de limpieza',1,3,0,NULL),
+	 (472,103,'Sentimiento de encierro',1,4,0,NULL),
+	 (473,103,'La decoración',1,5,0,NULL),
+	 (474,103,'La alfombra en el suelo y/o pared',1,6,0,NULL),
+	 (475,103,'Falta de socialización laboral',1,7,0,NULL),
+	 (476,103,'Aislamiento',1,8,0,NULL),
+	 (477,103,'No le molestan estos aspectos',0,9,0,NULL),
+	 (478,103,'Otros',1,10,1,NULL),
 	 
 	 
 	 (479,104,'Si',2,1,0,NULL),
@@ -946,14 +950,16 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 
 	 /*
 	 //revisar excel 38 - 111
+	 
+	 la ponderacion se calcula sumando los valores seleccionados / 3 dividio entre 3
 	 */
 	 (506,111,'Luz ultravioleta (soldadura eléctrica al arco, lámparas, germicidas…) excluida la luz solar',1,1,0,NULL),
-	 (507,111,'Luz infrarroja',2,2,0,NULL),
-	 (508,111,'Microondas (hornos de secado, antenas de telefonía móvil…)',3,3,0,NULL),
-	 (509,111,'Radiofrecuencias (soldaduras por radiofrecuencias, calentamiento de bajíos…)',4,4,0,NULL),
-	 (510,111,'Rayos lasser',5,5,0,NULL),
-	 (511,111,'Rayos X, rayos gamma, radioisótopos (radiodiagnóstico, radioterapia, diagnóstico de soldaduras)',6,6,0,NULL),
-	 (512,111,'No estoy expuesto a radiación',7,7,0,NULL),
+	 (507,111,'Luz infrarroja',1,2,0,NULL),
+	 (508,111,'Microondas (hornos de secado, antenas de telefonía móvil…)',1,3,0,NULL),
+	 (509,111,'Radiofrecuencias (soldaduras por radiofrecuencias, calentamiento de bajíos…)',1,4,0,NULL),
+	 (510,111,'Rayos lasser',1,5,0,NULL),
+	 (511,111,'Rayos X, rayos gamma, radioisótopos (radiodiagnóstico, radioterapia, diagnóstico de soldaduras)',1,6,0,NULL),
+	 (512,111,'No estoy expuesto a radiación',0,7,0,NULL),
 	 
 	 (513,112,'Si',2,1,0,NULL),
 	 (514,112,'No',1,2,0,NULL),
@@ -967,13 +973,13 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 //revisar excel 41- 114
 	 */
 	 (519,114,'Delantales',1,1,0,NULL),
-	 (520,114,'Guantes plomizos (para rayos x)',2,2,0,NULL);
+	 (520,114,'Guantes plomizos (para rayos x)',1,2,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
-	 (521,114,'Trajes aluminizados',3,3,0,NULL),
-	 (522,114,'Trajes en fibras espaciales para prevenir el ingreso a radiación',4,4,0,NULL),
-	 (523,114,'Zapatos especiales',5,5,0,NULL),
-	 (524,114,'Protección Ocular',6,6,0,NULL),
-	 (525,114,'No estoy expuesto a radiación ionizante',7,7,0,NULL),
+	 (521,114,'Trajes aluminizados',1,3,0,NULL),
+	 (522,114,'Trajes en fibras espaciales para prevenir el ingreso a radiación',1,4,0,NULL),
+	 (523,114,'Zapatos especiales',1,5,0,NULL),
+	 (524,114,'Protección Ocular',1,6,0,NULL),
+	 (525,114,'No estoy expuesto a radiación ionizante',0,7,0,NULL),
 	 
 	 (526,115,'Si',2,1,0,NULL),
 	 (527,115,'No',0,2,0,NULL),
@@ -1087,22 +1093,25 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (617,146,'Nunca',3,3,0,NULL),
 	 
 	 /*
-	 //revisar pregunta 74 excel -- 147
+	 //revisar pregunta 74 excel -- 147 id duplicado revisar al final
 	 */
+	 (618,148,'Buena',0,1,0,NULL),
+	 (619,148,'Regular',1,2,0,NULL),
+	 (618,148,'Mala',2,3,0,NULL),
 	 
 	 (618,148,'Si',1,1,0,NULL),
 	 (619,148,'No',0,2,0,NULL),
 	 
 	 
 	 /*
-	 //revisar preungta 76 excel -- 149
+	 //revisar preungta 76 excel -- 149  se suman los valores seleccionados
 	 */
 	 (620,149,'La normatividad de la empresa',1,1,0,NULL),
-	 (621,149,'El inmediato superior',2,2,0,NULL),
-	 (622,149,'El ritmo de trabajo',3,3,0,NULL),
-	 (623,149,'No poder desviar la atención del trabajo',4,4,0,NULL),
-	 (624,149,'No hay obstáculos que dificulten la comuniación',5,5,0,NULL),
-	 (625,149,'Otros',6,6,0,NULL),
+	 (621,149,'El inmediato superior',1,2,0,NULL),
+	 (622,149,'El ritmo de trabajo',1,3,0,NULL),
+	 (623,149,'No poder desviar la atención del trabajo',1,4,0,NULL),
+	 (624,149,'No hay obstáculos que dificulten la comuniación',0,5,0,NULL),
+	 (625,149,'Otros',1,6,0,NULL),
 	 
 	 
 	 (626,150,'Si',0,1,0,NULL),
@@ -1140,14 +1149,14 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (687,172,'No',1,2,0,NULL),
 	 
 	 /*
-	 //falta 173 - exceel 100
+	 //falta 173 - exceel 100  no esta ponderada
 	 */
 	 
 	 (688,174,'Si',2,1,0,NULL),
 	 (689,174,'No',0,2,0,NULL),
 	 
 	 /*
-	 // falta 175 - excel 102
+	 // falta 175 - excel 102  no esta ponderada
 	  ###############Ambiente Laboral
 	  */
 	  
@@ -1187,26 +1196,26 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 //revisar 166 pregunta excel 93
 	 */
 	 (668,166,'Cáncer',1,1,0,NULL),
-	 (669,166,'Diabetes',2,2,0,NULL),
-	 (670,166,'Enfermedades del corazón',3,3,0,NULL);
+	 (669,166,'Diabetes',1,2,0,NULL),
+	 (670,166,'Enfermedades del corazón',1,3,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
-	 (671,166,'Presión arterial alta',4,4,0,NULL),
-	 (672,166,'Enfermedades de los riñones',5,5,0,NULL),
-	 (673,166,'Enfermedades cerebrovasculares',6,6,0,NULL),
-	 (674,166,'Enfermedades mentales',7,7,0,NULL),
-	 (675,166,'Intento de Suicidio',8,8,0,NULL),
-	 (676,166,'Enfermedades reumatológicas',9,9,0,NULL),
-	 (677,166,'Ninguna de las anteriores',10,10,0,NULL),
+	 (671,166,'Presión arterial alta',1,4,0,NULL),
+	 (672,166,'Enfermedades de los riñones',1,5,0,NULL),
+	 (673,166,'Enfermedades cerebrovasculares',1,6,0,NULL),
+	 (674,166,'Enfermedades mentales',1,7,0,NULL),
+	 (675,166,'Intento de Suicidio',1,8,0,NULL),
+	 (676,166,'Enfermedades reumatológicas',1,9,0,NULL),
+	 (677,166,'Ninguna de las anteriores',0,10,0,NULL),
 	 
 	 /*
 	 //revisar 166 pregunta excel 94
 	 */
 	 (678,167,'Hipertensión Arterial Esencial',1,1,0,NULL),
-	 (679,167,'Obesidad Mórbida',2,2,0,NULL),
-	 (680,167,'Diabetes Mellitus tipo II',3,3,0,NULL);
+	 (679,167,'Obesidad Mórbida',1,2,0,NULL),
+	 (680,167,'Diabetes Mellitus tipo II',1,3,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
-	 (681,167,'Otros',4,4,0,NULL),
-	 (682,167,'Ninguna',5,5,0,NULL),
+	 (681,167,'Otros',1,4,0,NULL),
+	 (682,167,'Ninguna',0,5,0,NULL),
 	 
 	 /*
 	 //revisar 168 pregunta excel 95 NO existe
@@ -1253,232 +1262,278 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	/*	
 	 falta de 182 a 189
 	 */
-	 (707,190,'Nunca',1,1,0,NULL),
-	 (708,190,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
-	 (709,190,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
-	 (710,190,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
-	 (711,190,'Frecuentemente (todos los días)',5,5,0,NULL),
-	 (712,191,'Si',1,1,0,NULL),
-	 (713,191,'No',2,2,0,NULL),
-	 (714,191,'A veces',3,3,0,NULL),
-	 (715,192,'Nunca',1,1,0,NULL),
+	 
+	 /*	pregunta 189 excel 116 revisar ids**/
+	 (707,189,'Si',3,1,0,NULL),
+	 (708,189,'No',0,2,0,NULL),
+	 (709,189,'Aveces',1,3,0,NULL),
+	 (707,190,'Nunca',0,1,0,NULL),
+	 (708,190,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
+	 (709,190,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
+	 (710,190,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
+	 (711,190,'Frecuentemente (todos los días)',4,5,0,NULL),
+	 
+	 (712,191,'Si',3,1,0,NULL),
+	 (713,191,'No',0,2,0,NULL),
+	 (714,191,'A veces',1,3,0,NULL),
+	 (715,192,'Nunca',0,1,0,NULL),	 
 	 (716,192,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
 	 (717,192,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
 	 (718,192,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
-	 (719,192,'Frecuentemente (todos los días)',5,5,0,NULL),
-	 (720,193,'Si',1,1,0,NULL);
+	 (719,192,'Frecuentemente (todos los días)',5,5,0,NULL),  
+	 (720,193,'Si',2,1,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
-	 (721,193,'No',2,2,0,NULL),
-	 (722,194,'Sí',1,1,0,NULL),
-	 (723,194,'No',2,2,0,NULL),
-	 (724,194,'A veces',3,3,0,NULL),
-	 (725,194,'Nunca',4,4,0,NULL),
-	 (726,195,'Nunca',1,1,0,NULL),
-	 (727,195,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
+	 (721,193,'No',0,2,0,NULL), 
+	 (722,194,'Sí',3,1,0,NULL),
+	 (723,194,'No',0,2,0,NULL),
+	 (724,194,'A veces',1,3,0,NULL),
+	 (725,194,'Nunca',0,4,0,NULL),
+	 
+	 (726,195,'Nunca',0,1,0,NULL),
+	 (727,195,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
 	 (728,195,'Regularmente (algunas veces a la semana)',3,3,0,NULL),
 	 (729,195,'Frecuentemente (todos los días)',4,4,0,NULL),
-	 (730,196,'Si',1,1,0,NULL);
+	 
+	 
+	 (730,196,'Si',3,1,0,NULL);
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
-	 (731,196,'No',2,2,0,NULL),
+	 (731,196,'No',0,2,0,NULL),
+	 (732,196,'A veces',1,3,0,NULL),
+	 (733,196,'Nunca',0,4,0,NULL),
 	 
+	 (734,197,'Nunca',0,1,0,NULL),
+	 (735,197,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
+	 (736,197,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
+	 (737,197,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
+	 (738,197,'Frecuentemente (todos los días)',4,5,0,NULL),
 	 
-	 (732,196,'A veces',3,3,0,NULL),
-	 (733,196,'Nunca',4,4,0,NULL),
-	 (734,197,'Nunca',1,1,0,NULL),
-	 (735,197,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
-	 (736,197,'Ocasionalmente (algunas veces al mes)',3,3,0,NULL),
-	 (737,197,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
-	 (738,197,'Frecuentemente (todos los días)',5,5,0,NULL),
-	 (739,198,'Si',1,1,0,NULL),
-	 (740,198,'No',2,2,0,NULL),
-	 (741,199,'Si',1,1,0,NULL),
-	 (742,199,'No',2,2,0,NULL),
-	 (743,199,'A veces',3,3,0,NULL),
-	 (744,199,'Nunca',4,4,0,NULL),
-	 (745,200,'Nunca',1,1,0,NULL),
-	 (746,200,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
+	 (739,198,'Si',2,1,0,NULL),
+	 (740,198,'No',0,2,0,NULL),
+	 (741,199,'Si',3,1,0,NULL),
+	 (742,199,'No',0,2,0,NULL),
+	 (743,199,'A veces',1,3,0,NULL),
+	 (744,199,'Nunca',0,4,0,NULL),
+	 
+	 (745,200,'Nunca',0,1,0,NULL),
+	 (746,200,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
 	 (747,200,'Regularmente (algunas veces a la semana)',3,3,0,NULL),
 	 (748,200,'Frecuentemente (todos los días)',4,4,0,NULL),
-	 (749,201,'Si',1,1,0,NULL),
-	 (750,201,'No',2,2,0,NULL),
-	 (751,201,'A veces',3,3,0,NULL),
-	 (752,201,'Nunca',4,4,0,NULL),
-	 (753,202,'Nunca',1,1,0,NULL),
-	 (754,202,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
+	 (749,201,'Si',2,1,0,NULL),
+	 (750,201,'No',0,2,0,NULL),
+	 (751,201,'A veces',1,3,0,NULL),
+	 (752,201,'Nunca',0,4,0,NULL),	 
+	 (753,202,'Nunca',0,1,0,NULL),
+	 (754,202,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
 	 (755,202,'Regularmente (algunas veces a la semana)',3,3,0,NULL),
 	 (756,202,'Frecuentemente (todos los días)',4,4,0,NULL),
-	 (757,203,'Si',1,1,0,NULL),
-	 (758,203,'No',2,2,0,NULL),
-	 (759,204,'Si',1,1,0,NULL),
-	 (760,204,'No',2,2,0,NULL),
-	 (761,204,'A veces',3,3,0,NULL),
-	 (762,204,'Nunca',4,4,0,NULL),
-	 (763,205,'Nunca',1,1,0,NULL),
-	 (764,205,'Regularmente (algunas veces a la semana)',2,2,0,NULL),
-	 (765,205,'Frecuentemente (todos los días)',3,3,0,NULL),
-	 (766,206,'Si',1,1,0,NULL),
-	 (767,206,'No',2,2,0,NULL),
-	 (768,206,'A veces',3,3,0,NULL),
-	 (769,207,'Nunca',1,1,0,NULL),
-	 (770,207,'Rara vez (una vez al mes o menos)',2,2,0,NULL),
+	 
+	 (757,203,'Si',2,1,0,NULL),
+	 (758,203,'No',0,2,0,NULL),
+	 (759,204,'Si',3,1,0,NULL),
+	 (760,204,'No',0,2,0,NULL),
+	 (761,204,'A veces',1,3,0,NULL),
+	 (762,204,'Nunca',0,4,0,NULL),
+	 
+	 (763,205,'Nunca',0,1,0,NULL),
+	 (764,205,'Regularmente (algunas veces a la semana)',3,2,0,NULL),
+	 (765,205,'Frecuentemente (todos los días)',4,3,0,NULL),
+	 
+	 (766,206,'Si',3,1,0,NULL),
+	 (767,206,'No',0,2,0,NULL),
+	 (768,206,'A veces',1,3,0,NULL),
+	 
+	 (769,207,'Nunca',0,1,0,NULL),
+	 (770,207,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
 	 (771,207,'Frecuentemente (todos los días)',3,3,0,NULL),
-	 (772,208,'Si',1,1,0,NULL),
-	 (773,208,'No',2,2,0,NULL),
+	 
+	 (772,208,'Si',2,1,0,NULL),
+	 (773,208,'No',0,2,0,NULL),
+	 
 	 (774,209,'Menos de 30 min',1,1,0,NULL),
 	 (775,209,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (776,209,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (777,209,'Mas de 4 horas',4,4,0,NULL),
-	 (778,209,'Nunca',5,5,0,NULL),
+	 (778,209,'Nunca',0,5,0,NULL),
+	 
 	 (779,210,'Menos de 30 min',1,1,0,NULL),
 	 (780,210,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (781,210,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (782,210,'Mas de 4 horas',4,4,0,NULL),
-	 (783,210,'Nunca',5,5,0,NULL),
+	 (783,210,'Nunca',05,5,0,NULL),
+	 
 	 (784,211,'Menos de 30 min',1,1,0,NULL),
 	 (785,211,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (786,211,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (787,211,'Mas de 4 horas',4,4,0,NULL),
-	 (788,211,'Nunca',5,5,0,NULL),
+	 (788,211,'Nunca',0,5,0,NULL),
+	 
 	 (789,212,'Menos de 30 min',1,1,0,NULL),
 	 (790,212,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (791,212,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (792,212,'Mas de 4 horas',4,4,0,NULL),
-	 (793,212,'Nunca',5,5,0,NULL),
+	 (793,212,'Nunca',0,5,0,NULL),
+	 
 	 (794,213,'Menos de 30 min',1,1,0,NULL),
 	 (795,213,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (796,213,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (797,213,'Mas de 4 horas',4,4,0,NULL),
-	 (798,213,'Nunca',5,5,0,NULL),
+	 (798,213,'Nunca',0,5,0,NULL),
+	 
 	 (799,214,'Menos de 30 min',1,1,0,NULL),
 	 (800,214,'Entre 30min y 2 horas',2,2,0,NULL),
 	 (801,214,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (802,214,'Mas de 4 horas',4,4,0,NULL),
-	 (803,214,'Nunca',5,5,0,NULL),
+	 (803,214,'Nunca',0,5,0,NULL),
+	 
 	 (804,215,'Menos de 30 minutos',1,1,0,NULL),
 	 (805,215,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (806,215,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (807,215,'Mas de 4 horas',4,4,0,NULL),
-	 (808,215,'Nunca',5,5,0,NULL),
+	 (808,215,'Nunca',0,5,0,NULL),
+	 
 	 (809,216,'Menos de 30 minutos',1,1,0,NULL),
 	 (810,216,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (811,216,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (812,216,'Mas de 4 horas',4,4,0,NULL),
-	 (813,216,'Nunca',5,5,0,NULL),
+	 (813,216,'Nunca',0,5,0,NULL),
+	 
 	 (814,217,'Menos de 30 minutos',1,1,0,NULL),
 	 (815,217,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (816,217,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (817,217,'Mas de 4 horas',4,4,0,NULL),
-	 (818,217,'Nunca',5,5,0,NULL),
+	 (818,217,'Nunca',0,5,0,NULL),
+	 
 	 (819,218,'Menos de 30 minutos',1,1,0,NULL),
 	 (820,218,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (821,218,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (822,218,'Mas de 4 horas',4,4,0,NULL),
-	 (823,218,'Nunca',5,5,0,NULL),
+	 (823,218,'Nunca',0,5,0,NULL),
+	 
 	 (824,219,'Menos de 30 minutos',1,1,0,NULL),
 	 (825,219,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (826,219,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (827,219,'Mas de 4 horas',4,4,0,NULL),
-	 (828,219,'Nunca',5,5,0,NULL),
+	 (828,219,'Nunca',0,5,0,NULL),
+	 
 	 (829,220,'Menos de 30 minutos',1,1,0,NULL),
 	 (830,220,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (831,220,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (832,220,'Mas de 4 horas',4,4,0,NULL),
-	 (833,220,'Nunca',5,5,0,NULL),
-	 (834,220,'Otros',6,6,1,NULL),
+	 (833,220,'Nunca',0,5,0,NULL),
+	 
 	 (835,221,'Menos de 30 minutos',1,1,0,NULL),
 	 (836,221,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (837,221,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (838,221,'Mas de 4 horas',4,4,0,NULL),
-	 (839,221,'Nunca',5,5,0,NULL),
+	 (839,221,'Nunca',0,5,0,NULL),
+	 
 	 (840,222,'Menos de 30 minutos',1,1,0,NULL),
 	 (841,222,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (842,222,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (843,222,'Mas de 4 horas',4,4,0,NULL),
-	 (844,222,'Nunca',5,5,0,NULL),
+	 (844,222,'Nunca',0,5,0,NULL),
+	 
 	 (845,223,'Menos de 30 minutos',1,1,0,NULL),
 	 (846,223,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (847,223,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (848,223,'Mas de 4 horas',4,4,0,NULL),
-	 (849,223,'Nunca',5,5,0,NULL),
+	 (849,223,'Nunca',0,5,0,NULL),
+	 
 	 (850,224,'Menos de 30 minutos',1,1,0,NULL),
 	 (851,224,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (852,224,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (853,224,'Mas de 4 horas',4,4,0,NULL),
-	 (854,224,'Nunca',5,5,0,NULL),
+	 (854,224,'Nunca',0,5,0,NULL),
+	 
 	 (855,225,'Menos de 30 minutos',1,1,0,NULL),
 	 (856,225,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (857,225,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (858,225,'Mas de 4 horas',4,4,0,NULL),
-	 (859,225,'Nunca',5,5,0,NULL),
+	 (859,225,'Nunca',0,5,0,NULL),
+	 
 	 (860,226,'Menos de 30 minutos',1,1,0,NULL),
 	 (861,226,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (862,226,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (863,226,'Mas de 4 horas',4,4,0,NULL),
-	 (864,226,'Nunca',5,5,0,NULL),
+	 (864,226,'Nunca',0,5,0,NULL),
+	 
 	 (865,227,'Menos de 30 minutos',1,1,0,NULL),
 	 (866,227,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (867,227,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (868,227,'Mas de 4 horas',4,4,0,NULL),
-	 (869,227,'Nunca',5,5,0,NULL),
+	 (869,227,'Nunca',0,5,0,NULL),
+	 
 	 (870,228,'Menos de 30 minutos',1,1,0,NULL),
 	 (871,228,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (872,228,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (873,228,'Mas de 4 horas',4,4,0,NULL),
-	 (874,228,'Nunca',5,5,0,NULL),
+	 (874,228,'Nunca',0,5,0,NULL),
+	 
 	 (875,229,'Menos de 30 minutos',1,1,0,NULL),
 	 (876,229,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (877,229,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (878,229,'Mas de 4 horas',4,4,0,NULL),
-	 (879,229,'Nunca',5,5,0,NULL),
+	 (879,229,'Nunca',0,5,0,NULL),
+	 
 	 (880,230,'Menos de 30 minutos',1,1,0,NULL),
 	 (881,230,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (882,230,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (883,230,'Mas de 4 horas',4,4,0,NULL),
-	 (884,230,'Nunca',5,5,0,NULL),
+	 (884,230,'Nunca',0,5,0,NULL),
+	 
 	 (885,231,'Menos de 30 minutos',1,1,0,NULL),
 	 (886,231,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (887,231,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (888,231,'Mas de 4 horas',4,4,0,NULL),
-	 (889,231,'Nunca',5,5,0,NULL),
+	 (889,231,'Nunca',0,5,0,NULL),
+	                                              
 	 (890,232,'Entre 3 y 5 kilos',1,1,0,NULL),
 	 (891,232,'Entre 5 y 15 kilos',2,2,0,NULL),
 	 (892,232,'Entre 15 y 25 kilos',3,3,0,NULL),
 	 (893,232,'Mas de 25 kilos',4,4,0,NULL),
 	 (894,232,'No levanto peso',5,5,0,NULL),
-	 (895,233,'Levantas la carga tu solo/a (sin ayuda de otra persona)',1,1,0,NULL),
+	 
+	 
+	 (895,233,'Levantas la carga tu solo/a (sin ayuda de otra persona)',5,1,0,NULL),
 	 (896,233,'Levantas la carga por debajo de tus rodillas',2,2,0,NULL),
 	 (897,233,'Levantas la carga por encima de tus hombros',3,3,0,NULL),
 	 (898,233,'Mantienes los brazos extendidos sin poder apoyar la carga en tu cuerpo',4,4,0,NULL),
-	 (899,233,'Levantas la carga con dificultad por no tener buen agarre (sin asa)',5,5,0,NULL),
-	 (900,233,'Tienes que levantar la carga cada pocos segundos',6,6,0,NULL);
+	 (899,233,'Levantas la carga con dificultad por no tener buen agarre (sin asa)',2,5,0,NULL),
+	 (900,233,'Tienes que levantar la carga cada pocos segundos',3,6,0,NULL);
+	 (916,233,'No levanto peso',0,6,0,NULL), 
+	 
 INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
 	 (901,234,'Menos de 30 minutos',1,1,0,NULL),
 	 (902,234,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (903,234,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (904,234,'Mas de 4 horas',4,4,0,NULL),
-	 (905,234,'Nunca',5,5,0,NULL),
+	 (905,234,'Nunca',0,5,0,NULL),
+	 
 	 (906,235,'Entre 3 y 5 kilos',1,1,0,NULL),
 	 (907,235,'Entre 5 y 15 kilos',2,2,0,NULL),
 	 (908,235,'Entre 15 y 25 kilos',3,3,0,NULL),
 	 (909,235,'Mas de 25 kilos',4,4,0,NULL),
-	 (910,235,'No levanto peso',5,5,0,NULL),
-	 (911,236,'Transportas la carga tu solo/a (sin ayuda de otra persona)',1,1,0,NULL),
-	 (912,236,'Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos',2,2,0,NULL),
-	 (913,236,'Transportas la carga con dificultad porno tener buen agarre (sin asa)',3,3,0,NULL),
+	 (910,235,'No levanto peso',0,5,0,NULL),
+	 
+	 (911,236,'Transportas la carga tu solo/a (sin ayuda de otra persona)',5,1,0,NULL),
+	 (912,236,'Transportas la carga con los brazos extendidos sin apoyar la carga en tu cuerpo y sin doblar los codos',3,2,0,NULL),
+	 (913,236,'Transportas la carga con dificultad porno tener buen agarre (sin asa)',2,3,0,NULL),
 	 (914,236,'Caminas mas de 10 metros transportando la carga',4,4,0,NULL),
-	 (915,236,'Tienes que transportar la carga cada pocos segundos',5,5,0,NULL),
-	 (916,236,'No levanto peso',6,6,0,NULL),
+	 (915,236,'Tienes que transportar la carga cada pocos segundos',1,5,0,NULL),
+	 (916,236,'No levanto peso',0,6,0,NULL),
+	 
 	 (917,237,'Menos de 30 minutos',1,1,0,NULL),
 	 (918,237,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (919,237,'Entre 2 y 4 horas',3,3,0,NULL),
 	 (920,237,'Mas de 4 horas',4,4,0,NULL),
-	 (921,237,'Nunca',5,5,0,NULL),
-	 (922,238,'Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre',1,1,0,NULL),
-	 (923,238,'Tienes que hacer mucha fuerza para desplazar la carga',2,2,0,NULL),
-	 (924,238,'La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)',3,3,0,NULL),
-	 (925,238,'Tienes que empujar y/o arrastrar la carga cada pocos segundos',4,4,0,NULL),
-	 (926,238,'No empujo',5,5,0,NULL),
-	/* ################## ponderacion medica sin validar*/
+	 (921,237,'Nunca',0,5,0,NULL),
+	 
+	 (922,238,'Tienes que hacer mucha fuerza para iniciar el empuje y/o arrastre',4,1,0,NULL),
+	 (923,238,'Tienes que hacer mucha fuerza para desplazar la carga',3,2,0,NULL),
+	 (924,238,'La zona donde tienes que poner las manos al empujar y/o arrastrar no es adecuada (muy alta, muy baja, difícil de agarrar, etc.)',2,3,0,NULL),
+	 (925,238,'Tienes que empujar y/o arrastrar la carga cada pocos segundos',1,4,0,NULL),
+	 (926,238,'No empujo',0,5,0,NULL),
+	/* ################## ponderacion validado*/
 	 
 	/* #####psicologicos 166 validado*/
 	 (927,239,'Si',3,1,0,NULL),
