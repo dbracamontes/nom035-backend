@@ -27,6 +27,7 @@ import com.example.nom035.repository.UserRepository;
 import com.example.nom035.service.Nom035ScoringService;
 import com.example.nom035.service.PdfReportService;
 import com.example.nom035.service.PdfBrandingConfig;
+import com.example.nom035.service.JasperPonderacionReportService;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -46,6 +47,9 @@ public class ReportsController {
 
     @Autowired
     private PdfReportService pdfReportService;
+
+    @Autowired
+    private JasperPonderacionReportService jasperPonderacionReportService;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -268,6 +272,63 @@ public class ReportsController {
         String rawCompany = companyName != null ? companyName : (summary.get("companyName") instanceof String ? (String) summary.get("companyName") : "company");
         String safeCompany = rawCompany.replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_.-]", "");
         String filename = "dictamen-summary-company-" + safeCompany + ".pdf";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+    @GetMapping(value = "/application/{applicationId}/ponderaciones.pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Secured({"ROLE_ADMIN", "ROLE_COMPANY", "ROLE_EMPLOYEE"})
+    public ResponseEntity<byte[]> getApplicationPonderacionesPdf(
+            @PathVariable Long applicationId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String subtitle,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) String footerText,
+            @RequestParam(required = false) String primaryHex,
+            @RequestParam(required = false) String secondaryHex,
+            @RequestParam(required = false) String logoClasspath
+    ) {
+        ResponseEntity<?> jsonResp = getApplicationDictamen(applicationId);
+        if (!jsonResp.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.status(jsonResp.getStatusCode()).build();
+        }
+        DictamenDto dto = (DictamenDto) jsonResp.getBody();
+        if (dto == null) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        // Evitar exponer IDs internos en el PDF
+        dto.setEmployeeId(null);
+        dto.setCompanyId(null);
+        dto.setApplicationId(null);
+        dto.setSurveyId(null);
+
+        boolean hasBrand = title != null || subtitle != null || companyName != null || footerText != null || primaryHex != null || secondaryHex != null || logoClasspath != null;
+        PdfBrandingConfig brand = hasBrand ? new PdfBrandingConfig()
+            .setTitle(title)
+            .setSubtitle(subtitle)
+            .setCompanyName(companyName)
+            .setFooterText(footerText)
+            .setPrimaryHex(primaryHex)
+            .setSecondaryHex(secondaryHex)
+            .setLogoClasspath(logoClasspath)
+            : new PdfBrandingConfig()
+                .setTitle("Ponderaciones Medica Leben")
+                .setSubtitle("Resultados por categoría")
+                .setCompanyName(dto.getCompanyName())
+                .setFooterText("Confidencial")
+                .setPrimaryHex("#2196F3")
+                .setSecondaryHex("#9C27B0")
+                .setLogoClasspath("/branding/logo_medica_leben.jpg");
+
+        byte[] pdf = jasperPonderacionReportService.buildPonderaciones(dto, brand);
+
+        String rawName = dto.getEmployeeName() != null ? dto.getEmployeeName() : "application";
+        String safeName = rawName.replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_.-]", "");
+        String filename = "ponderaciones-" + safeName + ".pdf";
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)

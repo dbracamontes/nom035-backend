@@ -1,9 +1,9 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 
-DROP TABLE IF EXISTS user_role;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS `user_role`;
+DROP TABLE IF EXISTS `role`;
+DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS response;
 DROP TABLE IF EXISTS survey_application;
 DROP TABLE IF EXISTS option_answer;
@@ -88,7 +88,7 @@ CREATE TABLE company_survey (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== USER ========== 
-CREATE TABLE user (
+CREATE TABLE `user` (
     id BIGINT NOT NULL AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE user (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== ROLE ========== 
-CREATE TABLE role (
+CREATE TABLE `role` (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY (id)
@@ -172,7 +172,7 @@ CREATE TABLE option_answer (
     id BIGINT NOT NULL AUTO_INCREMENT,
     question_id BIGINT NOT NULL,
     text VARCHAR(200) NOT NULL,
-    value INT,
+    `value` INT,
     sort_order INT,
     requires_free_text BOOLEAN DEFAULT FALSE,
     metadata JSON NULL,
@@ -205,7 +205,7 @@ CREATE TABLE response (
     question_id BIGINT NOT NULL,
     option_answer_id BIGINT NULL,
     free_text VARCHAR(500),
-    value INT,
+    `value` INT,
     answered_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id),
     CONSTRAINT fk_response_survey_application FOREIGN KEY (survey_application_id)

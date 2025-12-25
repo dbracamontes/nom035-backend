@@ -75,9 +75,26 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.3</version>
+        </dependency>
+        <!-- DejaVu font pack for Jasper to avoid missing Helvetica on headless JVMs -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>6.21.3</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
             <version>1.3.39</version>
+        </dependency>
+        <!-- H2 for local/dev in-memory runs (optional; MySQL remains default) -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
     <build>

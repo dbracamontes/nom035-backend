@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Jasper template for ponderaciones / category weighting summary -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd"
+              name="ponderaciones"
+              pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="30" bottomMargin="30" uuid="7c05a41d-6ccf-4bb0-9c2f-3d4d3c52c2c4">
+
+    <!-- Styles -->
+    <!-- Use DejaVu Sans (available via jasperreports-fonts) to avoid Helvetica missing on headless JVMs -->
+    <style name="Title" fontName="DejaVu Sans" fontSize="18" isBold="true"/>
+    <style name="Subtitle" fontName="DejaVu Sans" fontSize="12" isBold="true"/>
+    <style name="Label" fontName="DejaVu Sans" fontSize="10" isBold="true"/>
+    <style name="Value" fontName="DejaVu Sans" fontSize="10"/>
+    <style name="TableHeader" fontName="DejaVu Sans" fontSize="10" isBold="true" backcolor="#EEEEEE"/>
+
+    <!-- Dataset for table rows -->
+    <subDataset name="categoriesDataset" uuid="c49e67f0-29c3-4ad3-9c13-770bd406c1d7">
+        <field name="category" class="java.lang.String"/>
+        <field name="score" class="java.lang.Integer"/>
+        <field name="level" class="java.lang.String"/>
+    </subDataset>
+
+    <!-- Parameters -->
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+    <parameter name="REPORT_SUBTITLE" class="java.lang.String"/>
+    <parameter name="COMPANY_NAME" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_NAME" class="java.lang.String"/>
+    <parameter name="GLOBAL_SCORE" class="java.lang.Integer"/>
+    <parameter name="GLOBAL_LEVEL" class="java.lang.String"/>
+    <parameter name="TRAUMATIC_ALERT" class="java.lang.Boolean"/>
+    <parameter name="TRAUMATIC_COUNT" class="java.lang.Integer"/>
+    <parameter name="GENERATED_AT" class="java.lang.String"/>
+    <parameter name="CONCLUSION" class="java.lang.String"/>
+    <parameter name="PRIMARY_COLOR" class="java.awt.Color"/>
+    <parameter name="SECONDARY_COLOR" class="java.awt.Color"/>
+    <parameter name="CATEGORIES_DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+    <parameter name="LOGO_URL" class="java.lang.String"/>
+
+    <!-- Title band -->
+    <title>
+        <band height="140">
+            <image scaleImage="RetainShape" isUsingCache="true">
+                <reportElement x="0" y="0" width="120" height="70" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
+                <imageExpression><![CDATA[$P{LOGO_URL} == null ? null : new java.net.URL($P{LOGO_URL})]]></imageExpression>
+            </image>
+            <textField pattern="">
+                <reportElement x="0" y="0" width="515" height="26" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" size="18"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "Ponderaciones Medica Leben" : $P{REPORT_TITLE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="30" width="515" height="18" uuid="8ae63f2f-0d2f-41a1-8b3f-09c803f978ef" style="Subtitle"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$P{REPORT_SUBTITLE} == null ? "Resultados por categoría" : $P{REPORT_SUBTITLE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="55" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA["Empresa: " + ($P{COMPANY_NAME} == null ? "-" : $P{COMPANY_NAME})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="75" width="515" height="16" uuid="0b5e8d6c-15f3-4bb6-b5d4-6b2167a70a63" style="Value"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA["Colaborador: " + ($P{EMPLOYEE_NAME} == null ? "-" : $P{EMPLOYEE_NAME})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="95" width="515" height="16" uuid="581cb3df-2da6-4a44-9f7b-40a1c5e3b5a6" style="Value"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$P{GENERATED_AT} == null ? "" : $P{GENERATED_AT}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <detail>
+        <band height="320">
+            <!-- Global metrics frame -->
+            <frame>
+                <reportElement x="0" y="0" width="515" height="90" uuid="b8c8f9a2-20f7-4c8d-b8c4-8b71f1d83db6"/>
+                <staticText>
+                    <reportElement x="0" y="0" width="120" height="16" uuid="6e9a1338-4108-4c33-8a9c-8a43adbe5b50" style="Label"/>
+                    <textElement/>
+                    <text><![CDATA[Puntaje global]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="0" width="100" height="16" uuid="06fc1800-5d22-41d0-8b59-98d5c4b5c3d6" style="Value"/>
+                    <textElement/>
+                    <textFieldExpression><![CDATA[$P{GLOBAL_SCORE} == null ? "-" : String.valueOf($P{GLOBAL_SCORE})]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="18" width="120" height="16" uuid="ce780017-5a23-43ff-83e0-9ce579d4b71c" style="Label"/>
+                    <textElement/>
+                    <text><![CDATA[Nivel global]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="18" width="180" height="16" uuid="808b3d7b-9e1d-4365-9d0e-8b8c6d7de23c" style="Value"/>
+                    <textElement/>
+                    <textFieldExpression><![CDATA[$P{GLOBAL_LEVEL} == null ? "-" : $P{GLOBAL_LEVEL}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="36" width="120" height="16" uuid="9e8b2b04-1f9f-4f9f-89b5-9f7cbbe11213" style="Label"/>
+                    <textElement/>
+                    <text><![CDATA[Acontecimientos traumáticos]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="36" width="200" height="16" uuid="92e6bf33-2091-472f-aefb-c03fe0252052" style="Value"/>
+                    <textElement/>
+                    <textFieldExpression><![CDATA[$P{TRAUMATIC_ALERT} != null && $P{TRAUMATIC_ALERT} ? "Alerta: " + ($P{TRAUMATIC_COUNT} == null ? "-" : String.valueOf($P{TRAUMATIC_COUNT})) : "Sin alertas"]]></textFieldExpression>
+                </textField>
+            </frame>
+
+            <!-- Categories table -->
+            <componentElement>
+                <reportElement x="0" y="110" width="515" height="180" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
+                <jr:table>
+                    <datasetRun subDataset="categoriesDataset">
+                        <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
+                    </datasetRun>
+                    <jr:column width="240" uuid="0c6db35b-9c17-4f06-84bc-f3ca6f6bde2b">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="240" height="20"/>
+                                <textElement textAlignment="Left"/>
+                                <text><![CDATA[Categoría]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="240" height="18"/>
+                                <textElement/>
+                                <textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="120" uuid="ba84f2e8-68e9-4c23-aabf-9383d9cc4d53">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="120" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Puntaje]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="120" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{score} == null ? "" : String.valueOf($F{score})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="155" uuid="5017a260-7d45-4268-8c56-508a6d1097fa">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="155" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Nivel]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="155" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{level}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="80">
+            <staticText>
+                <reportElement x="0" y="0" width="515" height="16" uuid="a26a95e5-7bd8-4dbc-8a96-0e5a4f2433e5" style="Label"/>
+                <textElement/>
+                <text><![CDATA[Conclusión]]></text>
+            </staticText>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="0" y="18" width="515" height="50" uuid="c512e6a2-ef16-4d5c-90e4-546759937245" style="Value"/>
+                <textElement/>
+                <textFieldExpression><![CDATA[$P{CONCLUSION} == null ? "" : $P{CONCLUSION}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

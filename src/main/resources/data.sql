@@ -106,10 +106,13 @@ INSERT INTO `user` (id, username, password, email, company_id, employee_id, enab
   (5, 'cotizador', 'cotizador123', 'cotizador@demo.com', NULL, NULL, TRUE)
 ON DUPLICATE KEY UPDATE username=VALUES(username);
 
+-- H2 (MySQL mode) does not support MySQL-style UPDATE ... JOIN, so use a correlated subquery instead
 UPDATE `user` u
-JOIN employee e ON LOWER(u.email) = LOWER(e.email)
-SET u.employee_id = e.id
-WHERE u.email IS NOT NULL AND u.employee_id IS NULL;
+SET u.employee_id = (
+		SELECT e.id FROM employee e WHERE LOWER(u.email) = LOWER(e.email) LIMIT 1
+)
+WHERE u.email IS NOT NULL AND u.employee_id IS NULL
+	AND EXISTS (SELECT 1 FROM employee e WHERE LOWER(u.email) = LOWER(e.email));
 
 
 INSERT INTO user_role (user_id, role_id) VALUES
@@ -411,7 +414,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 -- ================================
 -- OPTION_ANSWER (rebuild deterministically for all 73 questions)
 DELETE FROM option_answer;
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (1,1,'Nunca',1,1,0,NULL),
 	 (2,1,'Rara vez',2,2,0,NULL),
 	 (3,1,'A veces',3,3,0,NULL),
