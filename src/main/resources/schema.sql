@@ -4,7 +4,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `user_role`;
 DROP TABLE IF EXISTS `role`;
 DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS response;
+DROP TABLE IF EXISTS `response`;
 DROP TABLE IF EXISTS survey_application;
 DROP TABLE IF EXISTS option_answer;
 DROP TABLE IF EXISTS question;
@@ -199,7 +199,7 @@ CREATE TABLE survey_application (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== RESPONSE ==========
-CREATE TABLE response (
+CREATE TABLE `response` (
     id BIGINT NOT NULL AUTO_INCREMENT,
     survey_application_id BIGINT NOT NULL,
     question_id BIGINT NOT NULL,

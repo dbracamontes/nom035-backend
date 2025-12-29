@@ -850,13 +850,12 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 (429,91,'Rentada',2,2,0,NULL),
 	 (430,91,'Prestada',3,3,0,NULL),
 
-	 
-	 /**id duplicado arreglar al final*/
-	 (425,90,'No consumo',5,1,0,NULL),
-	 (426,90,'Menos de 1 vez a la semana',4,2,0,NULL),
-	 (427,90,'1 a 2 veces a la semana',3,3,0,NULL),
-	 (428,91,'3 a 4 veces a la semana',2,4,0,NULL),
-	 (429,91,'5 o mas veces a la semana',1,5,0,NULL),
+	 /** ids renumerados para evitar duplicados **/
+	 (2001,90,'No consumo',5,1,0,NULL),
+	 (2002,90,'Menos de 1 vez a la semana',4,2,0,NULL),
+	 (2003,90,'1 a 2 veces a la semana',3,3,0,NULL),
+	 (2004,91,'3 a 4 veces a la semana',2,4,0,NULL),
+	 (2005,91,'5 o mas veces a la semana',1,5,0,NULL),
 	 
 	 
 	 (431,93,'No economicamente no me es posible',3,1,0,NULL),
@@ -877,7 +876,7 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 /*
 	 ###############Ambiente Laboral
 	 */
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (441,96,'De pie',3,1,0,NULL),
 	 (442,96,'Sentado',1,2,0,NULL),
 	 (443,96,'Ambos',2,3,0,NULL),
@@ -977,7 +976,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 */
 	 (519,114,'Delantales',1,1,0,NULL),
 	 (520,114,'Guantes plomizos (para rayos x)',1,2,0,NULL);
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (521,114,'Trajes aluminizados',1,3,0,NULL),
 	 (522,114,'Trajes en fibras espaciales para prevenir el ingreso a radiación',1,4,0,NULL),
 	 (523,114,'Zapatos especiales',1,5,0,NULL),
@@ -1100,10 +1099,10 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 */
 	 (618,148,'Buena',0,1,0,NULL),
 	 (619,148,'Regular',1,2,0,NULL),
-	 (618,148,'Mala',2,3,0,NULL),
+	 (1200,148,'Mala',2,3,0,NULL),
 	 
-	 (618,148,'Si',1,1,0,NULL),
-	 (619,148,'No',0,2,0,NULL),
+	 (1201,148,'Si',1,1,0,NULL),
+	 (1203,148,'No',0,2,0,NULL),
 	 
 	 
 	 /*
@@ -1201,7 +1200,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (668,166,'Cáncer',1,1,0,NULL),
 	 (669,166,'Diabetes',1,2,0,NULL),
 	 (670,166,'Enfermedades del corazón',1,3,0,NULL);
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (671,166,'Presión arterial alta',1,4,0,NULL),
 	 (672,166,'Enfermedades de los riñones',1,5,0,NULL),
 	 (673,166,'Enfermedades cerebrovasculares',1,6,0,NULL),
@@ -1216,7 +1215,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (678,167,'Hipertensión Arterial Esencial',1,1,0,NULL),
 	 (679,167,'Obesidad Mórbida',1,2,0,NULL),
 	 (680,167,'Diabetes Mellitus tipo II',1,3,0,NULL);
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (681,167,'Otros',1,4,0,NULL),
 	 (682,167,'Ninguna',0,5,0,NULL),
 	 
@@ -1270,11 +1269,11 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (707,189,'Si',3,1,0,NULL),
 	 (708,189,'No',0,2,0,NULL),
 	 (709,189,'Aveces',1,3,0,NULL),
-	 (707,190,'Nunca',0,1,0,NULL),
-	 (708,190,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
-	 (709,190,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
-	 (710,190,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
-	 (711,190,'Frecuentemente (todos los días)',4,5,0,NULL),
+	 (2006,190,'Nunca',0,1,0,NULL),
+	 (2007,190,'Rara vez (una vez al mes o menos)',1,2,0,NULL),
+	 (2008,190,'Ocasionalmente (algunas veces al mes)',2,3,0,NULL),
+	 (2009,190,'Regularmente (algunas veces a la semana)',3,4,0,NULL),
+	 (2010,190,'Frecuentemente (todos los días)',4,5,0,NULL),
 	 
 	 (712,191,'Si',3,1,0,NULL),
 	 (713,191,'No',0,2,0,NULL),
@@ -1285,7 +1284,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (718,192,'Regularmente (algunas veces a la semana)',4,4,0,NULL),
 	 (719,192,'Frecuentemente (todos los días)',5,5,0,NULL),  
 	 (720,193,'Si',2,1,0,NULL);
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (721,193,'No',0,2,0,NULL), 
 	 (722,194,'Sí',3,1,0,NULL),
 	 (723,194,'No',0,2,0,NULL),
@@ -1299,7 +1298,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 
 	 
 	 (730,196,'Si',3,1,0,NULL);
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (731,196,'No',0,2,0,NULL),
 	 (732,196,'A veces',1,3,0,NULL),
 	 (733,196,'Nunca',0,4,0,NULL),
@@ -1502,10 +1501,10 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (897,233,'Levantas la carga por encima de tus hombros',3,3,0,NULL),
 	 (898,233,'Mantienes los brazos extendidos sin poder apoyar la carga en tu cuerpo',4,4,0,NULL),
 	 (899,233,'Levantas la carga con dificultad por no tener buen agarre (sin asa)',2,5,0,NULL),
-	 (900,233,'Tienes que levantar la carga cada pocos segundos',3,6,0,NULL);
-	 (916,233,'No levanto peso',0,6,0,NULL), 
+	 (900,233,'Tienes que levantar la carga cada pocos segundos',3,6,0,NULL),
+	 (2011,233,'No levanto peso',0,7,0,NULL);
 	 
-INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_text,metadata) VALUES
+INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_free_text,metadata) VALUES
 	 (901,234,'Menos de 30 minutos',1,1,0,NULL),
 	 (902,234,'Entre 30 min y 2 horas',2,2,0,NULL),
 	 (903,234,'Entre 2 y 4 horas',3,3,0,NULL),
@@ -1523,7 +1522,7 @@ INSERT INTO option_answer (id,question_id,`text`,value,sort_order,requires_free_
 	 (913,236,'Transportas la carga con dificultad porno tener buen agarre (sin asa)',2,3,0,NULL),
 	 (914,236,'Caminas mas de 10 metros transportando la carga',4,4,0,NULL),
 	 (915,236,'Tienes que transportar la carga cada pocos segundos',1,5,0,NULL),
-	 (916,236,'No levanto peso',0,6,0,NULL),
+	 (2012,236,'No levanto peso',0,6,0,NULL),
 	 
 	 (917,237,'Menos de 30 minutos',1,1,0,NULL),
 	 (918,237,'Entre 30 min y 2 horas',2,2,0,NULL),
@@ -1610,7 +1609,7 @@ WHERE id BETWEEN 1 AND 5;
 -- Insert hardcoded responses with variation for applications 1..5 over all 73 questions
 -- Each option_answer_id = ((question_id - 1) * 5) + value, consistent with option_answer seeding
 -- App 1 cycles values 1..5; App 2 cycles 2..5,1; App 3 cycles 3..5,1..2; App 4 cycles 4..5,1..3; App 5 cycles 5,1..4
-INSERT INTO response (survey_application_id, question_id, option_answer_id, value, answered_at) VALUES
+INSERT INTO response (survey_application_id, question_id, option_answer_id, `value`, answered_at) VALUES
 -- Application 1
 (1, 1, ((1-1)*5 + 1), 1, NOW()),
 (1, 2, ((2-1)*5 + 2), 2, NOW()),
