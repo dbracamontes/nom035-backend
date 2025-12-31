@@ -44,7 +44,17 @@ public class EmployeeDocs {
     private String filePath;
 
     public enum DocumentStatus {
-        ACTIVE, INACTIVE
+        ACTIVE, INACTIVE;
+
+        public static DocumentStatus fromString(String value) {
+            if (value == null) return null;
+            for (DocumentStatus status : DocumentStatus.values()) {
+                if (status.name().equalsIgnoreCase(value)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("No enum constant DocumentStatus." + value);
+        }
     }
 
     public Long getId() { return id; }
@@ -69,4 +79,8 @@ public class EmployeeDocs {
     public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
     public String getFilePath() { return filePath; }
     public void setFilePath(String filePath) { this.filePath = filePath; }
+    // Setter para aceptar String y mapear case-insensitive
+    public void setStatus(String status) {
+        this.status = DocumentStatus.fromString(status);
+    }
 }

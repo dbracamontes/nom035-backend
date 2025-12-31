@@ -316,13 +316,13 @@ public class ReportsController {
             .setSecondaryHex(secondaryHex)
             .setLogoClasspath(logoClasspath)
             : new PdfBrandingConfig()
-                .setTitle("Ponderaciones Medica Leben")
-                .setSubtitle("Resultados por categoría")
+                .setTitle("Ponderación Medica Leben")
+                .setSubtitle(null)
                 .setCompanyName(dto.getCompanyName())
                 .setFooterText("Confidencial")
                 .setPrimaryHex("#2196F3")
                 .setSecondaryHex("#9C27B0")
-                .setLogoClasspath("/branding/logo_medica_leben.jpg");
+                .setLogoClasspath("/branding/logo_medica_leben_png.png");
 
         byte[] pdf = jasperPonderacionReportService.buildPonderaciones(dto, brand);
 

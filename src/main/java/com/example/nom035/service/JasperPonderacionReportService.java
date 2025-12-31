@@ -47,7 +47,7 @@ public class JasperPonderacionReportService {
         ensureTemplate();
         Map<String, Object> params = new HashMap<>();
 
-        params.put("REPORT_TITLE", brand != null && brand.getTitle() != null ? brand.getTitle() : "Ponderaciones Medica Leben");
+        params.put("REPORT_TITLE", brand != null && brand.getTitle() != null ? brand.getTitle() : "Ponderación Medica Leben");
         params.put("REPORT_SUBTITLE", brand != null && brand.getSubtitle() != null ? brand.getSubtitle() : "Resultados por categoría");
         params.put("COMPANY_NAME", dto.getCompanyName());
         params.put("EMPLOYEE_NAME", dto.getEmployeeName());
@@ -57,7 +57,38 @@ public class JasperPonderacionReportService {
         params.put("TRAUMATIC_COUNT", dto.getTraumaticEventsCount());
         params.put("CONCLUSION", dto.getConclusion());
         params.put("GENERATED_AT", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(LocalDateTime.now()));
-        params.put("LOGO_URL", resolveLogoUrl(brand));
+        
+        // Cargar el logo como ByteArrayInputStream para que JasperReports pueda leerlo múltiples veces
+        if (brand != null && brand.getLogoClasspath() != null) {
+            try {
+                String path = brand.getLogoClasspath();
+                if (!path.startsWith("/")) {
+                    path = "/" + path;
+                }
+                InputStream logoStream = getClass().getResourceAsStream(path);
+                if (logoStream != null) {
+                    byte[] logoBytes = logoStream.readAllBytes();
+                    logoStream.close();
+                    if (logoBytes.length > 0) {
+                        // Crear ByteArrayInputStream que se puede leer múltiples veces
+                        params.put("LOGO_IMAGE", new java.io.ByteArrayInputStream(logoBytes));
+                        System.out.println("Logo cargado como ByteArrayInputStream desde: " + path + " (" + logoBytes.length + " bytes)");
+                    } else {
+                        System.err.println("Logo vacío: " + path);
+                        params.put("LOGO_IMAGE", null);
+                    }
+                } else {
+                    System.err.println("Logo NO encontrado: " + path);
+                    params.put("LOGO_IMAGE", null);
+                }
+            } catch (Exception e) {
+                System.err.println("Error al cargar logo: " + e.getMessage());
+                e.printStackTrace();
+                params.put("LOGO_IMAGE", null);
+            }
+        } else {
+            params.put("LOGO_IMAGE", null);
+        }
 
         Color primary = toColor(brand != null ? brand.getPrimaryHex() : null, new Color(33, 150, 243));
         Color secondary = toColor(brand != null ? brand.getSecondaryHex() : null, new Color(156, 39, 176));
@@ -84,9 +115,21 @@ public class JasperPonderacionReportService {
     private String resolveLogoUrl(PdfBrandingConfig brand) {
         if (brand == null || brand.getLogoClasspath() == null) return null;
         try {
-            var url = getClass().getResource(brand.getLogoClasspath());
-            return url != null ? url.toString() : null;
+            // Asegurar que la ruta empiece con /
+            String path = brand.getLogoClasspath();
+            if (!path.startsWith("/")) {
+                path = "/" + path;
+            }
+            var url = getClass().getResource(path);
+            if (url != null) {
+                System.out.println("Logo encontrado: " + url.toString());
+                return url.toString();
+            } else {
+                System.err.println("Logo NO encontrado en classpath: " + path);
+                return null;
+            }
         } catch (Exception e) {
+            System.err.println("Error al buscar logo: " + e.getMessage());
             return null; // logo es opcional
         }
     }

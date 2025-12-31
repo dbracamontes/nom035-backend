@@ -9,7 +9,7 @@
 
     <!-- Styles -->
     <!-- Use DejaVu Sans (available via jasperreports-fonts) to avoid Helvetica missing on headless JVMs -->
-    <style name="Title" fontName="DejaVu Sans" fontSize="18" isBold="true"/>
+    <style name="Title" fontName="DejaVu Sans" fontSize="15" isBold="true"/>
     <style name="Subtitle" fontName="DejaVu Sans" fontSize="12" isBold="true"/>
     <style name="Label" fontName="DejaVu Sans" fontSize="10" isBold="true"/>
     <style name="Value" fontName="DejaVu Sans" fontSize="10"/>
@@ -36,41 +36,28 @@
     <parameter name="PRIMARY_COLOR" class="java.awt.Color"/>
     <parameter name="SECONDARY_COLOR" class="java.awt.Color"/>
     <parameter name="CATEGORIES_DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
-    <parameter name="LOGO_URL" class="java.lang.String"/>
+    <parameter name="LOGO_IMAGE" class="java.io.InputStream"/>
 
     <!-- Title band -->
     <title>
         <band height="140">
-            <image scaleImage="RetainShape" isUsingCache="true">
-                <reportElement x="0" y="0" width="120" height="70" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
-                <imageExpression><![CDATA[$P{LOGO_URL} == null ? null : new java.net.URL($P{LOGO_URL})]]></imageExpression>
+            <image scaleImage="RetainShape" isUsingCache="false" onErrorType="Blank" hAlign="Left" vAlign="Top" evaluationTime="Now">
+                <reportElement x="0" y="10" width="120" height="70" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
+                <imageExpression><![CDATA[$P{LOGO_IMAGE}]]></imageExpression>
             </image>
             <textField pattern="">
-                <reportElement x="0" y="0" width="515" height="26" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
+                <reportElement x="0" y="50" width="515" height="20" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
                 <textElement textAlignment="Center">
-                    <font isBold="true" size="18"/>
+                    <font isBold="true" size="17"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "Ponderaciones Medica Leben" : $P{REPORT_TITLE}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "Ponderación Medica Leben" : $P{REPORT_TITLE}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="0" y="30" width="515" height="18" uuid="8ae63f2f-0d2f-41a1-8b3f-09c803f978ef" style="Subtitle"/>
-                <textElement textAlignment="Center"/>
-                <textFieldExpression><![CDATA[$P{REPORT_SUBTITLE} == null ? "Resultados por categoría" : $P{REPORT_SUBTITLE}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="0" y="55" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
-                <textElement textAlignment="Center"/>
+                <reportElement x="0" y="72" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
                 <textFieldExpression><![CDATA["Empresa: " + ($P{COMPANY_NAME} == null ? "-" : $P{COMPANY_NAME})]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="0" y="75" width="515" height="16" uuid="0b5e8d6c-15f3-4bb6-b5d4-6b2167a70a63" style="Value"/>
-                <textElement textAlignment="Center"/>
-                <textFieldExpression><![CDATA["Colaborador: " + ($P{EMPLOYEE_NAME} == null ? "-" : $P{EMPLOYEE_NAME})]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="0" y="95" width="515" height="16" uuid="581cb3df-2da6-4a44-9f7b-40a1c5e3b5a6" style="Value"/>
-                <textElement textAlignment="Center"/>
-                <textFieldExpression><![CDATA[$P{GENERATED_AT} == null ? "" : $P{GENERATED_AT}]]></textFieldExpression>
             </textField>
         </band>
     </title>
