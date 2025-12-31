@@ -25,11 +25,10 @@ public class Company {
     @Column(length = 150, nullable = false)
     private String name;
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String taxId;
 
-    // Optional folio mercantil field
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String folioMercantil;
 
     private LocalDateTime createdAt = LocalDateTime.now();
