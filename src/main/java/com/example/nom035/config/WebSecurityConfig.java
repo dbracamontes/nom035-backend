@@ -34,6 +34,14 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://localhost:3001");
+        // Permitir acceso desde cualquier IP en la red local (192.168.x.x)
+        configuration.addAllowedOriginPattern("http://192.168.*.*:3000");
+        configuration.addAllowedOriginPattern("http://192.168.*.*:3001");
+        configuration.addAllowedOriginPattern("http://192.168.*.*:8080");
+        // Permitir acceso desde cualquier IP local (10.x.x.x)
+        configuration.addAllowedOriginPattern("http://10.*.*.*:3000");
+        configuration.addAllowedOriginPattern("http://10.*.*.*:3001");
+        configuration.addAllowedOriginPattern("http://10.*.*.*:8080");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
