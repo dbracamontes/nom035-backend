@@ -3,25 +3,25 @@ package com.example.nom035.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream. Collectors;
+import java.util.stream.Collectors;
 
-import org.springframework. beans.factory.annotation.Autowired;
-import org.springframework. http.HttpStatus;
-import org.springframework. http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org. springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.nom035.dto.MedicaLebenReportDto;
-import com.example. nom035.dto.MedicaLebenReportDto.CategoryDetail;
-import com. example.nom035.entity.Response;
+import com.example.nom035.dto.MedicaLebenReportDto.CategoryDetail;
+import com.example.nom035.entity.Response;
 import com.example.nom035.entity.SurveyApplication;
 import com.example.nom035.entity.User;
 import com.example.nom035.repository.ResponseRepository;
-import com.example. nom035.repository.SurveyApplicationRepository;
-import com. example.nom035.repository.UserRepository;
-import com.example. nom035.service.MedicaLebenScoringService;
+import com.example.nom035.repository.SurveyApplicationRepository;
+import com.example.nom035.repository.UserRepository;
+import com.example.nom035.service.MedicaLebenScoringService;
 
 @RestController
 @RequestMapping("/api/reports/medica-leben")
@@ -147,7 +147,7 @@ public class MedicaLebenReportController {
         report.setCompanyName(sa.getCompanySurvey().getCompany().getName());
         report.setEmployeeName(sa.getEmployee().getName());
         
-        report.setGlobalScore(result. globalScore);
+        report.setGlobalScore(result.globalScore);
         report.setGlobalMaxPossible(result.globalMaxPossible);
         report.setGlobalMinPossible(result.globalMinPossible);
         report.setTotalResponses(result.totalResponses);
@@ -158,7 +158,7 @@ public class MedicaLebenReportController {
         for (String catName : result.categoryScores.keySet()) {
             CategoryDetail detail = new CategoryDetail();
             detail.setName(catName);
-            detail.setScore(result. categoryScores.get(catName));
+            detail.setScore(result.categoryScores.get(catName));
             detail.setMaxPossible(result.categoryMaxPossible.get(catName));
             detail.setMinPossible(result.categoryMinPossible. get(catName));
             detail.setCount(result.categoryCounts.get(catName));
@@ -174,17 +174,22 @@ public class MedicaLebenReportController {
         report.setHasHighRiskEvents((Boolean) result.insights.getOrDefault("hasHighRiskEvents", false));
         
         report.setRecommendations(generateRecommendations(result));
+
+        // Generar lista de notas a partir de respuestas de ciertas preguntas
+        List<String> notas = generateNotasForApplication(sa.getId());
+        report.setNotas(notas);
         
         return report;
     }
 
-    private List<String> generateRecommendations(MedicaLebenScoringService. Result result) {
+    @SuppressWarnings("unchecked")
+    private List<String> generateRecommendations(MedicaLebenScoringService.Result result) {
         List<String> recommendations = new ArrayList<>();
         
         for (Map.Entry<String, String> entry : result.categoryLevels.entrySet()) {
             String category = entry.getKey();
             String level = entry.getValue();
-            double avg = result.categoryAverages. get(category);
+            double avg = result.categoryAverages.get(category);
             
             if ("Crítico".equals(level) || "Riesgo alto".equals(level)) {
                 recommendations.add(generateRecommendationForCategory(category, avg));
@@ -209,21 +214,86 @@ public class MedicaLebenReportController {
         return recommendations;
     }
 
-    private String generateRecommendationForCategory(String category, double avg) {
-        switch (category) {
-            case MedicaLebenScoringService.CAT_AMBIENTE_LABORAL:
-                return "Ambiente laboral requiere mejoras:  revisar ventilación, iluminación, ruido y temperatura.";
-            case MedicaLebenScoringService.CAT_CONDICIONES_LABORALES:
-                return "Condiciones laborales críticas: evaluar carga de trabajo, EPP y capacitación en seguridad.";
-            case MedicaLebenScoringService.CAT_SINTOMAS_DOLOR:
-                return "Alto nivel de síntomas reportados: implementar pausas activas y evaluación ergonómica.";
-            case MedicaLebenScoringService.CAT_EVENTOS_CRITICOS:
-                return "Eventos críticos detectados:  activar protocolo de atención psicológica. ";
-            case MedicaLebenScoringService.CAT_HABITOS_SALUD:
-                return "Hábitos de salud requieren atención:  promover programas de bienestar y actividad física.";
-            default:
-                return "La categoría " + category + " requiere atención. ";
+    /**
+     * Genera un texto de recomendación para una categoría específica
+     * en función de su puntaje promedio.
+     */
+    private String generateRecommendationForCategory(String category, double average) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("En la categoría \"").append(category).append("\" se observa un puntaje promedio de ")
+          .append(String.format("%.2f", average)).append(". ");
+
+        // Mensajes genéricos según el nivel de riesgo implícito por el promedio
+        if (average >= 3.0) {
+            sb.append("Se recomienda una valoración médica y psicológica más profunda, así como seguimiento cercano.");
+        } else if (average >= 2.0) {
+            sb.append("Se sugiere monitoreo periódico y medidas preventivas para reducir el riesgo.");
+        } else {
+            sb.append("Se recomienda mantener las condiciones actuales y continuar con las acciones preventivas.");
         }
+
+        return sb.toString();
+    }
+
+    // Genera las notas de texto libre para preguntas específicas de Médica Leben
+    private List<String> generateNotasForApplication(Long applicationId) {
+        List<Response> responses = responseRepository.findBySurveyApplicationId(applicationId);
+        List<String> notas = new ArrayList<>();
+
+        for (Response r : responses) {
+            if (r.getQuestion() == null || r.getQuestion().getId() == null) {
+                continue;
+            }
+            Long qid = r.getQuestion().getId();
+            String freeText = r.getFreeText();
+            if (freeText != null) {
+                freeText = freeText.trim();
+            }
+
+            if (qid == 159L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("La cantidad de cigarros al día y los años que lleva fumando o que fumo?: " + freeText);
+                }
+            } else if (qid == 163L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("El tipo de alcohol (cerveza, tequila, etc.), la cantidad de consumo por semana (latas, vasos, botella) y el número de años que ha consumido alcohol: " + freeText);
+                }
+            } else if (qid == 167L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: " + freeText);
+                } else if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
+                    notas.add("¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: " + r.getOptionAnswer().getText());
+                }
+            } else if (qid == 170L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("Favor de especificar el nombre del medicamento(s) o suplementos que consume: " + freeText);
+                }
+            } else if (qid == 171L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("Alergias (Si o No) y especificar a qué es alérgico: " + freeText);
+                } else if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
+                    notas.add("Alergias (Si o No) y especificar a qué es alérgico: " + r.getOptionAnswer().getText());
+                }
+            } else if (qid == 172L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("¿Alguna vez ha sufrido un accidente de trabajo?: " + freeText);
+                } else if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
+                    notas.add("¿Alguna vez ha sufrido un accidente de trabajo?: " + r.getOptionAnswer().getText());
+                }
+            } else if (qid == 174L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("En su historial de trabajo, ¿ha tenido alguna incapacidad?: " + freeText);
+                } else if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
+                    notas.add("En su historial de trabajo, ¿ha tenido alguna incapacidad?: " + r.getOptionAnswer().getText());
+                }
+            } else if (qid == 177L) {
+                if (freeText != null && !freeText.isEmpty()) {
+                    notas.add("Tipo de droga que consume o ha consumido: " + freeText);
+                }
+            }
+        }
+
+        return notas;
     }
 
     private boolean hasAccess(SurveyApplication sa) {

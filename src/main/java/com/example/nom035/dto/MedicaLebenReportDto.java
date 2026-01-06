@@ -35,6 +35,9 @@ public class MedicaLebenReportDto {
     
     // Recomendaciones
     private List<String> recommendations;
+
+    // Notas generadas a partir de preguntas abiertas específicas (159, 163, 167, 170, 171, 172, 174, 177, etc.)
+    private List<String> notas;
     
     @Data
     @NoArgsConstructor
