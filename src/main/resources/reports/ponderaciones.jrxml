@@ -77,7 +77,7 @@
                 <textElement textAlignment="Center">
                     <font isBold="true" size="17"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "REPORTE PONDERACIONES - UNA PÁGINA" : $P{REPORT_TITLE}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "REPORTE VERIFICACIÓN ESPACIADO" : $P{REPORT_TITLE}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="0" y="72" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
@@ -90,10 +90,10 @@
     </title>
 
     <detail>
-        <band height="456">
+        <band height="480">
             <!-- Fechas -->
             <frame>
-                <reportElement x="0" y="0" width="515" height="35" uuid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6"/>
+                <reportElement x="0" y="0" width="515" height="40" uuid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6"/>
                 <staticText>
                     <reportElement x="0" y="0" width="120" height="16" uuid="f1e2d3c4-b5a6-978e-f0a1-b2c3d4e5f6a7" style="Label"/>
                     <text><![CDATA[Fecha aplicación:]]></text>
@@ -111,140 +111,140 @@
                     <textFieldExpression><![CDATA[$P{GENERATED_DATE} == null ? "-" : $P{GENERATED_DATE}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="18" width="120" height="16" uuid="d5e6f7a8-b9c0-123a-4b5c-6d7e8f9a0b1c" style="Label"/>
+                    <reportElement x="0" y="20" width="120" height="16" uuid="d5e6f7a8-b9c0-123a-4b5c-6d7e8f9a0b1c" style="Label"/>
                     <text><![CDATA[Nombre / Edad:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="18" width="380" height="16" uuid="e6f7a8b9-c0d1-234a-5b6c-7d8e9f0a1b2c" style="Value"/>
+                    <reportElement x="130" y="20" width="380" height="16" uuid="e6f7a8b9-c0d1-234a-5b6c-7d8e9f0a1b2c" style="Value"/>
                     <textFieldExpression><![CDATA[($P{EMPLOYEE_NAME} == null ? "-" : $P{EMPLOYEE_NAME}) + " / " + ($P{EMPLOYEE_AGE} == null ? "No disponible" : $P{EMPLOYEE_AGE})]]></textFieldExpression>
                 </textField>
             </frame>
 
             <!-- Sección Generales -->
             <frame>
-                <reportElement x="0" y="45" width="515" height="130" uuid="e7f8a9b0-c1d2-345b-6c7d-8e9f0a1b2c3d"/>
+                <reportElement x="0" y="50" width="515" height="100" uuid="e7f8a9b0-c1d2-345b-6c7d-8e9f0a1b2c3d"/>
                 <staticText>
-                    <reportElement x="0" y="0" width="515" height="18" uuid="f8a9b0c1-d2e3-456c-7d8e-9f0a1b2c3d4e" style="Subtitle"/>
+                    <reportElement x="0" y="0" width="515" height="16" uuid="f8a9b0c1-d2e3-456c-7d8e-9f0a1b2c3d4e" style="Subtitle"/>
                     <text><![CDATA[Generales]]></text>
                 </staticText>
                 <staticText>
-                    <reportElement x="0" y="22" width="120" height="14" uuid="a9b0c1d2-e3f4-567d-8e9f-0a1b2c3d4e5f" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="18" width="120" height="11" uuid="a9b0c1d2-e3f4-567d-8e9f-0a1b2c3d4e5f" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Departamento:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="22" width="160" height="14" uuid="b0c1d2e3-f4a5-678e-9f0a-1b2c3d4e5f6a" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="18" width="160" height="11" uuid="b0c1d2e3-f4a5-678e-9f0a-1b2c3d4e5f6a" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_DEPARTMENT} == null ? "No disponible" : $P{EMPLOYEE_DEPARTMENT}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="300" y="22" width="100" height="14" uuid="c1d2e3f4-a5b6-789f-0a1b-2c3d4e5f6a7b" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="300" y="18" width="100" height="11" uuid="c1d2e3f4-a5b6-789f-0a1b-2c3d4e5f6a7b" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Puesto:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="410" y="22" width="100" height="14" uuid="d2e3f4a5-b6c7-890a-1b2c-3d4e5f6a7b8c" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="410" y="18" width="100" height="11" uuid="d2e3f4a5-b6c7-890a-1b2c-3d4e5f6a7b8c" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_POSITION} == null ? "No disponible" : $P{EMPLOYEE_POSITION}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="38" width="120" height="14" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="30" width="120" height="11" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Estado civil:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="38" width="160" height="14" uuid="f4a5b6c7-d8e9-012c-3d4e-5f6a7b8c9d0e" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="30" width="160" height="11" uuid="f4a5b6c7-d8e9-012c-3d4e-5f6a7b8c9d0e" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_MARITAL} == null ? "No disponible" : $P{EMPLOYEE_MARITAL}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="300" y="38" width="100" height="14" uuid="a5b6c7d8-e9f0-123d-4e5f-6a7b8c9d0e1f" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="300" y="30" width="100" height="11" uuid="a5b6c7d8-e9f0-123d-4e5f-6a7b8c9d0e1f" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Género:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="410" y="38" width="100" height="14" uuid="b6c7d8e9-f0a1-234e-5f6a-7b8c9d0e1f2a" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="410" y="30" width="100" height="11" uuid="b6c7d8e9-f0a1-234e-5f6a-7b8c9d0e1f2a" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_GENDER} == null ? "No disponible" : $P{EMPLOYEE_GENDER}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="54" width="120" height="14" uuid="c7d8e9f0-a1b2-345f-6a7b-8c9d0e1f2a3b" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="42" width="120" height="11" uuid="c7d8e9f0-a1b2-345f-6a7b-8c9d0e1f2a3b" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Estudios:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="54" width="160" height="14" uuid="d8e9f0a1-b2c3-456a-7b8c-9d0e1f2a3b4c" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="42" width="160" height="11" uuid="d8e9f0a1-b2c3-456a-7b8c-9d0e1f2a3b4c" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_STUDIES} == null ? "No disponible" : $P{EMPLOYEE_STUDIES}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="300" y="54" width="100" height="14" uuid="e9f0a1b2-c3d4-567b-8c9d-0e1f2a3b4c5d" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="300" y="42" width="100" height="11" uuid="e9f0a1b2-c3d4-567b-8c9d-0e1f2a3b4c5d" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Antigüedad puesto:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="410" y="54" width="100" height="14" uuid="f0a1b2c3-d4e5-678c-9d0e-1f2a3b4c5d6e" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="410" y="42" width="100" height="11" uuid="f0a1b2c3-d4e5-678c-9d0e-1f2a3b4c5d6e" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_SENIORITY} == null ? "No disponible" : $P{EMPLOYEE_SENIORITY}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="70" width="120" height="14" uuid="a1b2c3d4-e5f6-789d-0e1f-2a3b4c5d6e7f" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="54" width="120" height="11" uuid="a1b2c3d4-e5f6-789d-0e1f-2a3b4c5d6e7f" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Misma actividad:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="70" width="160" height="14" uuid="b2c3d4e5-f6a7-890e-1f2a-3b4c5d6e7f8a" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="54" width="160" height="11" uuid="b2c3d4e5-f6a7-890e-1f2a-3b4c5d6e7f8a" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_SAME_ACTIVITY} == null ? "No disponible" : $P{EMPLOYEE_SAME_ACTIVITY}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="86" width="120" height="14" uuid="c3d4e5f6-a7b8-901f-2a3b-4c5d6e7f8a9b" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="66" width="120" height="11" uuid="c3d4e5f6-a7b8-901f-2a3b-4c5d6e7f8a9b" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Días semana trabaja:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="86" width="160" height="14" uuid="d4e5f6a7-b8c9-012a-3b4c-5d6e7f8a9b0c" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="66" width="160" height="11" uuid="d4e5f6a7-b8c9-012a-3b4c-5d6e7f8a9b0c" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_WORKING_DAYS} == null ? "No disponible" : $P{EMPLOYEE_WORKING_DAYS}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="300" y="86" width="100" height="14" uuid="e5f6a7b8-c9d0-123b-4c5d-6e7f8a9b0c1d" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="300" y="66" width="100" height="11" uuid="e5f6a7b8-c9d0-123b-4c5d-6e7f8a9b0c1d" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Horas por día:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="410" y="86" width="100" height="14" uuid="f6a7b8c9-d0e1-234c-5d6e-7f8a9b0c1d2e" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="410" y="66" width="100" height="11" uuid="f6a7b8c9-d0e1-234c-5d6e-7f8a9b0c1d2e" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_HOURS_PER_DAY} == null ? "No disponible" : $P{EMPLOYEE_HOURS_PER_DAY}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="102" width="120" height="14" uuid="a7b8c9d0-e1f2-345d-6e7f-8a9b0c1d2e3f" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="78" width="120" height="11" uuid="a7b8c9d0-e1f2-345d-6e7f-8a9b0c1d2e3f" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Tipo transporte:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="102" width="160" height="14" uuid="b8c9d0e1-f2a3-456e-7f8a-9b0c1d2e3f4a" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="78" width="160" height="11" uuid="b8c9d0e1-f2a3-456e-7f8a-9b0c1d2e3f4a" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_TRANSPORT} == null ? "No disponible" : $P{EMPLOYEE_TRANSPORT}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="300" y="102" width="100" height="14" uuid="c9d0e1f2-a3b4-567f-8a9b-0c1d2e3f4a5b" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="300" y="78" width="100" height="11" uuid="c9d0e1f2-a3b4-567f-8a9b-0c1d2e3f4a5b" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Tiempo traslado:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="410" y="102" width="100" height="14" uuid="d0e1f2a3-b4c5-678a-9b0c-1d2e3f4a5b6c" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="410" y="78" width="100" height="11" uuid="d0e1f2a3-b4c5-678a-9b0c-1d2e3f4a5b6c" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_COMMUTE_TIME} == null ? "No disponible" : $P{EMPLOYEE_COMMUTE_TIME}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="116" width="120" height="14" uuid="e1f2a3b4-c5d6-789b-0c1d-2e3f4a5b6c7d" style="Label"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="0" y="89" width="120" height="11" uuid="e1f2a3b4-c5d6-789b-0c1d-2e3f4a5b6c7d" style="Label"/>
+                    <textElement><font size="8"/></textElement>
                     <text><![CDATA[Casa:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="116" width="160" height="14" uuid="f2a3b4c5-d6e7-890c-1d2e-3f4a5b6c7d8e" style="Value"/>
-                    <textElement><font size="9"/></textElement>
+                    <reportElement x="130" y="89" width="160" height="11" uuid="f2a3b4c5-d6e7-890c-1d2e-3f4a5b6c7d8e" style="Value"/>
+                    <textElement><font size="8"/></textElement>
                     <textFieldExpression><![CDATA[$P{EMPLOYEE_HOUSING} == null ? "No disponible" : $P{EMPLOYEE_HOUSING}]]></textFieldExpression>
                 </textField>
             </frame>
@@ -257,7 +257,7 @@
 
             <!-- Categories table -->
             <componentElement>
-                <reportElement x="0" y="178" width="515" height="95" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
+                <reportElement x="0" y="178" width="515" height="100" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
                 <jr:table>
                     <datasetRun subDataset="categoriesDataset">
                         <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
@@ -379,12 +379,12 @@
 
             <!-- Factor de ajuste -->
             <staticText>
-                <reportElement x="0" y="278" width="100" height="14" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
+                <reportElement x="0" y="288" width="100" height="14" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
                 <textElement><font size="9" isBold="true"/></textElement>
                 <text><![CDATA[Factor ajuste:]]></text>
             </staticText>
             <textField>
-                <reportElement x="110" y="278" width="100" height="14" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
+                <reportElement x="110" y="288" width="100" height="14" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
                 <textElement><font size="9" isBold="true"/></textElement>
                 <textFieldExpression><![CDATA[$P{FACTOR_AJUSTE} == null ? "1.0" : $P{FACTOR_AJUSTE}]]></textFieldExpression>
             </textField>
@@ -393,7 +393,7 @@
             <!-- Gráfico de Barras -->
             <barChart>
                 <chart isShowLegend="true">
-                    <reportElement x="0" y="296" width="250" height="155" uuid="28db7c6c-d7db-4a0a-9e8b-2fa0c1f2bb0a"/>
+                    <reportElement x="0" y="308" width="250" height="160" uuid="28db7c6c-d7db-4a0a-9e8b-2fa0c1f2bb0a"/>
                     <chartTitle>
                         <titleExpression><![CDATA["Puntaje por categoría"]]></titleExpression>
                     </chartTitle>
@@ -424,7 +424,7 @@
             <!-- Gráfico de Líneas -->
             <lineChart>
                 <chart isShowLegend="true">
-                    <reportElement x="265" y="296" width="250" height="155" uuid="b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"/>
+                    <reportElement x="265" y="308" width="250" height="160" uuid="b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"/>
                     <chartTitle>
                         <titleExpression><![CDATA["Tendencia por categoría"]]></titleExpression>
                     </chartTitle>
