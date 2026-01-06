@@ -28,6 +28,7 @@ import com.example.nom035.service.Nom035ScoringService;
 import com.example.nom035.service.PdfReportService;
 import com.example.nom035.service.PdfBrandingConfig;
 import com.example.nom035.service.JasperPonderacionReportService;
+import com.example.nom035.service.MedicaLebenScoringService;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -50,6 +51,9 @@ public class ReportsController {
 
     @Autowired
     private JasperPonderacionReportService jasperPonderacionReportService;
+
+    @Autowired
+    private MedicaLebenScoringService medicaLebenScoringService;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -81,45 +85,106 @@ public class ReportsController {
         }
 
         List<Response> responses = responseRepository.findBySurveyApplicationId(applicationId);
-        Nom035ScoringService.Result res = scoringService.score(responses);
+        Long surveyId = sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey() != null
+            ? sa.getCompanySurvey().getSurvey().getId()
+            : null;
 
         DictamenDto dto = new DictamenDto();
         dto.setApplicationId(applicationId);
         dto.setEmployeeId(sa.getEmployee() != null ? sa.getEmployee().getId() : null);
-        // Populate employee name & company name
         dto.setEmployeeName(sa.getEmployee() != null ? sa.getEmployee().getName() : null);
+        dto.setEmployeeEmail(sa.getEmployee() != null ? sa.getEmployee().getEmail() : null);
+        dto.setPosition(sa.getEmployee() != null ? sa.getEmployee().getPosition() : null);
+        dto.setDepartment(sa.getEmployee() != null ? sa.getEmployee().getDepartment() : null);
         dto.setCompanyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany()!=null ? sa.getCompanySurvey().getCompany().getId() : null);
         dto.setCompanyName(sa.getCompanySurvey() != null && sa.getCompanySurvey().getCompany()!=null ? sa.getCompanySurvey().getCompany().getName() : null);
-        dto.setSurveyId(sa.getCompanySurvey() != null && sa.getCompanySurvey().getSurvey()!=null ? sa.getCompanySurvey().getSurvey().getId() : null);
-        dto.setGlobalScore(res.globalScore);
-        dto.setGlobalLevel(res.globalLevel);
-        dto.setTraumaticEventsCount(res.traumaticEventsCount);
-        dto.setTraumaticAlert(res.traumaticAlert);
+        dto.setSurveyId(surveyId);
+        dto.setApplicationDate(sa.getStartedAt() != null ? sa.getStartedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null);
+        dto.setCompletedDate(sa.getCompletedAt() != null ? sa.getCompletedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null);
+
+        // Default demográficos sin dato
+        dto.setAge("No disponible");
+        dto.setMaritalStatus("No disponible");
+        dto.setGender("No disponible");
+        dto.setStudies("No disponible");
+        dto.setSeniority("No disponible");
+        dto.setSameActivity("No disponible");
+        dto.setWorkingDays("No disponible");
+        dto.setHoursPerDay("No disponible");
+        dto.setTransportType("No disponible");
+        dto.setWeeklyGasoline("No disponible");
+        dto.setCommuteTime("No disponible");
+        dto.setTransportCost("No disponible");
+        dto.setHousing("No disponible");
 
         List<CategoryScoreDto> cats = new ArrayList<>();
-        for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
-            String level = res.categoryLevels.getOrDefault(e.getKey(), "N/A");
-            cats.add(new CategoryScoreDto(e.getKey(), e.getValue(), level));
-        }
-        dto.setCategories(cats);
 
-        // Build a brief conclusion per provided guidance
-        String risky = cats.stream()
-            .filter(c -> {
-                String lv = c.getLevel();
-                return "Medio".equalsIgnoreCase(lv) || "Alto".equalsIgnoreCase(lv) || "Muy alto".equalsIgnoreCase(lv);
-            })
-            .map(CategoryScoreDto::getCategory)
-            .collect(Collectors.joining(", "));
-        StringBuilder sb = new StringBuilder();
-        sb.append("Nivel global ").append(dto.getGlobalLevel()).append(".");
-        if (!risky.isBlank()) {
-            sb.append(" Riesgo en: ").append(risky).append(".");
+        if (surveyId != null && surveyId == 2L) {
+            // Médica Leben scoring
+            MedicaLebenScoringService.Result res = medicaLebenScoringService.score(responses);
+            dto.setGlobalScore(res.globalScore);
+            dto.setGlobalLevel(res.globalLevel);
+            dto.setGlobalMin(res.globalMinPossible);
+            dto.setGlobalMax(res.globalMaxPossible);
+            dto.setTotalResponses(res.totalResponses);
+            dto.setTraumaticEventsCount((Integer) res.insights.getOrDefault("criticalEventsCount", 0));
+            dto.setTraumaticAlert(res.insights.getOrDefault("hasHighRiskEvents", false) == Boolean.TRUE);
+
+            for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
+                String key = e.getKey();
+                String level = res.categoryLevels.getOrDefault(key, "N/A");
+                cats.add(new CategoryScoreDto(
+                    key,
+                    e.getValue(),
+                    level,
+                    res.categoryMinPossible.getOrDefault(key, 0),
+                    res.categoryMaxPossible.getOrDefault(key, 0),
+                    res.categoryCounts.getOrDefault(key, 0),
+                    res.categoryCounts.getOrDefault(key, 0)
+                ));
+            }
+            dto.setCategories(cats);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Nivel global ").append(dto.getGlobalLevel()).append(".");
+            if (dto.isTraumaticAlert()) {
+                sb.append(" Se detectaron eventos críticos: ")
+                  .append(dto.getTraumaticEventsCount())
+                  .append(". Requiere seguimiento clínico.");
+            }
+            dto.setConclusion(sb.toString());
+
+        } else {
+            // Flujo original NOM-035
+            Nom035ScoringService.Result res = scoringService.score(responses);
+            dto.setGlobalScore(res.globalScore);
+            dto.setGlobalLevel(res.globalLevel);
+            dto.setTraumaticEventsCount(res.traumaticEventsCount);
+            dto.setTraumaticAlert(res.traumaticAlert);
+
+            for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
+                String level = res.categoryLevels.getOrDefault(e.getKey(), "N/A");
+                cats.add(new CategoryScoreDto(e.getKey(), e.getValue(), level));
+            }
+            dto.setCategories(cats);
+
+            String risky = cats.stream()
+                .filter(c -> {
+                    String lv = c.getLevel();
+                    return "Medio".equalsIgnoreCase(lv) || "Alto".equalsIgnoreCase(lv) || "Muy alto".equalsIgnoreCase(lv);
+                })
+                .map(CategoryScoreDto::getCategory)
+                .collect(Collectors.joining(", "));
+            StringBuilder sb = new StringBuilder();
+            sb.append("Nivel global ").append(dto.getGlobalLevel()).append(".");
+            if (!risky.isBlank()) {
+                sb.append(" Riesgo en: ").append(risky).append(".");
+            }
+            if (dto.isTraumaticAlert()) {
+                sb.append(" Alerta: ").append(dto.getTraumaticEventsCount()).append(" respuestas afirmativas en Acontecimientos Traumáticos Severos. Requiere canalización clínica.");
+            }
+            dto.setConclusion(sb.toString());
         }
-        if (dto.isTraumaticAlert()) {
-            sb.append(" Alerta: ").append(dto.getTraumaticEventsCount()).append(" respuestas afirmativas en Acontecimientos Traumáticos Severos. Requiere canalización clínica.");
-        }
-        dto.setConclusion(sb.toString());
 
         return ResponseEntity.ok(dto);
     }

@@ -20,6 +20,10 @@
         <field name="category" class="java.lang.String"/>
         <field name="score" class="java.lang.Integer"/>
         <field name="level" class="java.lang.String"/>
+        <field name="min" class="java.lang.Integer"/>
+        <field name="max" class="java.lang.Integer"/>
+        <field name="responsesCount" class="java.lang.Integer"/>
+        <field name="questionsCount" class="java.lang.Integer"/>
     </subDataset>
 
     <!-- Parameters -->
@@ -27,7 +31,30 @@
     <parameter name="REPORT_SUBTITLE" class="java.lang.String"/>
     <parameter name="COMPANY_NAME" class="java.lang.String"/>
     <parameter name="EMPLOYEE_NAME" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_EMAIL" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_DEPARTMENT" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_POSITION" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_AGE" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_MARITAL" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_GENDER" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_STUDIES" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_SENIORITY" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_SAME_ACTIVITY" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_WORKING_DAYS" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_HOURS_PER_DAY" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_TRANSPORT" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_WEEKLY_GAS" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_COMMUTE_TIME" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_TRANSPORT_COST" class="java.lang.String"/>
+    <parameter name="EMPLOYEE_HOUSING" class="java.lang.String"/>
+    <parameter name="APPLICATION_DATE" class="java.lang.String"/>
+    <parameter name="COMPLETED_DATE" class="java.lang.String"/>
+    <parameter name="GENERATED_DATE" class="java.lang.String"/>
+    <parameter name="FACTOR_AJUSTE" class="java.lang.String"/>
     <parameter name="GLOBAL_SCORE" class="java.lang.Integer"/>
+    <parameter name="GLOBAL_MIN" class="java.lang.Integer"/>
+    <parameter name="GLOBAL_MAX" class="java.lang.Integer"/>
+    <parameter name="TOTAL_RESPONSES" class="java.lang.Integer"/>
     <parameter name="GLOBAL_LEVEL" class="java.lang.String"/>
     <parameter name="TRAUMATIC_ALERT" class="java.lang.Boolean"/>
     <parameter name="TRAUMATIC_COUNT" class="java.lang.Integer"/>
@@ -50,7 +77,7 @@
                 <textElement textAlignment="Center">
                     <font isBold="true" size="17"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "Ponderación Medica Leben" : $P{REPORT_TITLE}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "REPORTE PONDERACIONES - UNA PÁGINA" : $P{REPORT_TITLE}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="0" y="72" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
@@ -63,99 +90,367 @@
     </title>
 
     <detail>
-        <band height="320">
-            <!-- Global metrics frame -->
+        <band height="456">
+            <!-- Fechas -->
             <frame>
-                <reportElement x="0" y="0" width="515" height="90" uuid="b8c8f9a2-20f7-4c8d-b8c4-8b71f1d83db6"/>
+                <reportElement x="0" y="0" width="515" height="35" uuid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6"/>
                 <staticText>
-                    <reportElement x="0" y="0" width="120" height="16" uuid="6e9a1338-4108-4c33-8a9c-8a43adbe5b50" style="Label"/>
-                    <textElement/>
-                    <text><![CDATA[Puntaje global]]></text>
+                    <reportElement x="0" y="0" width="120" height="16" uuid="f1e2d3c4-b5a6-978e-f0a1-b2c3d4e5f6a7" style="Label"/>
+                    <text><![CDATA[Fecha aplicación:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="0" width="100" height="16" uuid="06fc1800-5d22-41d0-8b59-98d5c4b5c3d6" style="Value"/>
-                    <textElement/>
-                    <textFieldExpression><![CDATA[$P{GLOBAL_SCORE} == null ? "-" : String.valueOf($P{GLOBAL_SCORE})]]></textFieldExpression>
+                    <reportElement x="130" y="0" width="100" height="16" uuid="a2b3c4d5-e6f7-8901-a2b3-c4d5e6f7a8b9" style="Value"/>
+                    <textFieldExpression><![CDATA[$P{APPLICATION_DATE} == null ? "-" : $P{APPLICATION_DATE}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="18" width="120" height="16" uuid="ce780017-5a23-43ff-83e0-9ce579d4b71c" style="Label"/>
-                    <textElement/>
-                    <text><![CDATA[Nivel global]]></text>
+                    <reportElement x="250" y="0" width="100" height="16" uuid="b3c4d5e6-f7a8-901a-2b3c-4d5e6f7a8b9c" style="Label"/>
+                    <text><![CDATA[Fecha generada:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="18" width="180" height="16" uuid="808b3d7b-9e1d-4365-9d0e-8b8c6d7de23c" style="Value"/>
-                    <textElement/>
-                    <textFieldExpression><![CDATA[$P{GLOBAL_LEVEL} == null ? "-" : $P{GLOBAL_LEVEL}]]></textFieldExpression>
+                    <reportElement x="360" y="0" width="150" height="16" uuid="c4d5e6f7-a8b9-012a-3b4c-5d6e7f8a9b0c" style="Value"/>
+                    <textFieldExpression><![CDATA[$P{GENERATED_DATE} == null ? "-" : $P{GENERATED_DATE}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="0" y="36" width="120" height="16" uuid="9e8b2b04-1f9f-4f9f-89b5-9f7cbbe11213" style="Label"/>
-                    <textElement/>
-                    <text><![CDATA[Acontecimientos traumáticos]]></text>
+                    <reportElement x="0" y="18" width="120" height="16" uuid="d5e6f7a8-b9c0-123a-4b5c-6d7e8f9a0b1c" style="Label"/>
+                    <text><![CDATA[Nombre / Edad:]]></text>
                 </staticText>
                 <textField>
-                    <reportElement x="130" y="36" width="200" height="16" uuid="92e6bf33-2091-472f-aefb-c03fe0252052" style="Value"/>
-                    <textElement/>
-                    <textFieldExpression><![CDATA[$P{TRAUMATIC_ALERT} != null && $P{TRAUMATIC_ALERT} ? "Alerta: " + ($P{TRAUMATIC_COUNT} == null ? "-" : String.valueOf($P{TRAUMATIC_COUNT})) : "Sin alertas"]]></textFieldExpression>
+                    <reportElement x="130" y="18" width="380" height="16" uuid="e6f7a8b9-c0d1-234a-5b6c-7d8e9f0a1b2c" style="Value"/>
+                    <textFieldExpression><![CDATA[($P{EMPLOYEE_NAME} == null ? "-" : $P{EMPLOYEE_NAME}) + " / " + ($P{EMPLOYEE_AGE} == null ? "No disponible" : $P{EMPLOYEE_AGE})]]></textFieldExpression>
                 </textField>
             </frame>
 
+            <!-- Sección Generales -->
+            <frame>
+                <reportElement x="0" y="45" width="515" height="130" uuid="e7f8a9b0-c1d2-345b-6c7d-8e9f0a1b2c3d"/>
+                <staticText>
+                    <reportElement x="0" y="0" width="515" height="18" uuid="f8a9b0c1-d2e3-456c-7d8e-9f0a1b2c3d4e" style="Subtitle"/>
+                    <text><![CDATA[Generales]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="0" y="22" width="120" height="14" uuid="a9b0c1d2-e3f4-567d-8e9f-0a1b2c3d4e5f" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Departamento:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="22" width="160" height="14" uuid="b0c1d2e3-f4a5-678e-9f0a-1b2c3d4e5f6a" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_DEPARTMENT} == null ? "No disponible" : $P{EMPLOYEE_DEPARTMENT}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="300" y="22" width="100" height="14" uuid="c1d2e3f4-a5b6-789f-0a1b-2c3d4e5f6a7b" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Puesto:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="410" y="22" width="100" height="14" uuid="d2e3f4a5-b6c7-890a-1b2c-3d4e5f6a7b8c" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_POSITION} == null ? "No disponible" : $P{EMPLOYEE_POSITION}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="38" width="120" height="14" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Estado civil:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="38" width="160" height="14" uuid="f4a5b6c7-d8e9-012c-3d4e-5f6a7b8c9d0e" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_MARITAL} == null ? "No disponible" : $P{EMPLOYEE_MARITAL}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="300" y="38" width="100" height="14" uuid="a5b6c7d8-e9f0-123d-4e5f-6a7b8c9d0e1f" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Género:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="410" y="38" width="100" height="14" uuid="b6c7d8e9-f0a1-234e-5f6a-7b8c9d0e1f2a" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_GENDER} == null ? "No disponible" : $P{EMPLOYEE_GENDER}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="54" width="120" height="14" uuid="c7d8e9f0-a1b2-345f-6a7b-8c9d0e1f2a3b" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Estudios:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="54" width="160" height="14" uuid="d8e9f0a1-b2c3-456a-7b8c-9d0e1f2a3b4c" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_STUDIES} == null ? "No disponible" : $P{EMPLOYEE_STUDIES}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="300" y="54" width="100" height="14" uuid="e9f0a1b2-c3d4-567b-8c9d-0e1f2a3b4c5d" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Antigüedad puesto:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="410" y="54" width="100" height="14" uuid="f0a1b2c3-d4e5-678c-9d0e-1f2a3b4c5d6e" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_SENIORITY} == null ? "No disponible" : $P{EMPLOYEE_SENIORITY}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="70" width="120" height="14" uuid="a1b2c3d4-e5f6-789d-0e1f-2a3b4c5d6e7f" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Misma actividad:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="70" width="160" height="14" uuid="b2c3d4e5-f6a7-890e-1f2a-3b4c5d6e7f8a" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_SAME_ACTIVITY} == null ? "No disponible" : $P{EMPLOYEE_SAME_ACTIVITY}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="86" width="120" height="14" uuid="c3d4e5f6-a7b8-901f-2a3b-4c5d6e7f8a9b" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Días semana trabaja:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="86" width="160" height="14" uuid="d4e5f6a7-b8c9-012a-3b4c-5d6e7f8a9b0c" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_WORKING_DAYS} == null ? "No disponible" : $P{EMPLOYEE_WORKING_DAYS}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="300" y="86" width="100" height="14" uuid="e5f6a7b8-c9d0-123b-4c5d-6e7f8a9b0c1d" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Horas por día:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="410" y="86" width="100" height="14" uuid="f6a7b8c9-d0e1-234c-5d6e-7f8a9b0c1d2e" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_HOURS_PER_DAY} == null ? "No disponible" : $P{EMPLOYEE_HOURS_PER_DAY}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="102" width="120" height="14" uuid="a7b8c9d0-e1f2-345d-6e7f-8a9b0c1d2e3f" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Tipo transporte:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="102" width="160" height="14" uuid="b8c9d0e1-f2a3-456e-7f8a-9b0c1d2e3f4a" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_TRANSPORT} == null ? "No disponible" : $P{EMPLOYEE_TRANSPORT}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="300" y="102" width="100" height="14" uuid="c9d0e1f2-a3b4-567f-8a9b-0c1d2e3f4a5b" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Tiempo traslado:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="410" y="102" width="100" height="14" uuid="d0e1f2a3-b4c5-678a-9b0c-1d2e3f4a5b6c" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_COMMUTE_TIME} == null ? "No disponible" : $P{EMPLOYEE_COMMUTE_TIME}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="0" y="116" width="120" height="14" uuid="e1f2a3b4-c5d6-789b-0c1d-2e3f4a5b6c7d" style="Label"/>
+                    <textElement><font size="9"/></textElement>
+                    <text><![CDATA[Casa:]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="130" y="116" width="160" height="14" uuid="f2a3b4c5-d6e7-890c-1d2e-3f4a5b6c7d8e" style="Value"/>
+                    <textElement><font size="9"/></textElement>
+                    <textFieldExpression><![CDATA[$P{EMPLOYEE_HOUSING} == null ? "No disponible" : $P{EMPLOYEE_HOUSING}]]></textFieldExpression>
+                </textField>
+            </frame>
+
+            <!-- Sección Ponderaciones (encabezado tabla) -->
+            <staticText>
+                <reportElement x="0" y="160" width="515" height="16" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Subtitle"/>
+                <text><![CDATA[Ponderaciones]]></text>
+            </staticText>
+
             <!-- Categories table -->
             <componentElement>
-                <reportElement x="0" y="110" width="515" height="180" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
+                <reportElement x="0" y="178" width="515" height="95" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
                 <jr:table>
                     <datasetRun subDataset="categoriesDataset">
                         <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
                     </datasetRun>
-                    <jr:column width="240" uuid="0c6db35b-9c17-4f06-84bc-f3ca6f6bde2b">
+                    <jr:column width="140" uuid="0c6db35b-9c17-4f06-84bc-f3ca6f6bde2b">
                         <jr:columnHeader height="20" style="TableHeader">
                             <staticText>
-                                <reportElement x="0" y="0" width="240" height="20"/>
+                                <reportElement x="0" y="0" width="140" height="20"/>
                                 <textElement textAlignment="Left"/>
                                 <text><![CDATA[Categoría]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell height="18">
                             <textField>
-                                <reportElement x="0" y="0" width="240" height="18"/>
+                                <reportElement x="0" y="0" width="140" height="18"/>
                                 <textElement/>
                                 <textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="120" uuid="ba84f2e8-68e9-4c23-aabf-9383d9cc4d53">
+                    <jr:column width="50" uuid="1b269e5e-9b64-4f2a-a36a-c35a7f8cfd2e">
                         <jr:columnHeader height="20" style="TableHeader">
                             <staticText>
-                                <reportElement x="0" y="0" width="120" height="20"/>
+                                <reportElement x="0" y="0" width="50" height="20"/>
                                 <textElement textAlignment="Center"/>
-                                <text><![CDATA[Puntaje]]></text>
+                                <text><![CDATA[Min]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell height="18">
                             <textField>
-                                <reportElement x="0" y="0" width="120" height="18"/>
+                                <reportElement x="0" y="0" width="50" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{min} == null ? "" : String.valueOf($F{min})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="55" uuid="ba84f2e8-68e9-4c23-aabf-9383d9cc4d53">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="55" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Resultado]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="55" height="18"/>
                                 <textElement textAlignment="Center"/>
                                 <textFieldExpression><![CDATA[$F{score} == null ? "" : String.valueOf($F{score})]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="155" uuid="5017a260-7d45-4268-8c56-508a6d1097fa">
+                    <jr:column width="55" uuid="d7dc9f2b-a2c1-4b5b-8d0e-6b0e590df3f6">
                         <jr:columnHeader height="20" style="TableHeader">
                             <staticText>
-                                <reportElement x="0" y="0" width="155" height="20"/>
+                                <reportElement x="0" y="0" width="55" height="20"/>
                                 <textElement textAlignment="Center"/>
-                                <text><![CDATA[Nivel]]></text>
+                                <text><![CDATA[Máximo]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell height="18">
                             <textField>
-                                <reportElement x="0" y="0" width="155" height="18"/>
+                                <reportElement x="0" y="0" width="55" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{max} == null ? "" : String.valueOf($F{max})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="70" uuid="5017a260-7d45-4268-8c56-508a6d1097fa">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="70" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[Rango]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="70" height="18"/>
                                 <textElement textAlignment="Center"/>
                                 <textFieldExpression><![CDATA[$F{level}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
+                    <jr:column width="70" uuid="a1f9b0f4-9d49-43ef-9c7b-1e5ac9b41f1b">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="70" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[# Respuestas]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="70" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{responsesCount} == null ? "" : String.valueOf($F{responsesCount})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="75" uuid="4a65f837-ae85-49b5-9ea3-30cfb1c2e3f3">
+                        <jr:columnHeader height="20" style="TableHeader">
+                            <staticText>
+                                <reportElement x="0" y="0" width="75" height="20"/>
+                                <textElement textAlignment="Center"/>
+                                <text><![CDATA[# Preguntas]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell height="18">
+                            <textField>
+                                <reportElement x="0" y="0" width="75" height="18"/>
+                                <textElement textAlignment="Center"/>
+                                <textFieldExpression><![CDATA[$F{questionsCount} == null ? "" : String.valueOf($F{questionsCount})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
                 </jr:table>
             </componentElement>
+
+            <!-- Factor de ajuste -->
+            <staticText>
+                <reportElement x="0" y="278" width="100" height="14" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <text><![CDATA[Factor ajuste:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="110" y="278" width="100" height="14" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{FACTOR_AJUSTE} == null ? "1.0" : $P{FACTOR_AJUSTE}]]></textFieldExpression>
+            </textField>
+
+            <!-- Gráficos lado a lado -->
+            <!-- Gráfico de Barras -->
+            <barChart>
+                <chart isShowLegend="true">
+                    <reportElement x="0" y="296" width="250" height="155" uuid="28db7c6c-d7db-4a0a-9e8b-2fa0c1f2bb0a"/>
+                    <chartTitle>
+                        <titleExpression><![CDATA["Puntaje por categoría"]]></titleExpression>
+                    </chartTitle>
+                    <chartLegend position="Bottom"/>
+                </chart>
+                <categoryDataset>
+                    <dataset>
+                        <datasetRun subDataset="categoriesDataset">
+                            <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
+                        </datasetRun>
+                    </dataset>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Resultado"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{score}]]></valueExpression>
+                    </categorySeries>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Máximo"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{max}]]></valueExpression>
+                    </categorySeries>
+                </categoryDataset>
+                <barPlot>
+                    <plot/>
+                </barPlot>
+            </barChart>
+
+            <!-- Gráfico de Líneas -->
+            <lineChart>
+                <chart isShowLegend="true">
+                    <reportElement x="265" y="296" width="250" height="155" uuid="b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"/>
+                    <chartTitle>
+                        <titleExpression><![CDATA["Tendencia por categoría"]]></titleExpression>
+                    </chartTitle>
+                    <chartLegend position="Bottom"/>
+                </chart>
+                <categoryDataset>
+                    <dataset>
+                        <datasetRun subDataset="categoriesDataset">
+                            <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
+                        </datasetRun>
+                    </dataset>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Resultado"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{score}]]></valueExpression>
+                    </categorySeries>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Máximo"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{max}]]></valueExpression>
+                    </categorySeries>
+                </categoryDataset>
+                <linePlot>
+                    <plot/>
+                </linePlot>
+            </lineChart>
         </band>
     </detail>
 
