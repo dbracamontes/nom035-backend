@@ -323,7 +323,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (176,2,'¿Consume mariguana, heroína, LSD, cocaína barbitúricos, anfetaminas o cualquier otro tipo de drogas psicoactivas?','single_choice',103,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (177,2,'Tipo de droga','text',104,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (178,2,'Frecuencia','single_choice',105,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (179,2,'Selecciona la última ocasión que consumiste','multi_select',106,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (179,2,'Selecciona la última ocasión que consumiste','single_choice',106,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
 	 (180,2,'¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?','single_choice',107,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
 	 (181,2,'¿Pertenece o ha pertenecido a instituciones para su rehabilitación?','single_choice',108,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
@@ -1112,7 +1112,7 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 (621,149,'El inmediato superior',1,2,0,NULL),
 	 (622,149,'El ritmo de trabajo',1,3,0,NULL),
 	 (623,149,'No poder desviar la atención del trabajo',1,4,0,NULL),
-	 (624,149,'No hay obstáculos que dificulten la comuniación',0,5,0,NULL),
+	 (624,149,'No hay obstáculos que dificulten la comunicación',0,5,0,NULL),
 	 (625,149,'Otros',1,6,0,NULL),
 	 
 	 
