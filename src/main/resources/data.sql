@@ -208,10 +208,12 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (71,1,'¿Sus subalternos dificultan el logro de los objetivos de trabajo?','likert',71,'Obstaculización objetivos','Liderazgo trabajadores',NULL,'Encuesta de Comunicación Interna',NULL),
 	 (72,1,'¿Sus subalternos cooperan poco en las actividades cotidianas cuando se les requiere?','likert',72,'Falta de cooperación','Liderazgo trabajadores',NULL,'Encuesta de Comunicación Interna',NULL),
 	 (73,1,'¿Sus subalternos ignoran las sugerencias que se le hacen para mejorar su trabajo?','likert',73,'Ignorar sugerencias','Liderazgo trabajadores',NULL,'Encuesta de Comunicación Interna',NULL),
-	 (74,2,'Nombre','text',1,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (75,2,'Fecha de Nacimiento','date',2,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (76,2,'Departamento en el que labora','text',3,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (77,2,'Puesto','text',4,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
+	 (74,2,'Nombre','text',1,NULL,'Informacion Personal','Personalizado','Encuesta Médica Leben',NULL),
+	 (75,2,'Fecha de Nacimiento','date',2,NULL,'Informacion Personal','Personalizado','Encuesta Médica Leben',NULL),
+	 (76,2,'Departamento en el que labora','text',3,NULL,'Informacion Personal','Personalizado','Encuesta Médica Leben',NULL),
+	 (77,2,'Puesto','text',4,NULL,'Informacion Personal','Personalizado','Encuesta Médica Leben',NULL),
+	 
+	  /*Datos generales*/
 	 (78,2,'Estado Civil','single_choice',5,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
 	 (79,2,'Sexo','single_choice',6,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
 	 (80,2,'Estudios realizados','single_choice',7,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL);
@@ -232,6 +234,9 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (93,2,'¿Tiene la posibilidad de acceder a una alimentación sana, variada e higiénica?','single_choice',20,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
 	 (94,2,'¿Cuántas veces sale de vacaciones al año?','single_choice',21,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
 	 (95,2,'En caso de tener hijos, la Educación que reciben es','single_choice',22,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
+	 /*Datos generales*/
+	 
+	 
 	 (96,2,'¿En qué posición realizas la mayoría de tus actividades laborales?','single_choice',23,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (97,2,'¿Su lugar de trabajo cuenta con ventilación?','single_choice',24,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (98,2,'Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo','single_choice',25,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),

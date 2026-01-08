@@ -36,19 +36,21 @@ public class MedicaLebenScoringService {
      * Resultado del scoring de Médica Leben
      */
     public static class Result {
-        public final Map<String, Integer> categoryScores;      // Puntaje actual por categoría
-        public final Map<String, Integer> categoryCounts;      // Cantidad de respuestas por categoría
-        public final Map<String, Double> categoryAverages;     // Promedio por categoría
-        public final Map<String, Integer> categoryMaxPossible; // ⭐ Máximo teórico por categoría
-        public final Map<String, Integer> categoryMinPossible; // ⭐ Mínimo teórico por categoría
-        public final Map<String, String> categoryLevels;       // Nivel de riesgo por categoría
-        public final int globalScore;                          // Puntaje total actual
-        public final int totalResponses;                       // Total de respuestas válidas
-        public final double globalAverage;                     // Promedio global
-        public final int globalMaxPossible;                    // ⭐ Máximo teórico global
-        public final int globalMinPossible;                    // ⭐ Mínimo teórico global
-        public final String globalLevel;                       // Nivel de riesgo global
-        public final Map<String, Object> insights;             // Insights adicionales
+        public final Map<String, Integer> categoryScores;
+        public final Map<String, Integer> categoryCounts;
+        public final Map<String, Double> categoryAverages;
+        public final Map<String, Integer> categoryMaxPossible;
+        public final Map<String, Integer> categoryMinPossible;
+        public final Map<String, String> categoryLevels;
+        public final Map<String, Integer> categoryTotalQuestions; // Total de preguntas por categoría
+        public final int globalScore;
+        public final int totalResponses;
+        public final int totalQuestions;
+        public final double globalAverage;
+        public final int globalMaxPossible;
+        public final int globalMinPossible;
+        public final String globalLevel;
+        public final Map<String, Object> insights;
 
         public Result(
             Map<String, Integer> categoryScores,
@@ -57,8 +59,10 @@ public class MedicaLebenScoringService {
             Map<String, Integer> categoryMaxPossible,
             Map<String, Integer> categoryMinPossible,
             Map<String, String> categoryLevels,
+            Map<String, Integer> categoryTotalQuestions,
             int globalScore,
             int totalResponses,
+            int totalQuestions,
             double globalAverage,
             int globalMaxPossible,
             int globalMinPossible,
@@ -68,15 +72,17 @@ public class MedicaLebenScoringService {
             this.categoryScores = categoryScores;
             this.categoryCounts = categoryCounts;
             this.categoryAverages = categoryAverages;
-            this. categoryMaxPossible = categoryMaxPossible;
-            this. categoryMinPossible = categoryMinPossible;
-            this. categoryLevels = categoryLevels;
+            this.categoryMaxPossible = categoryMaxPossible;
+            this.categoryMinPossible = categoryMinPossible;
+            this.categoryLevels = categoryLevels;
+            this.categoryTotalQuestions = categoryTotalQuestions;
             this.globalScore = globalScore;
-            this. totalResponses = totalResponses;
+            this.totalResponses = totalResponses;
+            this.totalQuestions = totalQuestions;
             this.globalAverage = globalAverage;
-            this. globalMaxPossible = globalMaxPossible;
-            this. globalMinPossible = globalMinPossible;
-            this. globalLevel = globalLevel;
+            this.globalMaxPossible = globalMaxPossible;
+            this.globalMinPossible = globalMinPossible;
+            this.globalLevel = globalLevel;
             this.insights = insights;
         }
     }
@@ -85,9 +91,7 @@ public class MedicaLebenScoringService {
      * Calcula el scoring completo para una lista de respuestas de Médica Leben
      */
     public Result score(List<Response> responses) {
-        if (responses == null || responses.isEmpty()) {
-            return emptyResult();
-        }
+        List<Response> safeResponses = responses != null ? responses : java.util.Collections.emptyList();
 
         // Obtener todas las preguntas de Médica Leben (survey_id = 2)
         List<Question> allQuestions = questionRepository.findBySurveyId(2L);
@@ -96,6 +100,16 @@ public class MedicaLebenScoringService {
         Map<String, Integer> categoryMaxPossible = new LinkedHashMap<>();
         Map<String, Integer> categoryMinPossible = new LinkedHashMap<>();
         calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible);
+
+        // Contar total de preguntas por categoría
+        Map<String, Integer> categoryTotalQuestions = new LinkedHashMap<>();
+        for (String cat : getAllCategories()) { categoryTotalQuestions.put(cat, 0); }
+        for (Question q : allQuestions) {
+            String cat = normalizeCategory(q.getCategory());
+            if (cat != null) {
+                categoryTotalQuestions.put(cat, categoryTotalQuestions.getOrDefault(cat, 0) + 1);
+            }
+        }
 
         // Inicializar contadores para valores actuales
         Map<String, Integer> categoryScores = new LinkedHashMap<>();
@@ -111,7 +125,7 @@ public class MedicaLebenScoringService {
         Map<String, Integer> symptomCounts = new HashMap<>();
 
         // Procesar cada respuesta
-        for (Response r : responses) {
+        for (Response r : safeResponses) {
             if (r == null || r.getQuestion() == null || r.getValue() == null) {
                 continue;
             }
@@ -125,7 +139,7 @@ public class MedicaLebenScoringService {
             }
 
             // Acumular por categoría
-            categoryScores. put(category, categoryScores.getOrDefault(category, 0) + value);
+            categoryScores.put(category, categoryScores.getOrDefault(category, 0) + value);
             categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
 
             globalScore += value;
@@ -139,7 +153,7 @@ public class MedicaLebenScoringService {
             // Contar síntomas
             if (CAT_SINTOMAS_DOLOR.equals(category) && isPositiveSymptom(value, q)) {
                 String symptomType = extractSymptomType(q.getText());
-                symptomCounts. put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
+                symptomCounts.put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
             }
         }
 
@@ -149,7 +163,7 @@ public class MedicaLebenScoringService {
 
         // Calcular totales teóricos globales
         int globalMaxPossible = categoryMaxPossible.values().stream().mapToInt(Integer::intValue).sum();
-        int globalMinPossible = categoryMinPossible. values().stream().mapToInt(Integer::intValue).sum();
+        int globalMinPossible = categoryMinPossible.values().stream().mapToInt(Integer::intValue).sum();
 
         // Interpretar niveles de riesgo
         Map<String, String> categoryLevels = interpretCategoryLevels(categoryAverages);
@@ -168,8 +182,10 @@ public class MedicaLebenScoringService {
             categoryMaxPossible,
             categoryMinPossible,
             categoryLevels,
+            categoryTotalQuestions,
             globalScore,
             totalResponses,
+            allQuestions != null ? allQuestions.size() : 0,
             globalAverage,
             globalMaxPossible,
             globalMinPossible,
@@ -195,7 +211,7 @@ public class MedicaLebenScoringService {
 
         // Para cada pregunta, obtener min/max de sus opciones
         for (Question q : questions) {
-            String category = normalizeCategory(q. getCategory());
+            String category = normalizeCategory(q.getCategory());
             if (category == null) {
                 continue;
             }
@@ -249,6 +265,7 @@ public class MedicaLebenScoringService {
         // Mapear a categorías estándar
         switch (normalized) {
             case "Datos generales":
+                // Mostrar como "General" en reportes de Médica Leben
                 return CAT_DATOS_GENERALES;
             case "Ambiente laboral":
                 return CAT_AMBIENTE_LABORAL;
@@ -391,7 +408,8 @@ public class MedicaLebenScoringService {
         Map<String, Integer> emptyMax = new LinkedHashMap<>();
         Map<String, Integer> emptyMin = new LinkedHashMap<>();
         Map<String, String> emptyLevels = new LinkedHashMap<>();
-        
+        Map<String, Integer> emptyTotals = new LinkedHashMap<>();
+         
         initializeCategories(emptyScores, emptyCounts);
         
         for (String cat : emptyScores.keySet()) {
@@ -399,6 +417,7 @@ public class MedicaLebenScoringService {
             emptyMax.put(cat, 0);
             emptyMin.put(cat, 0);
             emptyLevels.put(cat, "Sin datos");
+            emptyTotals.put(cat, 0);
         }
 
         return new Result(
@@ -408,6 +427,8 @@ public class MedicaLebenScoringService {
             emptyMax,
             emptyMin,
             emptyLevels,
+            emptyTotals,
+            0,
             0,
             0,
             0.0,

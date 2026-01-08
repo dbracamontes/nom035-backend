@@ -21,6 +21,7 @@ public class MedicaLebenReportDto {
     private int globalMaxPossible;
     private int globalMinPossible;
     private int totalResponses;
+    private int totalQuestions;
     private double globalAverage;
     private String globalLevel;
     
@@ -48,6 +49,7 @@ public class MedicaLebenReportDto {
         private int maxPossible;
         private int minPossible;
         private int count;
+        private int totalQuestionsInCategory;
         private double average;
         private String level;
     }

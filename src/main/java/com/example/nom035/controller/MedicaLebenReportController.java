@@ -151,6 +151,7 @@ public class MedicaLebenReportController {
         report.setGlobalMaxPossible(result.globalMaxPossible);
         report.setGlobalMinPossible(result.globalMinPossible);
         report.setTotalResponses(result.totalResponses);
+        report.setTotalQuestions(result.totalQuestions);
         report.setGlobalAverage(result.globalAverage);
         report.setGlobalLevel(result.globalLevel);
         
@@ -162,6 +163,7 @@ public class MedicaLebenReportController {
             detail.setMaxPossible(result.categoryMaxPossible.get(catName));
             detail.setMinPossible(result.categoryMinPossible. get(catName));
             detail.setCount(result.categoryCounts.get(catName));
+            detail.setTotalQuestionsInCategory(result.categoryTotalQuestions.getOrDefault(catName, 0));
             detail.setAverage(result.categoryAverages.get(catName));
             detail. setLevel(result.categoryLevels.get(catName));
             categories.add(detail);
