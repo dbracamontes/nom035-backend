@@ -28,7 +28,8 @@ INSERT INTO company (id, name, tax_id, created_at) VALUES
 (2, 'EcoWorld Ltd', 'ECO987654', NOW()),
 (3, 'HealthCorp MX', 'HCM111222', NOW()),
 (4, 'BuildIt Global', 'BIG333444', NOW()),
-(5, 'SoftLogic Systems', 'SLS555666', NOW());
+(5, 'SoftLogic Systems', 'SLS555666', NOW()),
+(11, 'Business Corp', 'BCO240107', NOW());
 
 -- ================================
 -- EMPLOYEE
@@ -64,7 +65,10 @@ INSERT INTO employee (id, company_id, name, email, position, department, seniori
 (25, 1, 'Paola Salas', 'paola.salas@technova.com', 'Data Engineer', 'IT', 4, 'F', 33, 'SAPA880707MDFRRS25', 'activo'),
 (26, 1, 'Iván Castillo', 'ivan.castillo@technova.com', 'SysAdmin', 'IT', 6, 'M', 36, 'CAIV830808HDFRRL26', 'activo'),
 (27, 1, 'Karen Silva', 'karen.silva@technova.com', 'Technical Writer', 'PMO', 3, 'F', 28, 'SIKA940909MDFRRS27', 'activo'),
-(28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'CABR930101HDFRRL28', 'activo');
+(28, 1, 'Bruno Campos', 'bruno.campos@technova.com', 'Machine Learning Engineer', 'IT', 2, 'M', 27, 'CABR930101HDFRRL28', 'activo'),
+(10003, 11, 'Aurelio Piña Palacios', 'palaciosa@businesscorp.com', 'Reclutador', 'Recursos Humanos', 2, 'M', 32, 'PIPA920315HDFRRL29', 'activo'),
+(10004, 11, 'Mariano Castro Machado', 'machadom@businesscorp.com', 'Vendedora', 'Ventas', 3, 'F', 28, 'CAMM930820MDFRRS30', 'activo'),
+(10006, 11, 'Areli Montemayor Velasco', 'montemayora@businesscorp.com', 'Promotor', 'Promocion', 1, 'F', 25, 'MOVA980612MDFRRS31', 'activo');
 
 -- ================================
 -- SURVEY (solo uno: Encuesta NOM-035 Integral ahora id=1)
@@ -77,7 +81,8 @@ INSERT INTO survey (id, title, description, guide_type, active, version, base_su
 -- ================================
 DELETE FROM company_survey; 
 INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, company_version, status, completion_rate, notes) VALUES
-(1, 1, 1, NOW(), '2025-12-31', 'v1', 'activo', 0.00, 'Aplicación inicial pendiente');
+(1, 1, 1, NOW(), '2025-12-31', 'v1', 'activo', 0.00, 'Aplicación inicial pendiente'),
+(3, 11, 2, '2026-01-07', '2026-03-14', 'v1', 'activo', 0.00, 'Encuesta Business Corp Medica Leben');
 
 -- ================================
 -- ROLES Y USUARIOS PARA SPRING SECURITY
@@ -103,7 +108,10 @@ INSERT INTO `user` (id, username, password, email, company_id, employee_id, enab
 	(2, 'company', 'company123', 'company@demo.com', 1, NULL, TRUE),
   (3, 'employee', 'employee123', 'employee@demo.com', NULL, 11, TRUE),
   (4, 'generador', 'generador123', 'generador@demo.com', NULL, NULL, TRUE),
-  (5, 'cotizador', 'cotizador123', 'cotizador@demo.com', NULL, NULL, TRUE)
+  (5, 'cotizador', 'cotizador123', 'cotizador@demo.com', NULL, NULL, TRUE),
+  (34, 'aurelio.pi.a.palacios', 'employee123', 'palaciosa@businesscorp.com', NULL, NULL, TRUE),
+  (35, 'mariano.castro.machado', 'employee123', 'machadom@businesscorp.com', NULL, NULL, TRUE),
+  (36, 'areli.montemayor.velasco', 'employee123', 'montemayora@businesscorp.com', NULL, NULL, TRUE)
 ON DUPLICATE KEY UPDATE username=VALUES(username);
 
 -- H2 (MySQL mode) does not support MySQL-style UPDATE ... JOIN, so use a correlated subquery instead
@@ -120,7 +128,10 @@ INSERT INTO user_role (user_id, role_id) VALUES
 	(2, 2), -- company -> ROLE_COMPANY
   (3, 3),
   (4, 4), -- generador -> ROLE_GENERADOR
-  (5, 5)
+  (5, 5),
+  (34, 3), -- aurelio.pi.a.palacios -> ROLE_EMPLOYEE
+  (35, 3), -- mariano.castro.machado -> ROLE_EMPLOYEE
+  (36, 3)  -- areli.montemayor.velasco -> ROLE_EMPLOYEE
 ON DUPLICATE KEY UPDATE role_id=VALUES(role_id);
 
 -- ================================
@@ -328,7 +339,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (176,2,'¿Consume mariguana, heroína, LSD, cocaína barbitúricos, anfetaminas o cualquier otro tipo de drogas psicoactivas?','single_choice',103,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (177,2,'Tipo de droga','text',104,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (178,2,'Frecuencia','single_choice',105,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (179,2,'Selecciona la última ocasión que consumiste','multi_select',106,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (179,2,'Selecciona la última ocasión que consumiste','single_choice',106,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
 	 (180,2,'¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?','single_choice',107,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
 	 (181,2,'¿Pertenece o ha pertenecido a instituciones para su rehabilitación?','single_choice',108,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
@@ -1117,7 +1128,7 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 (621,149,'El inmediato superior',1,2,0,NULL),
 	 (622,149,'El ritmo de trabajo',1,3,0,NULL),
 	 (623,149,'No poder desviar la atención del trabajo',1,4,0,NULL),
-	 (624,149,'No hay obstáculos que dificulten la comuniación',0,5,0,NULL),
+	 (624,149,'No hay obstáculos que dificulten la comunicación',0,5,0,NULL),
 	 (625,149,'Otros',1,6,0,NULL),
 	 
 	 
@@ -1604,7 +1615,10 @@ INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, 
 (17, 1, 25, NOW(), NULL, 'pendiente', NULL, NULL),
 (18, 1, 26, NOW(), NULL, 'pendiente', NULL, NULL),
 (19, 1, 27, NOW(), NULL, 'pendiente', NULL, NULL),
-(20, 1, 28, NOW(), NULL, 'pendiente', NULL, NULL);
+(20, 1, 28, NOW(), NULL, 'pendiente', NULL, NULL),
+(10003, 3, 10003, NOW(), NULL, 'pendiente', NULL, NULL),
+(10004, 3, 10004, NOW(), NULL, 'pendiente', NULL, NULL),
+(10005, 3, 10006, NOW(), NULL, 'pendiente', NULL, NULL);
 
 -- Preload: mark first 5 TechNova applications as completed with medium score
 UPDATE survey_application
