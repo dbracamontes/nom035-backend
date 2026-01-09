@@ -102,20 +102,63 @@ public class ReportsController {
         dto.setApplicationDate(sa.getStartedAt() != null ? sa.getStartedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null);
         dto.setCompletedDate(sa.getCompletedAt() != null ? sa.getCompletedAt().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null);
 
-        // Default demográficos sin dato
-        dto.setAge("No disponible");
-        dto.setMaritalStatus("No disponible");
-        dto.setGender("No disponible");
-        dto.setStudies("No disponible");
-        dto.setSeniority("No disponible");
-        dto.setSameActivity("No disponible");
-        dto.setWorkingDays("No disponible");
-        dto.setHoursPerDay("No disponible");
-        dto.setTransportType("No disponible");
-        dto.setWeeklyGasoline("No disponible");
-        dto.setCommuteTime("No disponible");
-        dto.setTransportCost("No disponible");
-        dto.setHousing("No disponible");
+        // Extraer datos demográficos de las respuestas de la encuesta
+        // Mapeo de question IDs a campos del reporte (Encuesta Médica Leben)
+        Map<Long, String> responseMap = new HashMap<>();
+        for (Response r : responses) {
+            if (r.getQuestion() != null && r.getQuestion().getId() != null) {
+                Long qId = r.getQuestion().getId();
+                String value = r.getFreeText();
+                if (value == null || value.isBlank()) {
+                    if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
+                        value = r.getOptionAnswer().getText();
+                    }
+                }
+                if (value != null && !value.isBlank()) {
+                    responseMap.put(qId, value);
+                }
+            }
+        }
+
+        // IDs de preguntas demográficas de la encuesta Médica Leben:
+        // 75: Fecha de nacimiento (calcular edad)
+        // 76: Estado civil
+        // 77: Género
+        // 78: Nivel de estudios
+        // 79: Antigüedad en el puesto actual
+        // 80: ¿Ha desempeñado la misma actividad en otros lugares de trabajo?
+        // 81: ¿Cuántos días a la semana trabaja?
+        // 82: ¿Cuántas horas al día trabaja?
+        // 83: Tipo de transporte
+        // 84: Tiempo de traslado (ida y vuelta)
+        // 85: Tipo de vivienda
+        
+        // Edad (de fecha de nacimiento)
+        String birthDate = responseMap.get(75L);
+        if (birthDate != null && !birthDate.isBlank()) {
+            try {
+                java.time.LocalDate birth = java.time.LocalDate.parse(birthDate);
+                int age = java.time.Period.between(birth, java.time.LocalDate.now()).getYears();
+                dto.setAge(String.valueOf(age));
+            } catch (Exception e) {
+                dto.setAge("No disponible");
+            }
+        } else {
+            dto.setAge("No disponible");
+        }
+        
+        dto.setMaritalStatus(responseMap.getOrDefault(76L, "No disponible"));
+        dto.setGender(responseMap.getOrDefault(77L, "No disponible"));
+        dto.setStudies(responseMap.getOrDefault(78L, "No disponible"));
+        dto.setSeniority(responseMap.getOrDefault(79L, "No disponible"));
+        dto.setSameActivity(responseMap.getOrDefault(80L, "No disponible"));
+        dto.setWorkingDays(responseMap.getOrDefault(81L, "No disponible"));
+        dto.setHoursPerDay(responseMap.getOrDefault(82L, "No disponible"));
+        dto.setTransportType(responseMap.getOrDefault(83L, "No disponible"));
+        dto.setCommuteTime(responseMap.getOrDefault(84L, "No disponible"));
+        dto.setHousing(responseMap.getOrDefault(85L, "No disponible"));
+        dto.setWeeklyGasoline("No disponible"); // No hay pregunta específica para esto
+        dto.setTransportCost("No disponible"); // No hay pregunta específica para esto
 
         List<CategoryScoreDto> cats = new ArrayList<>();
 
