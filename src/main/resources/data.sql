@@ -1113,10 +1113,6 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 /*
 	 //revisar pregunta 74 excel -- 147 id duplicado revisar al final
 	 */
-	 (618,148,'Buena',0,1,0,NULL),
-	 (619,148,'Regular',1,2,0,NULL),
-	 (1200,148,'Mala',2,3,0,NULL),
-	 
 	 (1201,148,'Si',1,1,0,NULL),
 	 (1203,148,'No',0,2,0,NULL),
 	 
