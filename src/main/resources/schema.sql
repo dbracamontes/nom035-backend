@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS `role_privilege`;
 DROP TABLE IF EXISTS `password_reset_token`;
 DROP TABLE IF EXISTS `document_type`;
 DROP TABLE IF EXISTS `employee_docs`;
+DROP TABLE IF EXISTS `matrix_option_answer`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -242,4 +243,19 @@ CREATE TABLE employee_docs (
         REFERENCES employee(id) ON DELETE CASCADE,
     CONSTRAINT fk_employee_docs_type FOREIGN KEY (type_id)
         REFERENCES document_type(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =============================================
+-- Table: matrix_option_answer (ponderación matrices Médica Leben)
+-- =============================================
+CREATE TABLE IF NOT EXISTS matrix_option_answer (
+    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
+    question_id  BIGINT NOT NULL,
+    category     VARCHAR(255) NOT NULL,
+    text         VARCHAR(255) NOT NULL,
+    value        INT NOT NULL,
+    CONSTRAINT fk_matrix_option_answer_question
+        FOREIGN KEY (question_id) REFERENCES question(id),
+    CONSTRAINT uq_matrix_option_answer_question_category_text
+        UNIQUE (question_id, category, text)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

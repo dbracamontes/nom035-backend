@@ -29,7 +29,9 @@ INSERT INTO company (id, name, tax_id, created_at) VALUES
 (3, 'HealthCorp MX', 'HCM111222', NOW()),
 (4, 'BuildIt Global', 'BIG333444', NOW()),
 (5, 'SoftLogic Systems', 'SLS555666', NOW()),
-(11, 'Business Corp', 'BCO240107', NOW());
+(11, 'Business Corp', 'BCO240107', NOW()),
+(10, 'Medica Leben Demo 2', 'MLEA20251230X1'),
+(12, 'Test Excel', 'TEXC20260110X1');
 
 -- ================================
 -- EMPLOYEE
@@ -45,7 +47,8 @@ INSERT INTO employee (id, company_id, name, email, position, department, seniori
 (8, 4, 'Paula Jiménez', 'paula.jimenez@buildit.com', 'Supervisor', 'Production', 8, 'F', 38, 'JIPA840808MDFRRS08', 'activo'),
 (9, 5, 'Ricardo Soto', 'ricardo.soto@softlogic.com', 'Project Manager', 'PMO', 9, 'M', 41, 'SORI820909HDFRRL09', 'activo'),
 (10, 5, 'María Cruz', 'maria.cruz@softlogic.com', 'Developer', 'IT', 3, 'F', 27, 'CRMA940101MDFRRS10', 'activo'),
-(11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'TEME950202HDFRRL11', 'activo');
+(11, 1, 'Test Employee', 'employee@demo.com', 'Tester', 'QA', 1, 'M', 25, 'TEME950202HDFRRL11', 'activo'),
+(10001, 10, 'Juan Perez', 'juan.perez@demo.com', 'Medico', 'Salud', 1, 'M', 30, 'TESTEXCEL202601HDFRRL01', 'activo');
 
 -- Agregar empleados adicionales para TechNova SA (company_id = 1) hasta tener 20 en total
 INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, curp, status) VALUES
@@ -82,7 +85,8 @@ INSERT INTO survey (id, title, description, guide_type, active, version, base_su
 DELETE FROM company_survey; 
 INSERT INTO company_survey (id, company_id, survey_id, assigned_at, due_date, company_version, status, completion_rate, notes) VALUES
 (1, 1, 1, NOW(), '2025-12-31', 'v1', 'activo', 0.00, 'Aplicación inicial pendiente'),
-(3, 11, 2, '2026-01-07', '2026-03-14', 'v1', 'activo', 0.00, 'Encuesta Business Corp Medica Leben');
+(3, 11, 2, '2026-01-07', '2026-03-14', 'v1', 'activo', 0.00, 'Encuesta Business Corp Medica Leben'),
+(4, 12, 2, '2026-01-07', '2026-03-14', 'v1', 'activo', 0.00, 'Encuesta Medica Leben Demo 2');
 
 -- ================================
 -- ROLES Y USUARIOS PARA SPRING SECURITY
@@ -111,7 +115,8 @@ INSERT INTO `user` (id, username, password, email, company_id, employee_id, enab
   (5, 'cotizador', 'cotizador123', 'cotizador@demo.com', NULL, NULL, TRUE),
   (34, 'aurelio.pi.a.palacios', 'employee123', 'palaciosa@businesscorp.com', NULL, NULL, TRUE),
   (35, 'mariano.castro.machado', 'employee123', 'machadom@businesscorp.com', NULL, NULL, TRUE),
-  (36, 'areli.montemayor.velasco', 'employee123', 'montemayora@businesscorp.com', NULL, NULL, TRUE)
+  (36, 'areli.montemayor.velasco', 'employee123', 'montemayora@businesscorp.com', NULL, NULL, TRUE),
+  (37, 'empleado.test.excel', 'employee123', 'test.excel@demo.com', NULL, NULL, TRUE)
 ON DUPLICATE KEY UPDATE username=VALUES(username);
 
 -- H2 (MySQL mode) does not support MySQL-style UPDATE ... JOIN, so use a correlated subquery instead
@@ -131,7 +136,8 @@ INSERT INTO user_role (user_id, role_id) VALUES
   (5, 5),
   (34, 3), -- aurelio.pi.a.palacios -> ROLE_EMPLOYEE
   (35, 3), -- mariano.castro.machado -> ROLE_EMPLOYEE
-  (36, 3)  -- areli.montemayor.velasco -> ROLE_EMPLOYEE
+  (36, 3),  -- areli.montemayor.velasco -> ROLE_EMPLOYEE
+  (37, 3)   -- empleado.test.excel -> ROLE_EMPLOYEE
 ON DUPLICATE KEY UPDATE role_id=VALUES(role_id);
 
 -- ================================
@@ -350,28 +356,27 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (186,2,'Síntomas cutáneos','matrix',113,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Sequedad en la piel", "Comezón en la piel", "Enrojecimiento", "Ampollas o vesículas", "Ulceras o necrosis"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
 	 (187,2,'Síntomas digestivos','matrix',114,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Nauseas", "Pérdida del apetito", "Estreñimiento", "Diarrea o vomito", "Dolor abdominal", "Heces o vomito con sangre"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
 	 (188,2,'Síntomas parecidos a la gripe','matrix',115,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Cansancio o fatiga", "Congestion nasal", "Dolor de cabeza", "Tos", "Fiebre", "Dificultad para respirar"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (189,2,'Sistemas dolorosos Indique si tiene molestia o dolor, su frecuencia, si le ha impedido realizar su trabajo actual, y si esa molestia o dolor se han producido coma consecuencia de las tareas que realiza en su puesto de trabajo','matrix',116,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Tiene dolor en esta zona ? Cuello, hombros o espalda alta"], "columns": ["Si", "No", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (189,2,'¿Tiene dolor en esta zona: cuello, hombros o espalda alta?','single_choice',116,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
 	 (190,2,'¿Con qué frecuencia?','single_choice',117,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (191,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',118,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (192,2,'¿Con qué frecuencia?','single_choice',119,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (193,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',120,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (194,2,'Tiene dolor en alguna de estas zonas abdomen, pecho o espalda baja?','single_choice',121,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (195,2,'¿Con qué frecuencia?','single_choice',122,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (196,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',123,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (197,2,'¿Con qué frecuencia?','single_choice',124,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (198,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',125,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (199,2,'Dolor de codos manos y/o muñecas','single_choice',126,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (200,2,'¿Con qué frecuencia?','single_choice',127,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (201,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',128,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (202,2,'¿Con qué frecuencia?','single_choice',129,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (203,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',130,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (204,2,'Dolor de piernas y pies','single_choice',131,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (205,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (206,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (207,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (208,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',135,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (191,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en articulaciones','matrix',118,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Dolor en las articulaciones", "Rigidez articular", "Hinchazón en las articulaciones", "Limitación para mover las articulaciones"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (192,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en extremidades','matrix',119,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Hormigueo", "Adormecimiento", "Debilidad en brazos o piernas", "Dolor en brazos o piernas"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (193,2,'¿Con qué frecuencia?','single_choice',120,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (194,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',121,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (195,2,'Dolor de codos manos y/o muñecas','single_choice',126,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (196,2,'¿Con qué frecuencia?','single_choice',127,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (197,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',128,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (198,2,'¿Con qué frecuencia?','single_choice',129,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (199,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',130,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (200,2,'Dolor de piernas y pies','single_choice',131,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (201,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (202,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (203,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (204,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',135,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (205,2,'Dolor de piernas y pies','single_choice',131,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (206,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (207,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
+	 (208,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
 	 (209,2,'En su trabajo,  ¿Cuánto tiempo tiene que adoptar o realizar estas posturas? Sentado','single_choice',136,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (210,2,'De pie','single_choice',137,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
@@ -867,11 +872,11 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 (430,91,'Prestada',3,3,0,NULL),
 
 	 /** ids renumerados para evitar duplicados **/
-	 (2001,90,'No consumo',5,1,0,NULL),
-	 (2002,90,'Menos de 1 vez a la semana',4,2,0,NULL),
-	 (2003,90,'1 a 2 veces a la semana',3,3,0,NULL),
-	 (2004,91,'3 a 4 veces a la semana',2,4,0,NULL),
-	 (2005,91,'5 o mas veces a la semana',1,5,0,NULL),
+	 (2001,92,'No consumo',5,1,0,NULL),
+	 (2002,92,'Menos de 1 vez a la semana',4,2,0,NULL),
+	 (2003,92,'1 a 2 veces a la semana',3,3,0,NULL),
+	 (2004,92,'3 a 4 veces a la semana',2,4,0,NULL),
+	 (2005,92,'5 o mas veces a la semana',1,5,0,NULL),
 	 
 	 
 	 (431,93,'No economicamente no me es posible',3,1,0,NULL),
@@ -988,7 +993,7 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	 
 	 
 	 /*
-	 //revisar excel 41- 114
+	 //revisar 41- 114
 	 */
 	 (519,114,'Delantales',1,1,0,NULL),
 	 (520,114,'Guantes plomizos (para rayos x)',1,2,0,NULL);
@@ -1624,7 +1629,6 @@ WHERE id BETWEEN 1 AND 5;
 
 -- Insert hardcoded responses with variation for applications 1..5 over all 73 questions
 -- Each option_answer_id = ((question_id - 1) * 5) + value, consistent with option_answer seeding
--- App 1 cycles values 1..5; App 2 cycles 2..5,1; App 3 cycles 3..5,1..2; App 4 cycles 4..5,1..3; App 5 cycles 5,1..4
 INSERT INTO response (survey_application_id, question_id, option_answer_id, `value`, answered_at) VALUES
 -- Application 1
 (1, 1, ((1-1)*5 + 1), 1, NOW()),
@@ -1997,6 +2001,7 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, `val
 (5,72, ((72-1)*5 + 1), 1, NOW()),
 (5,73, ((73-1)*5 + 2), 2, NOW());
 
+
 -- ================================
 -- DEMO: Medica Leben Demo 2 (sin acentos)
 -- ================================
@@ -2028,192 +2033,24 @@ INSERT INTO response (survey_application_id, question_id, value) VALUES
 	(10002, 234, 1), (10002, 235, 1), (10002, 236, 1), (10002, 237, 1), (10002, 238, 1), (10002, 239, 1), (10002, 240, 1), (10002, 241, 1),
 	(10002, 242, 1), (10002, 243, 1), (10002, 244, 1), (10002, 245, 1), (10002, 246, 1), (10002, 247, 1), (10002, 248, 1), (10002, 249, 1),
 	(10002, 250, 1), (10002, 251, 1), (10002, 252, 1), (10002, 253, 1), (10002, 254, 1), (10002, 255, 1), (10002, 256, 1);
+	 
+-- ================================
+-- DEMO: Medica Leben Demo 3 - Empresa Test Excel
+-- ================================
+-- Empresa Test Excel
+INSERT INTO company (id, name, tax_id) VALUES (12, 'Test Excel', 'TEXC20260110X1');
 
--- ================================
--- SEED: Responses for Aurelio Piña Palacios (Employee ID 10003, Survey Application ID 10003)
--- Preserves actual survey responses to avoid re-entering data after Docker rebuild
--- ================================
-INSERT INTO response (survey_application_id, question_id, option_answer_id, value, free_text) VALUES
-  (10003, 74, NULL, NULL, 'Aurelio Piña Palacios'),
-  (10003, 75, NULL, NULL, '1988-02-02'),
-  (10003, 76, NULL, NULL, 'Recursos Humanos'),
-  (10003, 77, NULL, NULL, 'Reclutador'),
-  (10003, 78, 367, 1, NULL),
-  (10003, 79, 371, 2, NULL),
-  (10003, 80, 376, 2, NULL),
-  (10003, 81, 382, 1, NULL),
-  (10003, 82, 388, 3, NULL),
-  (10003, 83, 394, 3, NULL),
-  (10003, 84, 397, 1, NULL),
-  (10003, 85, 401, 1, NULL),
-  (10003, 86, 405, 1, NULL),
-  (10003, 87, 410, 1, NULL),
-  (10003, 88, 414, 3, NULL),
-  (10003, 89, 418, 1, NULL),
-  (10003, 90, 423, 1, NULL),
-  (10003, 91, 428, 1, NULL),
-  (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"3 a 4 veces a la semana","Carnes Rojas y Lácteos":"1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"5 o mas veces a la semana"}}'),
-  (10003, 93, 433, 1, NULL),
-  (10003, 94, 435, 2, NULL),
-  (10003, 95, 438, 3, NULL),
-  (10003, 96, 442, 1, NULL),
-  (10003, 97, 444, 1, NULL),
-  (10003, 98, 447, 1, NULL),
-  (10003, 99, 451, 1, NULL),
-  (10003, 100, 455, 3, NULL),
-  (10003, 101, 457, 2, NULL),
-  (10003, 102, 465, 3, NULL),
-  (10003, 103, NULL, NULL, '{"kind":"multi_select","optionIds":["471"],"optionAnswerIds":[471],"optionLabels":["La falta de limpieza"],"otherText":null}'),
-  (10003, 104, 479, 2, NULL),
-  (10003, 105, 481, 1, NULL),
-  (10003, 106, 484, 3, NULL),
-  (10003, 107, 492, 1, NULL),
-  (10003, 108, 498, 2, NULL),
-  (10003, 109, 502, 2, NULL),
-  (10003, 110, 504, 2, NULL),
-  (10003, 111, NULL, NULL, '{"kind":"multi_select","optionIds":["506"],"optionAnswerIds":[506],"optionLabels":["Luz ultravioleta (soldadura eléctrica al arco, lámparas, germicidas…) excluida la luz solar"],"otherText":null}'),
-  (10003, 112, 513, 2, NULL),
-  (10003, 113, 517, 1, NULL),
-  (10003, 114, 520, 1, NULL),
-  (10003, 115, 526, 2, NULL),
-  (10003, 116, 532, 2, NULL),
-  (10003, 117, 539, 3, NULL),
-  (10003, 118, 541, 2, NULL),
-  (10003, 119, 543, 2, NULL),
-  (10003, 120, 546, 0, NULL),
-  (10003, 121, 548, 0, NULL),
-  (10003, 122, 552, 0, NULL),
-  (10003, 123, 554, 0, NULL),
-  (10003, 124, 556, 0, NULL),
-  (10003, 125, 559, 2, NULL),
-  (10003, 126, 560, 0, NULL),
-  (10003, 127, 562, 0, NULL),
-  (10003, 128, 564, 0, NULL),
-  (10003, 129, 566, 2, NULL),
-  (10003, 130, 569, 0, NULL),
-  (10003, 131, 570, 2, NULL),
-  (10003, 132, 572, 2, NULL),
-  (10003, 133, 578, 2, NULL),
-  (10003, 134, 581, 2, NULL),
-  (10003, 135, 583, 2, NULL),
-  (10003, 136, 585, 3, NULL),
-  (10003, 137, 588, 2, NULL),
-  (10003, 138, 591, 0, NULL),
-  (10003, 139, 592, 3, NULL),
-  (10003, 140, 595, 3, NULL),
-  (10003, 141, 602, 1, NULL),
-  (10003, 142, 604, 2, NULL),
-  (10003, 143, 609, 3, NULL),
-  (10003, 144, 610, 0, NULL),
-  (10003, 145, 613, 2, NULL),
-  (10003, 146, 616, 2, NULL),
-  (10003, 147, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Jefes":"Buena","Compañeros":"Buena","Subordinados":"Buena"}}'),
-  (10003, 148, 619, 1, NULL),
-  (10003, 149, NULL, NULL, '{"kind":"multi_select","optionIds":["620"],"optionAnswerIds":[620],"optionLabels":["La normatividad de la empresa"],"otherText":null}'),
-  (10003, 150, 626, 0, NULL),
-  (10003, 151, 631, 0, NULL),
-  (10003, 152, 633, 0, NULL),
-  (10003, 153, 636, 1, NULL),
-  (10003, 154, 638, 0, NULL),
-  (10003, 155, 639, 1, NULL),
-  (10003, 156, 642, 0, NULL),
-  (10003, 157, 647, 2, NULL),
-  (10003, 158, 650, 0, NULL),
-  (10003, 159, NULL, NULL, '9 al dia, 8 años'),
-  (10003, 160, 652, 2, NULL),
-  (10003, 161, 654, 1, NULL),
-  (10003, 162, 660, 2, NULL),
-  (10003, 163, NULL, NULL, 'Whiskey Ron y Cerveza'),
-  (10003, 164, 662, 1, NULL),
-  (10003, 165, 665, 2, NULL),
-  (10003, 166, NULL, NULL, '{"kind":"multi_select","optionIds":["677"],"optionAnswerIds":[677],"optionLabels":["Ninguna de las anteriores"],"otherText":null}'),
-  (10003, 167, 682, 0, NULL),
-  (10003, 168, NULL, NULL, 'No aplica'),
-  (10003, 169, 684, 0, NULL),
-  (10003, 170, NULL, NULL, 'No aplica'),
-  (10003, 171, NULL, NULL, 'No aplica'),
-  (10003, 172, 687, 1, NULL),
-  (10003, 173, NULL, NULL, 'No aplica'),
-  (10003, 174, 689, 0, NULL),
-  (10003, 175, NULL, NULL, 'No aplica'),
-  (10003, 176, 691, 0, NULL),
-  (10003, 177, NULL, NULL, 'No aplica'),
-  (10003, 178, 692, 0, NULL),
-  (10003, 179, 698, 2, NULL),
-  (10003, 180, 704, 0, NULL),
-  (10003, 181, 706, 0, NULL),
-  (10003, 182, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Sequedad ocular":"Nunca","Lagrimeo":"A veces","Enrojecimiento o comezón ocular":"Nunca","Dolor ocular":"A veces","Hinchazón ocular":"Nunca","Visión Borrosa":"Nunca"}}'),
-  (10003, 183, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Estornudos frecuentes":"Nunca","Sequedad nasal":"Nunca","Congestión nasal":"Nunca","Rinorrea (goteo o liquido nasal)":"A veces","Pérdida del olfato":"Muchas veces","Hemorragia nasal":"Nunca"}}'),
-  (10003, 184, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Resequedad":"Nunca","Ronquera":"Nunca","Irritación":"A veces","Dolor de garganta":"Nunca","Sensación de cuerpo extraño":"A veces","Dificultad o dolor al tragar":"Nunca"}}'),
-  (10003, 185, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Halitosis o mal aliento":"Nunca","Sequedad bucal":"Nunca","Sangrado de encías":"Nunca","Ulceras bucales":"Muchas veces","Lesiones o placas blanquecinas":"Muchas veces"}}'),
-  (10003, 186, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Sequedad en la piel":"Nunca","Comezón en la piel":"Nunca","Enrojecimiento":"Nunca","Ampollas o vesículas":"A veces","Ulceras o necrosis":"Nunca"}}'),
-  (10003, 187, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Nauseas":"Nunca","Pérdida del apetito":"Nunca","Estreñimiento":"A veces","Diarrea o vomito":"Muchas veces","Dolor abdominal":"Nunca","Heces o vomito con sangre":"Nunca"}}'),
-  (10003, 188, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Cansancio o fatiga":"Nunca","Congestion nasal":"A veces","Dolor de cabeza":"Muchas veces","Tos":"A veces","Fiebre":"Nunca","Dificultad para respirar":"Nunca"}}'),
-  (10003, 189, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Tiene dolor en esta zona ? Cuello, hombros o espalda alta":"Nunca"}}'),
-  (10003, 190, 2007, 1, NULL),
-  (10003, 191, 714, 1, NULL),
-  (10003, 192, 717, 3, NULL),
-  (10003, 193, 721, 0, NULL),
-  (10003, 194, 724, 1, NULL),
-  (10003, 195, 727, 1, NULL),
-  (10003, 196, 732, 1, NULL),
-  (10003, 197, 735, 1, NULL),
-  (10003, 198, 740, 0, NULL),
-  (10003, 199, 743, 1, NULL),
-  (10003, 200, 747, 3, NULL),
-  (10003, 201, 750, 0, NULL),
-  (10003, 202, 754, 1, NULL),
-  (10003, 203, 758, 0, NULL),
-  (10003, 204, 761, 1, NULL),
-  (10003, 205, 764, 3, NULL),
-  (10003, 206, 767, 0, NULL),
-  (10003, 207, 770, 1, NULL),
-  (10003, 208, 773, 0, NULL),
-  (10003, 209, 778, 0, NULL),
-  (10003, 210, 783, 5, NULL),
-  (10003, 211, 788, 0, NULL),
-  (10003, 212, 793, 0, NULL),
-  (10003, 213, 798, 0, NULL),
-  (10003, 214, 803, 0, NULL),
-  (10003, 215, 808, 0, NULL),
-  (10003, 216, 813, 0, NULL),
-  (10003, 217, 818, 0, NULL),
-  (10003, 218, 823, 0, NULL),
-  (10003, 219, 828, 0, NULL),
-  (10003, 220, 833, 0, NULL),
-  (10003, 221, 839, 0, NULL),
-  (10003, 222, 844, 0, NULL),
-  (10003, 223, 849, 0, NULL),
-  (10003, 224, 854, 0, NULL),
-  (10003, 225, 859, 0, NULL),
-  (10003, 226, 864, 0, NULL),
-  (10003, 227, 869, 0, NULL),
-  (10003, 228, 874, 0, NULL),
-  (10003, 229, 879, 0, NULL),
-  (10003, 230, 884, 0, NULL),
-  (10003, 231, 889, 0, NULL),
-  (10003, 232, 894, 5, NULL),
-  (10003, 233, 2011, 0, NULL),
-  (10003, 234, 905, 0, NULL),
-  (10003, 235, 910, 0, NULL),
-  (10003, 236, 2012, 0, NULL),
-  (10003, 237, 921, 0, NULL),
-  (10003, 238, 926, 0, NULL),
-  (10003, 239, 928, 0, NULL),
-  (10003, 240, 930, 0, NULL),
-  (10003, 241, 932, 0, NULL),
-  (10003, 242, 934, 0, NULL),
-  (10003, 243, 936, 1, NULL),
-  (10003, 244, 938, 1, NULL),
-  (10003, 245, 940, 1, NULL),
-  (10003, 246, 942, 0, NULL),
-  (10003, 247, 944, 0, NULL),
-  (10003, 248, 946, 0, NULL),
-  (10003, 249, 948, 0, NULL),
-  (10003, 250, 950, 0, NULL),
-  (10003, 251, 952, 0, NULL),
-  (10003, 252, 954, 0, NULL),
-  (10003, 253, 956, 0, NULL),
-  (10003, 254, 958, 0, NULL),
-  (10003, 255, 960, 1, NULL),
-  (10003, 256, 962, 0, NULL);
+-- Empleado de prueba para Test Excel
+INSERT INTO employee (id, company_id, name, email, position, department, seniority_years, gender, age, curp, status) VALUES
+  (10010, 12, 'Juan Perez', 'juan.perez@demo.com', 'Medico', 'Salud'),
+  (10011, 12, 'Anhelo Silva Jose Hugo', 'anhelo.silva@demo.com', 'Empleado', 'Test Excel', 1, 'M', 30, 'SILH860101HDFRRL11', 'activo'),
+  (10012, 12, 'Gómez Rodríguez Alejandra', 'alejandra.gomez@demo.com', 'Empleado', 'Test Excel', 1, 'F', 28, 'GOAL880202MDFRRL12', 'activo'),
+  (10013, 12, 'Jorge Ferrer López', 'jorge.ferrer@demo.com', 'Empleado', 'Test Excel', 1, 'M', 32, 'FEJO890303HDFRRL13', 'activo'),
+  (10014, 12, 'PERLA VIRIDIANA GONZALEZ ESPARZA', 'perla.gonzalez@demo.com', 'Empleado', 'Test Excel', 1, 'F', 29, 'GOEP900404MDFRRL14', 'activo');
+
+-- Company_survey Medica Leben para Test Excel
+INSERT INTO company_survey (id, company_id, survey_id, status) VALUES (4, 12, 2, 'ACTIVO');
+
+-- Survey_application Medica Leben para el empleado de Test Excel
+INSERT INTO survey_application (id, company_survey_id, employee_id, started_at, completed_at, status, score, risk_level) VALUES
+  (10006, 4, 10010, NOW(), NULL, 'pendiente', NULL, NULL);
