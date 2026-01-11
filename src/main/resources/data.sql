@@ -2023,7 +2023,7 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, valu
   (10003, 89, 418, 1, NULL),
   (10003, 90, 423, 1, NULL),
   (10003, 91, 428, 1, NULL),
-  (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"/3 a 4 veces a la semana","Carnes Rojas y Lácteos":"/1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"/5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"/5 o mas veces a la semana"], "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "otherOption":true,"otherPrompts":["Otros:"]}'),
+  (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"3 a 4 veces a la semana","Carnes Rojas y Lácteos":"1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"5 o mas veces a la semana"], "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "otherOption":true,"otherPrompts":["Otros:"]}'),
   (10003, 93, 433, 1, NULL),
   (10003, 94, 435, 2, NULL),
   (10003, 95, 438, 3, NULL),
