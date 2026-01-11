@@ -409,6 +409,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (238,2,'Señala si habitualmente','single_choice',165,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (239,2,'Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave','single_choice',166,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (240,2,'Actos violentos que derivaron de lesiones graves','single_choice',167,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
+	 
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
 	 (241,2,'Asaltos','single_choice',168,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (242,2,'Secuestros','single_choice',169,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
@@ -427,7 +428,6 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (254,2,'¿Ha tenido dificultad para concentrarse?','single_choice',181,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (255,2,'¿Ha estado nervioso o constantemente en alerta?','single_choice',182,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
 	 (256,2,'¿Se ha sobresaltado fácilmente para cualquier cosa?','single_choice',183,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
-
 
 -- ================================
 -- OPTION_ANSWER (rebuild deterministically for all 73 questions)
@@ -1275,7 +1275,7 @@ INSERT INTO option_answer (id,question_id,`text`,`value`,sort_order,requires_fre
 	  
 	  /*
 	 ############  Ponderacion Medica sin validar
-	 */
+	 */	
 	/*	
 	 falta de 182 a 189
 	 */
@@ -2023,7 +2023,7 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, valu
   (10003, 89, 418, 1, NULL),
   (10003, 90, 423, 1, NULL),
   (10003, 91, 428, 1, NULL),
-  (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"3 a 4 veces a la semana","Carnes Rojas y Lácteos":"1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"5 o mas veces a la semana"}}'),
+  (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"/3 a 4 veces a la semana","Carnes Rojas y Lácteos":"/1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"/5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"/5 o mas veces a la semana"], "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "otherOption":true,"otherPrompts":["Otros:"]}'),
   (10003, 93, 433, 1, NULL),
   (10003, 94, 435, 2, NULL),
   (10003, 95, 438, 3, NULL),
@@ -2188,3 +2188,258 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, valu
   (10003, 254, 958, 0, NULL),
   (10003, 255, 960, 1, NULL),
   (10003, 256, 962, 0, NULL);
+
+
+
+INSERT INTO matrix_option_answer (question_id,category,text,value) VALUES
+-- Question ID 92
+(92, 'Frutas y verduras', 'No consumo', 5),
+(92, 'Frutas y verduras', 'menos de 1 vez a la semana', 4),
+(92, 'Frutas y verduras', '1 a 2 veces a la semana', 3),
+(92, 'Frutas y verduras', '3 a 4 veces a la semana', 2),
+(92, 'Frutas y verduras', '5 o mas veces a la semana', 1),
+
+(92, 'Carnes Rojas y Lácteos', 'No consumo', 5),
+(92, 'Carnes Rojas y Lácteos', 'menos de 1 vez a la semana', 4),
+(92, 'Carnes Rojas y Lácteos', '1 a 2 veces a la semana', 3),
+(92, 'Carnes Rojas y Lácteos', '3 a 4 veces a la semana', 2),
+(92, 'Carnes Rojas y Lácteos', '5 o mas veces a la semana', 1),
+
+(92, 'Cereales (Tortilla Arroz Quinoa Papa)', 'No consumo', 5),
+(92, 'Cereales (Tortilla Arroz Quinoa Papa)', 'menos de 1 vez a la semana', 4),
+(92, 'Cereales (Tortilla Arroz Quinoa Papa)', '1 a 2 veces a la semana', 3),
+(92, 'Cereales (Tortilla Arroz Quinoa Papa)', '3 a 4 veces a la semana', 2),
+(92, 'Cereales (Tortilla Arroz Quinoa Papa)', '5 o mas veces a la semana', 1),
+
+(92, 'Semillas (Cacahuate Almendras Pistache)', 'No consumo', 5),
+(92, 'Semillas (Cacahuate Almendras Pistache)', 'menos de 1 vez a la semana', 4),
+(92, 'Semillas (Cacahuate Almendras Pistache)', '1 a 2 veces a la semana', 3),
+(92, 'Semillas (Cacahuate Almendras Pistache)', '3 a 4 veces a la semana', 2),
+(92, 'Semillas (Cacahuate Almendras Pistache)', '5 o mas veces a la semana', 1);
+
+
+INSERT INTO matrix_option_answer (question_id,category,text,value) VALUES
+-- Question ID 147
+(147, 'Jefes', 'Buena', 0),
+(147, 'Jefes', 'Regular', 1),
+(147, 'Jefes', 'Mala', 2),
+
+(147, 'Compañeros', 'Buena', 0),
+(147, 'Compañeros', 'Regular', 1),
+(147, 'Compañeros', 'Mala', 2),
+
+(147, 'Subordinados', 'Buena', 0),
+(147, 'Subordinados', 'Regular', 1),
+(147, 'Subordinados', 'Mala', 2);
+
+
+-- Ponderaciones específicas para matrices de síntomas (182-192)
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 182 - Síntomas oculares
+(182, 'Sequedad ocular', 'Muchas veces', 1),
+(182, 'Sequedad ocular', 'A veces', 0),
+(182, 'Sequedad ocular', 'Nunca', 0),
+
+(182, 'Lagrimeo', 'Muchas veces', 2),
+(182, 'Lagrimeo', 'A veces', 1),
+(182, 'Lagrimeo', 'Nunca', 0),
+
+(182, 'Enrojecimiento o comezón ocular', 'Muchas veces', 3),
+(182, 'Enrojecimiento o comezón ocular', 'A veces', 2),
+(182, 'Enrojecimiento o comezón ocular', 'Nunca', 0),
+
+(182, 'Dolor ocular', 'Muchas veces', 4),
+(182, 'Dolor ocular', 'A veces', 2),
+(182, 'Dolor ocular', 'Nunca', 0),
+
+(182, 'Hinchazón ocular', 'Muchas veces', 5),
+(182, 'Hinchazón ocular', 'A veces', 3),
+(182, 'Hinchazón ocular', 'Nunca', 0),
+
+(182, 'Visión Borrosa', 'Muchas veces', 6),
+(182, 'Visión Borrosa', 'A veces', 4),
+(182, 'Visión Borrosa', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 183 - Síntomas nasales
+(183, 'Estornudos frecuentes', 'Muchas veces', 1),
+(183, 'Estornudos frecuentes', 'A veces', 0),
+(183, 'Estornudos frecuentes', 'Nunca', 0),
+
+(183, 'Sequedad nasal', 'Muchas veces', 2),
+(183, 'Sequedad nasal', 'A veces', 1),
+(183, 'Sequedad nasal', 'Nunca', 0),
+
+(183, 'Congestión nasal', 'Muchas veces', 3),
+(183, 'Congestión nasal', 'A veces', 2),
+(183, 'Congestión nasal', 'Nunca', 0),
+
+(183, 'Rinorrea (goteo o liquido nasal)', 'Muchas veces', 4),
+(183, 'Rinorrea (goteo o liquido nasal)', 'A veces', 2),
+(183, 'Rinorrea (goteo o liquido nasal)', 'Nunca', 0),
+
+(183, 'Pérdida del olfato', 'Muchas veces', 5),
+(183, 'Pérdida del olfato', 'A veces', 3),
+(183, 'Pérdida del olfato', 'Nunca', 0),
+
+(183, 'Hemorragia nasal', 'Muchas veces', 6),
+(183, 'Hemorragia nasal', 'A veces', 4),
+(183, 'Hemorragia nasal', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 184 - Síntomas de garganta
+(184, 'Resequedad', 'Muchas veces', 1),
+(184, 'Resequedad', 'A veces', 0),
+(184, 'Resequedad', 'Nunca', 0),
+
+(184, 'Ronquera', 'Muchas veces', 2),
+(184, 'Ronquera', 'A veces', 1),
+(184, 'Ronquera', 'Nunca', 0),
+
+(184, 'Irritación', 'Muchas veces', 3),
+(184, 'Irritación', 'A veces', 2),
+(184, 'Irritación', 'Nunca', 0),
+
+(184, 'Dolor de garganta', 'Muchas veces', 4),
+(184, 'Dolor de garganta', 'A veces', 2),
+(184, 'Dolor de garganta', 'Nunca', 0),
+
+(184, 'Sensación de cuerpo extraño', 'Muchas veces', 5),
+(184, 'Sensación de cuerpo extraño', 'A veces', 3),
+(184, 'Sensación de cuerpo extraño', 'Nunca', 0),
+
+(184, 'Dificultad o dolor al tragar', 'Muchas veces', 6),
+(184, 'Dificultad o dolor al tragar', 'A veces', 4),
+(184, 'Dificultad o dolor al tragar', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 185 - Síntomas bucales
+(185, 'Halitosis o mal aliento', 'Muchas veces', 1),
+(185, 'Halitosis o mal aliento', 'A veces', 0),
+(185, 'Halitosis o mal aliento', 'Nunca', 0),
+
+(185, 'Sequedad bucal', 'Muchas veces', 2),
+(185, 'Sequedad bucal', 'A veces', 1),
+(185, 'Sequedad bucal', 'Nunca', 0),
+
+(185, 'Sangrado de encías', 'Muchas veces', 3),
+(185, 'Sangrado de encías', 'A veces', 2),
+(185, 'Sangrado de encías', 'Nunca', 0),
+
+(185, 'Ulceras bucales', 'Muchas veces', 4),
+(185, 'Ulceras bucales', 'A veces', 2),
+(185, 'Ulceras bucales', 'Nunca', 0),
+
+(185, 'Lesiones o placas blanquecinas', 'Muchas veces', 5),
+(185, 'Lesiones o placas blanquecinas', 'A veces', 3),
+(185, 'Lesiones o placas blanquecinas', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 186 - Síntomas cutáneos
+(186, 'Sequedad en la piel', 'Muchas veces', 1),
+(186, 'Sequedad en la piel', 'A veces', 0),
+(186, 'Sequedad en la piel', 'Nunca', 0),
+
+(186, 'Comezón en la piel', 'Muchas veces', 2),
+(186, 'Comezón en la piel', 'A veces', 1),
+(186, 'Comezón en la piel', 'Nunca', 0),
+
+(186, 'Enrojecimiento', 'Muchas veces', 3),
+(186, 'Enrojecimiento', 'A veces', 2),
+(186, 'Enrojecimiento', 'Nunca', 0),
+
+(186, 'Ampollas o vesículas', 'Muchas veces', 4),
+(186, 'Ampollas o vesículas', 'A veces', 2),
+(186, 'Ampollas o vesículas', 'Nunca', 0),
+
+(186, 'Ulceras o necrosis', 'Muchas veces', 5),
+(186, 'Ulceras o necrosis', 'A veces', 3),
+(186, 'Ulceras o necrosis', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 187 - Síntomas digestivos
+(187, 'Nauseas', 'Muchas veces', 1),
+(187, 'Nauseas', 'A veces', 0),
+(187, 'Nauseas', 'Nunca', 0),
+
+(187, 'Pérdida del apetito', 'Muchas veces', 2),
+(187, 'Pérdida del apetito', 'A veces', 1),
+(187, 'Pérdida del apetito', 'Nunca', 0),
+
+(187, 'Estreñimiento', 'Muchas veces', 3),
+(187, 'Estreñimiento', 'A veces', 2),
+(187, 'Estreñimiento', 'Nunca', 0),
+
+(187, 'Diarrea o vomito', 'Muchas veces', 4),
+(187, 'Diarrea o vomito', 'A veces', 2),
+(187, 'Diarrea o vomito', 'Nunca', 0),
+
+(187, 'Dolor abdominal', 'Muchas veces', 5),
+(187, 'Dolor abdominal', 'A veces', 3),
+(187, 'Dolor abdominal', 'Nunca', 0),
+
+(187, 'Heces o vomito con sangre', 'Muchas veces', 6),
+(187, 'Heces o vomito con sangre', 'A veces', 4),
+(187, 'Heces o vomito con sangre', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 188 - Síntomas parecidos a la gripe
+(188, 'Cansancio o fatiga', 'Muchas veces', 1),
+(188, 'Cansancio o fatiga', 'A veces', 0),
+(188, 'Cansancio o fatiga', 'Nunca', 0),
+
+(188, 'Congestion nasal', 'Muchas veces', 2),
+(188, 'Congestion nasal', 'A veces', 1),
+(188, 'Congestion nasal', 'Nunca', 0),
+
+(188, 'Dolor de cabeza', 'Muchas veces', 3),
+(188, 'Dolor de cabeza', 'A veces', 2),
+(188, 'Dolor de cabeza', 'Nunca', 0),
+
+(188, 'Tos', 'Muchas veces', 4),
+(188, 'Tos', 'A veces', 2),
+(188, 'Tos', 'Nunca', 0),
+
+(188, 'Fiebre', 'Muchas veces', 5),
+(188, 'Fiebre', 'A veces', 3),
+(188, 'Fiebre', 'Nunca', 0),
+
+(188, 'Dificultad para respirar', 'Muchas veces', 6),
+(188, 'Dificultad para respirar', 'A veces', 4),
+(188, 'Dificultad para respirar', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 191 - Síntomas en articulaciones
+(191, 'Dolor en las articulaciones', 'Muchas veces', 1),
+(191, 'Dolor en las articulaciones', 'A veces', 0),
+(191, 'Dolor en las articulaciones', 'Nunca', 0),
+
+(191, 'Rigidez articular', 'Muchas veces', 2),
+(191, 'Rigidez articular', 'A veces', 1),
+(191, 'Rigidez articular', 'Nunca', 0),
+
+(191, 'Hinchazón en las articulaciones', 'Muchas veces', 3),
+(191, 'Hinchazón en las articulaciones', 'A veces', 2),
+(191, 'Hinchazón en las articulaciones', 'Nunca', 0),
+
+(191, 'Limitación para mover las articulaciones', 'Muchas veces', 4),
+(191, 'Limitación para mover las articulaciones', 'A veces', 2),
+(191, 'Limitación para mover las articulaciones', 'Nunca', 0);
+
+INSERT INTO matrix_option_answer (question_id, category, text, value) VALUES
+-- Question ID 192 - Síntomas en extremidades
+(192, 'Hormigueo', 'Muchas veces', 1),
+(192, 'Hormigueo', 'A veces', 0),
+(192, 'Hormigueo', 'Nunca', 0),
+
+(192, 'Adormecimiento', 'Muchas veces', 2),
+(192, 'Adormecimiento', 'A veces', 1),
+(192, 'Adormecimiento', 'Nunca', 0),
+
+(192, 'Debilidad en brazos o piernas', 'Muchas veces', 3),
+(192, 'Debilidad en brazos o piernas', 'A veces', 2),
+(192, 'Debilidad en brazos o piernas', 'Nunca', 0),
+
+(192, 'Dolor en brazos o piernas', 'Muchas veces', 4),
+(192, 'Dolor en brazos o piernas', 'A veces', 2),
+(192, 'Dolor en brazos o piernas', 'Nunca', 0);
