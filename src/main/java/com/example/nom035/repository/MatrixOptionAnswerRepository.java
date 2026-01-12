@@ -21,7 +21,6 @@ public interface MatrixOptionAnswerRepository extends JpaRepository<MatrixOption
 	@Query("SELECT MAX(m.value) FROM MatrixOptionAnswer m WHERE m.questionId = :questionId")
 	Integer findMaxValueByQuestionId(@Param("questionId") Long questionId);
 
-	// Cada fila distinta (category) en la matriz la contamos como una "pregunta lógica"
 	@Query("SELECT COUNT(DISTINCT m.category) FROM MatrixOptionAnswer m WHERE m.questionId = :questionId")
 	int countDistinctCategoriesByQuestionId(@Param("questionId") Long questionId);
 }
