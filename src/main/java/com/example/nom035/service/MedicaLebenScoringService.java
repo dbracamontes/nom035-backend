@@ -12,6 +12,7 @@ import com.example.nom035.entity.MatrixOptionAnswer;
 import com.example.nom035.repository.OptionAnswerRepository;
 import com.example.nom035.repository.QuestionRepository;
 import com.example.nom035.repository.MatrixOptionAnswerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Servicio de scoring específico para la Encuesta Médica Leben (Survey ID = 2)
@@ -104,13 +105,31 @@ public class MedicaLebenScoringService {
         Map<String, Integer> categoryMinPossible = new LinkedHashMap<>();
         calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible);
 
-        // Contar total de preguntas por categoría
+        // Contar total de preguntas por categoría (tratando matrix como múltiples preguntas lógicas)
         Map<String, Integer> categoryTotalQuestions = new LinkedHashMap<>();
         for (String cat : getAllCategories()) { categoryTotalQuestions.put(cat, 0); }
-        for (Question q : allQuestions) {
-            String cat = normalizeCategory(q.getCategory());
-            if (cat != null) {
-                categoryTotalQuestions.put(cat, categoryTotalQuestions.getOrDefault(cat, 0) + 1);
+
+        int totalQuestions = 0;
+        if (allQuestions != null) {
+            for (Question q : allQuestions) {
+                String cat = normalizeCategory(q.getCategory());
+                if (cat == null) {
+                    continue;
+                }
+
+                boolean isMatrix = "matrix".equalsIgnoreCase(q.getType());
+                if (isMatrix) {
+                    // Cada fila distinta (category) en la matriz cuenta como una pregunta lógica
+                    int logicalQuestions = matrixOptionAnswerRepository.countDistinctCategoriesByQuestionId(q.getId());
+                    if (logicalQuestions <= 0) {
+                        logicalQuestions = 1; // fallback defensivo
+                    }
+                    categoryTotalQuestions.put(cat, categoryTotalQuestions.getOrDefault(cat, 0) + logicalQuestions);
+                    totalQuestions += logicalQuestions;
+                } else {
+                    categoryTotalQuestions.put(cat, categoryTotalQuestions.getOrDefault(cat, 0) + 1);
+                    totalQuestions++;
+                }
             }
         }
 
@@ -164,13 +183,41 @@ public class MedicaLebenScoringService {
                     continue;
                 }
 
-                int valueMatrix = computeMatrixValue(qid, r.getFreeText());
+                String freeTextJson = r.getFreeText();
 
+                // 1) Calcular valor agregado como antes
+                int valueMatrix = computeMatrixValue(qid, freeTextJson);
+
+                // 2) Contar cuántas filas lógicas fueron respondidas en esta matrix
+                int answeredRows = 0;
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> root = mapper.readValue(freeTextJson, Map.class);
+                    Object rowsObj = root.get("rows");
+                    if (rowsObj instanceof Map) {
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> rows = (Map<String, Object>) rowsObj;
+                        for (Object v : rows.values()) {
+                            if (v != null && !v.toString().trim().isEmpty()) {
+                                answeredRows++;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // Si falla el parseo, considerar al menos 1 respuesta para no perder la matrix completa
+                    answeredRows = 1;
+                }
+                if (answeredRows <= 0) {
+                    answeredRows = 1;
+                }
+
+                // Acumular puntajes y conteos usando answeredRows como número de "respuestas lógicas"
                 categoryScores.put(category, categoryScores.getOrDefault(category, 0) + valueMatrix);
-                categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
+                categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + answeredRows);
 
                 globalScore += valueMatrix;
-                totalResponses++;
+                totalResponses += answeredRows;
 
                 // Para síntomas/eventos críticos, usamos el valor agregado
                 if (CAT_EVENTOS_CRITICOS.equals(category) && isHighRiskValue(valueMatrix, q)) {
@@ -236,7 +283,7 @@ public class MedicaLebenScoringService {
             categoryTotalQuestions,
             globalScore,
             totalResponses,
-            allQuestions != null ? allQuestions.size() : 0,
+            totalQuestions,
             globalAverage,
             globalMaxPossible,
             globalMinPossible,
