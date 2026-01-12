@@ -180,7 +180,24 @@ public class MedicaLebenReportController {
         // Generar lista de notas a partir de respuestas de ciertas preguntas
         List<String> notas = generateNotasForApplication(sa.getId());
         report.setNotas(notas);
-        
+
+        // === NUEVO: exponer preguntas no contestadas para pruebas ===
+        Object unansweredObj = result.insights.get("unansweredQuestions");
+        if (unansweredObj instanceof List) {
+            @SuppressWarnings("unchecked")
+            List<Map<String, Object>> unanswered = (List<Map<String, Object>>) unansweredObj;
+            // Reducimos a solo id y texto como pidió el usuario
+            List<Map<String, Object>> unansweredSimple = unanswered.stream()
+                .map(q -> {
+                    Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("id", q.get("id"));
+                    m.put("text", q.get("text"));
+                    return m;
+                })
+                .collect(Collectors.toList());
+            report.setUnansweredQuestions(unansweredSimple);
+        }
+
         return report;
     }
 

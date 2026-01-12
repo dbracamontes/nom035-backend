@@ -40,6 +40,9 @@ public class MedicaLebenReportDto {
     // Notas generadas a partir de preguntas abiertas específicas (159, 163, 167, 170, 171, 172, 174, 177, etc.)
     private List<String> notas;
     
+    // NUEVO: preguntas no contestadas (solo id y texto) para fines de testing
+    private List<Map<String, Object>> unansweredQuestions;
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

@@ -13,6 +13,7 @@ import com.example.nom035.repository.OptionAnswerRepository;
 import com.example.nom035.repository.QuestionRepository;
 import com.example.nom035.repository.MatrixOptionAnswerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * Servicio de scoring específico para la Encuesta Médica Leben (Survey ID = 2)
@@ -145,6 +146,8 @@ public class MedicaLebenScoringService {
         Map<String, Object> insights = new HashMap<>();
         List<String> criticalEvents = new ArrayList<>();
         Map<String, Integer> symptomCounts = new HashMap<>();
+        // Nueva lista para preguntas no contestadas (se llenará al final)
+        List<Map<String, Object>> unansweredQuestions = new ArrayList<>();
 
         // Índice rápido por ID de pregunta para saber si es matrix
         Map<Long, Question> questionIndex = new HashMap<>();
@@ -172,6 +175,38 @@ public class MedicaLebenScoringService {
             }
 
             boolean isMatrix = "matrix".equalsIgnoreCase(q.getType());
+
+            // *** Lógica especial para Preguntas multi_select 103, 149 y 166 (usar option_answer.value a partir de freeText) ***
+            if (!isMatrix && q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+                int valueMulti = computeMultiSelectValueFromFreeTextOptionIds(r);
+                if (valueMulti > 0) {
+                    categoryScores.put(category, categoryScores.getOrDefault(category, 0) + valueMulti);
+                    int selections = countMultiSelectSelections(r); // cada opción seleccionada cuenta como respuesta lógica
+                    categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + selections);
+
+                    globalScore += valueMulti;
+                    totalResponses += selections;
+                }
+                continue;
+            }
+
+            // *** Lógica especial para Pregunta 111 (multi_select + suma/3 si suma > 0) ***
+            if (!isMatrix && q.getId() != null && q.getId() == 111L) {
+                int rawSum = computeMultiSelectValueFromFreeTextOptionIds(r); // suma de option_answer.value
+                if (rawSum > 0) {
+                    // División entre 3 según la regla de negocio
+                    int divided = rawSum / 3; // si necesitas redondeo distinto, ajusta aquí
+                    if (divided > 0) {
+                        categoryScores.put(category, categoryScores.getOrDefault(category, 0) + divided);
+                        int selections = countMultiSelectSelections(r);
+                        categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + selections);
+
+                        globalScore += divided;
+                        totalResponses += selections;
+                    }
+                }
+                continue;
+            }
 
             // Flujo para preguntas tipo matrix: usar freeText + matrix_option_answer
             if (isMatrix && r.getFreeText() != null && !r.getFreeText().isBlank()) {
@@ -267,7 +302,32 @@ public class MedicaLebenScoringService {
         Map<String, String> categoryLevels = interpretCategoryLevels(categoryAverages);
         String globalLevel = interpretGlobalLevel(globalAverage, categoryAverages);
 
-        // Agregar insights
+        // ==== NUEVO: detectar preguntas no contestadas para fines de testing ====
+        if (allQuestions != null && !allQuestions.isEmpty()) {
+            // Construir índice de respuestas por id de pregunta
+            Set<Long> answeredQuestionIds = new HashSet<>();
+            for (Response r : safeResponses) {
+                if (r != null && r.getQuestion() != null && r.getQuestion().getId() != null) {
+                    answeredQuestionIds.add(r.getQuestion().getId());
+                }
+            }
+            // Recorrer todas las preguntas de Médica Leben (survey 2) y marcar las que no tengan respuesta
+            for (Question q : allQuestions) {
+                if (q == null || q.getId() == null) continue;
+                if (!answeredQuestionIds.contains(q.getId())) {
+                    Map<String, Object> qInfo = new LinkedHashMap<>();
+                    qInfo.put("id", q.getId());
+                    qInfo.put("text", q.getText());
+                    qInfo.put("category", q.getCategory());
+                    qInfo.put("responseType", q.getType());
+                    unansweredQuestions.add(qInfo);
+                }
+            }
+            insights.put("unansweredQuestions", unansweredQuestions);
+            insights.put("unansweredCount", unansweredQuestions.size());
+        }
+
+        // Agregar insights existentes
         insights.put("criticalEventsCount", criticalEvents.size());
         insights.put("criticalEvents", criticalEvents);
         insights.put("symptomCounts", symptomCounts);
@@ -384,6 +444,92 @@ public class MedicaLebenScoringService {
             // Si algo falla al parsear, no aportamos puntaje en esa pregunta
             return 0;
         }
+    }
+
+    /**
+     * Calcula el valor total de una pregunta multi_select (ej. Pregunta 103)
+     * leyendo de response.freeText un JSON con los IDs de option_answer
+     * seleccionados y sumando option_answer.value.
+     *
+     * Formato esperado en freeText (ejemplo):
+     *   "[1,5,9]"  ó  "{ \"optionAnswerIds\": [1,5,9] }"
+     */
+    private int computeMultiSelectValueFromFreeTextOptionIds(Response r) {
+        String freeText = r.getFreeText();
+        if (freeText == null || freeText.isBlank()) {
+            return 0;
+        }
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Intentar parsear como arreglo directo de IDs
+            if (freeText.trim().startsWith("[")) {
+                List<Long> ids = mapper.readValue(freeText, new TypeReference<List<Long>>() {});
+                return sumOptionValuesByIds(ids);
+            }
+
+            // Intentar parsear como objeto con propiedad optionAnswerIds
+            Map<String, Object> root = mapper.readValue(freeText, new TypeReference<Map<String, Object>>() {});
+            Object idsObj = root.get("optionAnswerIds");
+            if (idsObj instanceof Collection) {
+                @SuppressWarnings("unchecked")
+                Collection<Object> raw = (Collection<Object>) idsObj;
+                List<Long> ids = raw.stream()
+                    .filter(Objects::nonNull)
+                    .map(o -> {
+                        if (o instanceof Number) return ((Number) o).longValue();
+                        try { return Long.parseLong(o.toString()); } catch (NumberFormatException ex) { return null; }
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+                return sumOptionValuesByIds(ids);
+            }
+        } catch (Exception ex) {
+            // Si el formato no es el esperado, no aporta puntaje
+            return 0;
+        }
+        return 0;
+    }
+
+    /**
+     * Cuenta cuántas opciones multi_select fueron seleccionadas a partir de freeText.
+     * Se usa para incrementar categoryCounts y totalResponses.
+     */
+    private int countMultiSelectSelections(Response r) {
+        String freeText = r.getFreeText();
+        if (freeText == null || freeText.isBlank()) {
+            return 0;
+        }
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            if (freeText.trim().startsWith("[")) {
+                List<?> ids = mapper.readValue(freeText, List.class);
+                return ids != null ? ids.size() : 0;
+            }
+
+            Map<String, Object> root = mapper.readValue(freeText, Map.class);
+            Object idsObj = root.get("optionAnswerIds");
+            if (idsObj instanceof Collection) {
+                return ((Collection<?>) idsObj).size();
+            }
+        } catch (Exception ex) {
+            return 0;
+        }
+        return 0;
+    }
+
+    /**
+     * Suma option_answer.value para una lista de option_answer.id
+     */
+    private int sumOptionValuesByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return 0;
+        }
+        return optionAnswerRepository.findAllById(ids).stream()
+            .filter(oa -> oa.getValue() != null)
+            .mapToInt(oa -> oa.getValue())
+            .sum();
     }
 
     /**
