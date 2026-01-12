@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.nom035.entity.Question;
 import com.example.nom035.entity.Response;
-import com.example.nom035.repository. OptionAnswerRepository;
-import com.example.nom035.repository. QuestionRepository;
+import com.example.nom035.entity.MatrixOptionAnswer;
+import com.example.nom035.repository.OptionAnswerRepository;
+import com.example.nom035.repository.QuestionRepository;
+import com.example.nom035.repository.MatrixOptionAnswerRepository;
 
 /**
  * Servicio de scoring específico para la Encuesta Médica Leben (Survey ID = 2)
@@ -23,6 +25,9 @@ public class MedicaLebenScoringService {
     
     @Autowired
     private OptionAnswerRepository optionAnswerRepository;
+
+    @Autowired
+    private MatrixOptionAnswerRepository matrixOptionAnswerRepository;
 
     // Categorías de la Encuesta Médica Leben
     public static final String CAT_DATOS_GENERALES = "Datos generales";
@@ -92,8 +97,6 @@ public class MedicaLebenScoringService {
      */
     public Result score(List<Response> responses) {
         List<Response> safeResponses = responses != null ? responses : java.util.Collections.emptyList();
-
-        // Obtener todas las preguntas de Médica Leben (survey_id = 2)
         List<Question> allQuestions = questionRepository.findBySurveyId(2L);
         
         // Calcular rangos teóricos por categoría
@@ -124,33 +127,81 @@ public class MedicaLebenScoringService {
         List<String> criticalEvents = new ArrayList<>();
         Map<String, Integer> symptomCounts = new HashMap<>();
 
+        // Índice rápido por ID de pregunta para saber si es matrix
+        Map<Long, Question> questionIndex = new HashMap<>();
+        if (allQuestions != null) {
+            for (Question q : allQuestions) {
+                if (q.getId() != null) {
+                    questionIndex.put(q.getId(), q);
+                }
+            }
+        }
+
+        // Para evitar contar dos veces la misma pregunta (value normal + matriz)
+        Set<Long> processedQuestionIds = new HashSet<>();
+
         // Procesar cada respuesta
         for (Response r : safeResponses) {
-            if (r == null || r.getQuestion() == null || r.getValue() == null) {
+            if (r == null || r.getQuestion() == null) {
                 continue;
             }
 
-            Integer value = r.getValue();
             Question q = r.getQuestion();
             String category = normalizeCategory(q.getCategory());
-
             if (category == null) {
                 continue;
             }
 
-            // Acumular por categoría
+            boolean isMatrix = "matrix".equalsIgnoreCase(q.getType());
+
+            // Flujo para preguntas tipo matrix: usar freeText + matrix_option_answer
+            if (isMatrix && r.getFreeText() != null && !r.getFreeText().isBlank()) {
+                Long qid = q.getId();
+                if (qid == null) continue;
+
+                // Evitar procesar la misma pregunta varias veces si hubiera más de una Response
+                if (processedQuestionIds.contains(qid)) {
+                    continue;
+                }
+
+                int valueMatrix = computeMatrixValue(qid, r.getFreeText());
+
+                categoryScores.put(category, categoryScores.getOrDefault(category, 0) + valueMatrix);
+                categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
+
+                globalScore += valueMatrix;
+                totalResponses++;
+
+                // Para síntomas/eventos críticos, usamos el valor agregado
+                if (CAT_EVENTOS_CRITICOS.equals(category) && isHighRiskValue(valueMatrix, q)) {
+                    criticalEvents.add(q.getText());
+                }
+                if (CAT_SINTOMAS_DOLOR.equals(category) && isPositiveSymptom(valueMatrix, q)) {
+                    String symptomType = extractSymptomType(q.getText());
+                    symptomCounts.put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
+                }
+
+                processedQuestionIds.add(qid);
+                continue;
+            }
+
+            // Flujo actual para preguntas normales basadas en value
+            if (r.getValue() == null) {
+                continue;
+            }
+
+            Integer value = r.getValue();
+
             categoryScores.put(category, categoryScores.getOrDefault(category, 0) + value);
             categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
 
             globalScore += value;
             totalResponses++;
 
-            // Detectar eventos críticos
             if (CAT_EVENTOS_CRITICOS.equals(category) && isHighRiskValue(value, q)) {
                 criticalEvents.add(q.getText());
             }
 
-            // Contar síntomas
             if (CAT_SINTOMAS_DOLOR.equals(category) && isPositiveSymptom(value, q)) {
                 String symptomType = extractSymptomType(q.getText());
                 symptomCounts.put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
@@ -216,17 +267,75 @@ public class MedicaLebenScoringService {
                 continue;
             }
 
-            // Obtener min y max para esta pregunta
-            Integer minValue = optionAnswerRepository.findMinValueByQuestionId(q.getId());
-            Integer maxValue = optionAnswerRepository.findMaxValueByQuestionId(q.getId());
-
-            if (minValue != null && maxValue != null) {
-                // Acumular en la categoría correspondiente
-                categoryMinPossible.put(category, 
-                    categoryMinPossible.getOrDefault(category, 0) + minValue);
-                categoryMaxPossible.put(category, 
-                    categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+            // Preguntas tipo matriz usan matrix_option_answer
+            if ("matrix".equalsIgnoreCase(q.getType())) {
+                Integer minValue = matrixOptionAnswerRepository.findMinValueByQuestionId(q.getId());
+                Integer maxValue = matrixOptionAnswerRepository.findMaxValueByQuestionId(q.getId());
+                if (minValue != null && maxValue != null) {
+                    categoryMinPossible.put(category,
+                        categoryMinPossible.getOrDefault(category, 0) + minValue);
+                    categoryMaxPossible.put(category,
+                        categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+                }
+            } else {
+                Integer minValue = optionAnswerRepository.findMinValueByQuestionId(q.getId());
+                Integer maxValue = optionAnswerRepository.findMaxValueByQuestionId(q.getId());
+                if (minValue != null && maxValue != null) {
+                    categoryMinPossible.put(category,
+                        categoryMinPossible.getOrDefault(category, 0) + minValue);
+                    categoryMaxPossible.put(category,
+                        categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+                }
             }
+        }
+    }
+
+    /**
+     * Calcula el valor agregado de una pregunta matrix a partir del freeText JSON
+     * y las ponderaciones en matrix_option_answer.
+     */
+    private int computeMatrixValue(Long questionId, String freeTextJson) {
+        // Estructura esperada (ya la tienes en data.sql):
+        // { "kind":"matrix", "selection":"checkbox",
+        //   "rows": { "Fila1":"ColumnaSeleccionada", ... } }
+        try {
+            // Uso mínimo de Jackson para no romper dependencias
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            @SuppressWarnings("unchecked")
+            Map<String, Object> root = mapper.readValue(freeTextJson, Map.class);
+
+            Object rowsObj = root.get("rows");
+            if (!(rowsObj instanceof Map)) {
+                return 0;
+            }
+
+            @SuppressWarnings("unchecked")
+            Map<String, String> rows = (Map<String, String>) rowsObj;
+            int total = 0;
+
+            for (Map.Entry<String, String> e : rows.entrySet()) {
+                String category = e.getKey();   // fila
+                String column = e.getValue();   // texto de la columna
+                if (column == null) continue;
+
+                // A veces en freeText viene con un prefijo tipo "/Texto"; normalizar
+                String normalizedColumn = column.trim();
+                if (normalizedColumn.startsWith("/")) {
+                    normalizedColumn = normalizedColumn.substring(1).trim();
+                }
+
+                Optional<MatrixOptionAnswer> opt =
+                    matrixOptionAnswerRepository.findByQuestionIdAndCategoryAndText(
+                        questionId, category, normalizedColumn
+                    );
+                if (opt.isPresent() && opt.get().getValue() != null) {
+                    total += opt.get().getValue();
+                }
+            }
+            return total;
+        } catch (Exception ex) {
+            // Si algo falla al parsear, no aportamos puntaje en esa pregunta
+            return 0;
         }
     }
 
