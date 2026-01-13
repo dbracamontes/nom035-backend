@@ -228,29 +228,29 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (77,2,'Puesto','text',4,NULL,'Informacion Personal','Personalizado','Encuesta Médica Leben',NULL),
 	 
 	  /*Datos generales*/
-	 (78,2,'Estado Civil','single_choice',5,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (79,2,'Sexo','single_choice',6,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (80,2,'Estudios realizados','single_choice',7,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL);
+	 (78,2,'Estado Civil','single_choice',5,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (79,2,'Sexo','single_choice',6,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (80,2,'Estudios realizados','single_choice',7,NULL,'General','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (81,2,'¿Cuál es su categoría dentro de la empresa?','single_choice',8,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (82,2,'¿Antigüedad en el puesto?','single_choice',9,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (83,2,'¿Cuánto tiempo hace que labora en el mismo lugar de trabajo (edificio, local o planta)?','single_choice',10,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (84,2,'Seleccione los días de la semana en trabaja usted','single_choice',11,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (85,2,'¿Cuántas horas trabaja al día?','single_choice',12,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (86,2,'¿Qué medio de transporte utiliza para llegar a su trabajo?','single_choice',13,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (87,2,'En caso de tener vehículo propio, ¿Cuántos tiene?','single_choice',14,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (88,2,'En caso de contar con vehículo propio ¿Cuánto gasta en gasolina a la semana?','single_choice',15,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (89,2,'¿Cuánto tiempo hace de traslado a su trabajo?','single_choice',16,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (90,2,'En caso de usar transporte publico (taxi, Uber, camión) para llegar a su centro de trabajo, ¿Cuánto gasta diariamente?','single_choice',17,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL);
+	 (81,2,'¿Cuál es su categoría dentro de la empresa?','single_choice',8,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (82,2,'¿Antigüedad en el puesto?','single_choice',9,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (83,2,'¿Cuánto tiempo hace que labora en el mismo lugar de trabajo (edificio, local o planta)?','single_choice',10,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (84,2,'Seleccione los días de la semana en trabaja usted','single_choice',11,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (85,2,'¿Cuántas horas trabaja al día?','single_choice',12,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (86,2,'¿Qué medio de transporte utiliza para llegar a su trabajo?','single_choice',13,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (87,2,'En caso de tener vehículo propio, ¿Cuántos tiene?','single_choice',14,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (88,2,'En caso de contar con vehículo propio ¿Cuánto gasta en gasolina a la semana?','single_choice',15,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (89,2,'¿Cuánto tiempo hace de traslado a su trabajo?','single_choice',16,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (90,2,'En caso de usar transporte publico (taxi, Uber, camión) para llegar a su centro de trabajo, ¿Cuánto gasta diariamente?','single_choice',17,NULL,'General','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (91,2,'¿La casa o departamento en el que habita es?','single_choice',18,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (92,2,'¿Cuántas veces a la semana consume los siguientes alimentos?','matrix',19,NULL,'Datos generales','Personalizado','Encuesta Médica Leben','{"rows": ["Frutas y verduras", "Carnes Rojas y Lácteos", "Cereales (Tortilla Arroz Quinoa Papa)", "Semillas (Cacahuate Almendras Pistache)"], "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "selection": "checkbox"}'),
-	 (93,2,'¿Tiene la posibilidad de acceder a una alimentación sana, variada e higiénica?','single_choice',20,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (94,2,'¿Cuántas veces sale de vacaciones al año?','single_choice',21,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
-	 (95,2,'En caso de tener hijos, la Educación que reciben es','single_choice',22,NULL,'Datos generales','Personalizado','Encuesta Médica Leben',NULL),
+	 (91,2,'¿La casa o departamento en el que habita es?','single_choice',18,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (92,2,'¿Cuántas veces a la semana consume los siguientes alimentos?','matrix',19,NULL,'General','Personalizado','Encuesta Médica Leben','{"rows": ["Frutas y verduras", "Carnes Rojas y Lácteos", "Cereales (Tortilla Arroz Quinoa Papa)", "Semillas (Cacahuate Almendras Pistache)"], "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "selection": "checkbox"}'),
+	 (93,2,'¿Tiene la posibilidad de acceder a una alimentación sana, variada e higiénica?','single_choice',20,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (94,2,'¿Cuántas veces sale de vacaciones al año?','single_choice',21,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
+	 (95,2,'En caso de tener hijos, la Educación que reciben es','single_choice',22,NULL,'General','Personalizado','Encuesta Médica Leben',NULL),
 	 /*Datos generales*/
 	 
-	 
+	  /*Ambiente Laboral 96-157 23-84*/
 	 (96,2,'¿En qué posición realizas la mayoría de tus actividades laborales?','single_choice',23,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (97,2,'¿Su lugar de trabajo cuenta con ventilación?','single_choice',24,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (98,2,'Seleccione el tipo de ventilación con la que cuenta su lugar de trabajo','single_choice',25,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
@@ -274,51 +274,55 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (114,2,'En caso de ser afirmativa la respuesta anterior, ¿Con qué tipo de equipo de protección personal cuenta?','single_choice',41,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (115,2,'¿Desarrolla usted trabajos en alturas mayores a 1.80 metros?','single_choice',42,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
 	 (116,2,'En caso de ser afirmativa la respuesta anterior, ¿Con que tipo de equipo de protección personal cuenta?','single_choice',43,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
-	 (117,2,'¿Qué riesgos asociados al trabajo en alturas conoce?','single_choice',44,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
-	 (118,2,'¿Desarrolla usted trabajos con soldadura?','single_choice',45,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (119,2,'¿Utiliza ropa adecuada y Equipo de protección especial para la soldadura?','single_choice',46,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (120,2,'Conoce los riesgos y medidas preventivas en los trabajos de soldaduras contaminantes, químicos en soldadura y tipo de contaminante químico que utiliza en su área laboral','single_choice',47,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL);
+	 (117,2,'¿Qué riesgos asociados al trabajo en alturas conoce?','single_choice',44,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL), 
+	 (118,2,'¿Desarrolla usted trabajos con soldadura?','single_choice',45,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (119,2,'¿Utiliza ropa adecuada y Equipo de protección especial para la soldadura?','single_choice',46,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (120,2,'Conoce los riesgos y medidas preventivas en los trabajos de soldaduras contaminantes, químicos en soldadura y tipo de contaminante químico que utiliza en su área laboral','single_choice',47,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (121,2,'Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos?','single_choice',48,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (122,2,'¿Qué tipos de riesgos de trabajo en actividades de soldadura conoce?','single_choice',49,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (123,2,'¿Conoce las medidas de primeros auxilios básicos para quemaduras?','single_choice',50,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (124,2,'Su área de trabajo ¿Cuenta con botiquín de primeros auxilios?','single_choice',51,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (125,2,'Su área de trabajo ¿Cuenta con extintores?','single_choice',52,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (126,2,'Su área de trabajo ¿Cuenta con señaléticas de prevención de accidentes?','single_choice',53,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (127,2,'Independientemente de la labor que realice, su área de trabajo ¿Cuenta con Equipo de Protección Personal (EPP)?','single_choice',54,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (128,2,'En su área laboral ¿Cuenta con la capacitación suficiente para el manejo de herramientas y uso de máquinas según el tipo de área de producción y procesamiento?','single_choice',55,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (129,2,'En su trabajo ¿Se encuentra expuesto a temperaturas elevadas? (trabajos cerca de hornos, fogones, etc.)','single_choice',56,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (130,2,'En su trabajo ¿Se encuentra expuesto a temperaturas abatidas? (trabajos en cuartos fríos o de refrigeración)','single_choice',57,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL);
+	 (121,2,'Conoce los riesgos de soldaduras, caídas en distintos niveles, pisadas sobre objetos, cortes, proyección de fragmentos y contactos eléctricos?','single_choice',48,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (122,2,'¿Qué tipos de riesgos de trabajo en actividades de soldadura conoce?','single_choice',49,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (123,2,'¿Conoce las medidas de primeros auxilios básicos para quemaduras?','single_choice',50,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (124,2,'Su área de trabajo ¿Cuenta con botiquín de primeros auxilios?','single_choice',51,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (125,2,'Su área de trabajo ¿Cuenta con extintores?','single_choice',52,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (126,2,'Su área de trabajo ¿Cuenta con señaléticas de prevención de accidentes?','single_choice',53,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (127,2,'Independientemente de la labor que realice, su área de trabajo ¿Cuenta con Equipo de Protección Personal (EPP)?','single_choice',54,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (128,2,'En su área laboral ¿Cuenta con la capacitación suficiente para el manejo de herramientas y uso de máquinas según el tipo de área de producción y procesamiento?','single_choice',55,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (129,2,'En su trabajo ¿Se encuentra expuesto a temperaturas elevadas? (trabajos cerca de hornos, fogones, etc.)','single_choice',56,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (130,2,'En su trabajo ¿Se encuentra expuesto a temperaturas abatidas? (trabajos en cuartos fríos o de refrigeración)','single_choice',57,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (131,2,'En su puesto de trabajo, ¿Manipula sustancias o preparados nocivos o tóxicos?','single_choice',58,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (132,2,'En caso de ser afirmativa la respuesta anterior, indique que tipo de producto químico utiliza o está expuesto','single_choice',59,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (133,2,'Estas sustancias o preparados ¿Tienen alguna etiqueta o leyenda que informe de su peligrosidad?','single_choice',60,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (134,2,'En general, la información que contiene la etiqueta (símbolos, etc.) es','single_choice',61,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (135,2,'En su puesto de trabajo ¿Respira polvos, humos, aerosoles, gases o vapores nocivos o tóxicos? (excluido el humo del tabaco)','single_choice',62,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (136,2,'En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales como desechos, fluidos corporales, materiales de laboratorio, animales?','single_choice',63,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (137,2,'¿Conoce usted los posibles efectos perjudiciales para su salud de la manipulación y/o respiración de esas sustancias nocivas o tóxicas?','single_choice',64,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (138,2,'¿Le han informado en su empresa de las medidas a adoptar para prevenir estos posibles efectos perjudiciales?','single_choice',65,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (139,2,'En general, el nivel de atención que debe mantener para realizar su trabajo es','single_choice',66,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (140,2,'En los últimos 3 meses, la cantidad de trabajo que ha tenido generalmente es','single_choice',67,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL);
+	 (131,2,'En su puesto de trabajo, ¿Manipula sustancias o preparados nocivos o tóxicos?','single_choice',58,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (132,2,'En caso de ser afirmativa la respuesta anterior, indique que tipo de producto químico utiliza o está expuesto','single_choice',59,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (133,2,'Estas sustancias o preparados ¿Tienen alguna etiqueta o leyenda que informe de su peligrosidad?','single_choice',60,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (134,2,'En general, la información que contiene la etiqueta (símbolos, etc.) es','single_choice',61,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (135,2,'En su puesto de trabajo ¿Respira polvos, humos, aerosoles, gases o vapores nocivos o tóxicos? (excluido el humo del tabaco)','single_choice',62,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (136,2,'En su trabajo, ¿Maneja o tiene contacto directo con materiales que pueden ser infecciosos, tales como desechos, fluidos corporales, materiales de laboratorio, animales?','single_choice',63,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (137,2,'¿Conoce usted los posibles efectos perjudiciales para su salud de la manipulación y/o respiración de esas sustancias nocivas o tóxicas?','single_choice',64,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (138,2,'¿Le han informado en su empresa de las medidas a adoptar para prevenir estos posibles efectos perjudiciales?','single_choice',65,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (139,2,'En general, el nivel de atención que debe mantener para realizar su trabajo es','single_choice',66,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (140,2,'En los últimos 3 meses, la cantidad de trabajo que ha tenido generalmente es','single_choice',67,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (141,2,'El ritmo de trabajo está determinado por','single_choice',68,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (142,2,'El ritmo de trabajo es','single_choice',69,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (143,2,'Cuando en su puesto de trabajo se comete algún error, ¿Qué sucede?','single_choice',70,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (144,2,'Le parece adecuado su horario de trabajo?','single_choice',71,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (145,2,'¿Considera que tiene que realizar tareas que no le corresponden?','single_choice',72,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (146,2,'¿Hasta qué punto puede tomar decisiones en su trabajo?','single_choice',73,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (147,2,'¿Cómo considera que son las relaciones con las personas con las que debe trabajar?','matrix',74,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben','{"rows": ["Jefes", "Compañeros", "Subordinados"], "columns": ["Buena", "Regular", "Mala"], "selection": "checkbox"}'),
-	 (148,2,'¿Existe algún obstáculo que dificulte la comunicación con sus compañeros?','single_choice',75,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (149,2,'En caso de ser afirmativa la respuesta anterior, ¿Cuál de los siguientes aspectos dificulta esta comunicación? (Si es necesario marque mas de una respuesta)','multi_select',76,NULL,'Condiciones laborales','Personalizado','Encuesta Médica Leben',NULL),
-	 (150,2,'¿Ha asistido a cursos de capacitación o formación complementaria para el desempeño de su trabajo?','single_choice',77,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL);
+	 (141,2,'El ritmo de trabajo está determinado por','single_choice',68,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (142,2,'El ritmo de trabajo es','single_choice',69,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (143,2,'Cuando en su puesto de trabajo se comete algún error, ¿Qué sucede?','single_choice',70,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (144,2,'Le parece adecuado su horario de trabajo?','single_choice',71,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (145,2,'¿Considera que tiene que realizar tareas que no le corresponden?','single_choice',72,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (146,2,'¿Hasta qué punto puede tomar decisiones en su trabajo?','single_choice',73,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (147,2,'¿Cómo considera que son las relaciones con las personas con las que debe trabajar?','matrix',74,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben','{"rows": ["Jefes", "Compañeros", "Subordinados"], "columns": ["Buena", "Regular", "Mala"], "selection": "checkbox"}'),
+	 (148,2,'¿Existe algún obstáculo que dificulte la comunicación con sus compañeros?','single_choice',75,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (149,2,'En caso de ser afirmativa la respuesta anterior, ¿Cuál de los siguientes aspectos dificulta esta comunicación? (Si es necesario marque mas de una respuesta)','multi_select',76,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL), 
+	 (150,2,'¿Ha asistido a cursos de capacitación o formación complementaria para el desempeño de su trabajo?','single_choice',77,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (151,2,'En caso de ser afirmativa la respuesta anterior, a ¿Cuántos cursos ha asistido?','single_choice',78,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (152,2,'¿Le parece suficiente la formación que le ha proporcionado la empresa en la que actualmente labora, para el desempeño de su trabajo?','single_choice',79,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (153,2,'¿Conoce si hay algún procedimiento establecido para la promoción del personal?','single_choice',80,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (154,2,'¿Qué tipo de contrato de trabajo tiene celebrado con la empresa en la que actualmente labora?','single_choice',81,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (155,2,'¿Cómo cree que esta considerado su puesto de trabajo en la empresa?','single_choice',82,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (156,2,'¿Qué tipo de preparación necesita para desempeñar su puesto de trabajo?','single_choice',83,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (157,2,'Además de su formación académica, ¿Para desarrollar su trabajo se requiere de aptitudes?','single_choice',84,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
+	 (151,2,'En caso de ser afirmativa la respuesta anterior, a ¿Cuántos cursos ha asistido?','single_choice',78,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (152,2,'¿Le parece suficiente la formación que le ha proporcionado la empresa en la que actualmente labora, para el desempeño de su trabajo?','single_choice',79,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (153,2,'¿Conoce si hay algún procedimiento establecido para la promoción del personal?','single_choice',80,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (154,2,'¿Qué tipo de contrato de trabajo tiene celebrado con la empresa en la que actualmente labora?','single_choice',81,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (155,2,'¿Cómo cree que esta considerado su puesto de trabajo en la empresa?','single_choice',82,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (156,2,'¿Qué tipo de preparación necesita para desempeñar su puesto de trabajo?','single_choice',83,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (157,2,'Además de su formación académica, ¿Para desarrollar su trabajo se requiere de aptitudes?','single_choice',84,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	  /*Ambiente Laboral 96-157 23-84*/
+	 
+	 
+	 /*Hábitos y salud 158-171 85-98*/
 	 (158,2,'Usted fuma o fumaba?','single_choice',85,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (159,2,'Si la respuesta anterior fue "Si" podría especificar la cantidad de cigarros al día y los años que lleva fumando o que fumo?','text',86,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (160,2,'Si no es usted fumador, ¿Considera que el humo de tabaco de los demás perjudica su salud?','single_choice',87,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL);
@@ -335,99 +339,112 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (170,2,'Favor de especificar el nombre del  medicamento (os) o suplementos que consume','text',97,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}');
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
 	 (171,2,'Alergias: Si o No y favor de especificar a que es alérgico:','text',98,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Favor de especificar a qué es alérgico:"]}'),
-	 (172,2,'¿Alguna vez ha sufrido un accidente de trabajo?','single_choice',99,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (173,2,'En caso de ser afirmativa la respuesta anterior, mencione  ¿Cuál?','text',100,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
-	 (174,2,'En su historial de trabajo, ¿ha tenido alguna incapacidad?','single_choice',101,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (175,2,'En caso de ser afirmativa la respuesta anterior, mencione de qué tipo','text',102,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
+	 /*Hábitos y salud 158-171 85-98*/
+	 
+	 /*Ambiente Laboral 172-180 99-108*/
+	 (172,2,'¿Alguna vez ha sufrido un accidente de trabajo?','single_choice',99,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (173,2,'En caso de ser afirmativa la respuesta anterior, mencione  ¿Cuál?','text',100,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
+	 (174,2,'En su historial de trabajo, ¿ha tenido alguna incapacidad?','single_choice',101,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben',NULL),
+	 (175,2,'En caso de ser afirmativa la respuesta anterior, mencione de qué tipo','text',102,NULL,'Ambiente laboral','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'), 
+	 /*Ambiente Laboral 172-180 99-108*/
+	 
+	 
+	  /*Hábitos y salud 176-181 103-108*/
 	 (176,2,'¿Consume mariguana, heroína, LSD, cocaína barbitúricos, anfetaminas o cualquier otro tipo de drogas psicoactivas?','single_choice',103,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (177,2,'Tipo de droga','text',104,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (178,2,'Frecuencia','single_choice',105,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (179,2,'Selecciona la última ocasión que consumiste','single_choice',106,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (180,2,'¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?','single_choice',107,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (181,2,'¿Pertenece o ha pertenecido a instituciones para su rehabilitación?','single_choice',108,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (182,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas oculares','matrix',109,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Sequedad ocular", "Lagrimeo", "Enrojecimiento o comezón ocular", "Dolor ocular", "Hinchazón ocular", "Visión Borrosa"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (183,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas nasales','matrix',110,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Estornudos frecuentes", "Sequedad nasal", "Congestión nasal", "Rinorrea (goteo o liquido nasal)", "Pérdida del olfato", "Hemorragia nasal"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (184,2,'Síntomas de garganta','matrix',111,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Resequedad", "Ronquera", "Irritación", "Dolor de garganta", "Sensación de cuerpo extraño", "Dificultad o dolor al tragar"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (185,2,'Síntomas bucales','matrix',112,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Halitosis o mal aliento", "Sequedad bucal", "Sangrado de encías", "Ulceras bucales", "Lesiones o placas blanquecinas"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (186,2,'Síntomas cutáneos','matrix',113,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Sequedad en la piel", "Comezón en la piel", "Enrojecimiento", "Ampollas o vesículas", "Ulceras o necrosis"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (187,2,'Síntomas digestivos','matrix',114,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Nauseas", "Pérdida del apetito", "Estreñimiento", "Diarrea o vomito", "Dolor abdominal", "Heces o vomito con sangre"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (188,2,'Síntomas parecidos a la gripe','matrix',115,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Cansancio o fatiga", "Congestion nasal", "Dolor de cabeza", "Tos", "Fiebre", "Dificultad para respirar"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (189,2,'¿Tiene dolor en esta zona: cuello, hombros o espalda alta?','single_choice',116,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (190,2,'¿Con qué frecuencia?','single_choice',117,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL);
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (191,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en articulaciones','matrix',118,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Dolor en las articulaciones", "Rigidez articular", "Hinchazón en las articulaciones", "Limitación para mover las articulaciones"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (192,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en extremidades','matrix',119,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben','{"rows": ["Hormigueo", "Adormecimiento", "Debilidad en brazos o piernas", "Dolor en brazos o piernas"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
-	 (193,2,'¿Con qué frecuencia?','single_choice',120,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (194,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',121,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (195,2,'Dolor de codos manos y/o muñecas','single_choice',126,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (196,2,'¿Con qué frecuencia?','single_choice',127,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (197,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',128,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (198,2,'¿Con qué frecuencia?','single_choice',129,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (199,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',130,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (200,2,'Dolor de piernas y pies','single_choice',131,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (201,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (202,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (203,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (204,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',135,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (205,2,'Dolor de piernas y pies','single_choice',131,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (206,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (207,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (208,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Síntomas y dolor','Personalizado','Encuesta Médica Leben',NULL),
-	 (209,2,'En su trabajo,  ¿Cuánto tiempo tiene que adoptar o realizar estas posturas? Sentado','single_choice',136,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (210,2,'De pie','single_choice',137,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (211,2,'Caminando','single_choice',138,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (212,2,'Caminando mientras subo o bajo niveles diferentes (peldaños, escalera, rampa, etc.)','single_choice',139,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (213,2,'En postura de rodillas/en cuclillas','single_choice',140,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (214,2,'Tumbado sobre la espalda o sobre un lado','single_choice',141,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (215,2,'En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia? Inclinar el cuello/ cabeza a hacia delante.','single_choice',142,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (216,2,'Inclinar el cuello/cabeza','single_choice',143,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (217,2,'Inclinar el cuello/cabeza hacia un lado o ambos','single_choice',144,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (218,2,'En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia? Inclinar la espalda/tronco hacia delante','single_choice',145,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (219,2,'Inclinar la espalda/tronco hacia atrás','single_choice',146,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (220,2,'Inclinar la espalda/tronco hacia un lado o ambos','single_choice',147,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben','{"otherOption": true, "otherPrompts": ["Otros:"]}');
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (221,2,'Girar la espalda/tronco','single_choice',148,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (222,2,'En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de hombros, muñecas y tobillos/pies, y ¿con que frecuencia? Las manos por encima de la cabeza o los codos por encima de los hombros','single_choice',149,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (223,2,'Ejerciendo presión con uno de los pies','single_choice',150,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (224,2,'En su trabajo, durante ¿Cuánto tiempo tiene que adoptar o realizar estas acciones con las manos? Sostener, presionar o levantar objetos o herramientas con los dedos en forma de pinza','single_choice',151,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (225,2,'Agarrar o sujetar con fuerza objetos o herramientas con las manos','single_choice',152,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (226,2,'Utilizar de manera intensiva los dedos, (ordenador, controles, botoneras, mando, calculadora, caja registradora, etc.)','single_choice',153,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (227,2,'En su trabajo, ¿durante cuanto tiempo tiene que trabajar realizando estas acciones relacionadas con la exposición a vibraciones y/o impactos?','single_choice',154,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (228,2,'Trabajar sobre superficies vibrantes (asiento de vehículo, plataforma o suelo vibrante, etc.)','single_choice',155,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (229,2,'Utilizar herramientas y máquinas de impacto o vibrantes (taladro, remachadora, amoladora, martillo, grapadora neumática, etc.)','single_choice',156,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (230,2,'Utilizar la mano (el pie o la rodilla) como martillo, golpeando de forma repetida','single_choice',157,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
-INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (231,2,'Levantar Manualmente , objetos, herramientas, materiales de mas de  3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',158,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (232,2,'Los pesos que con mayor frecuencia levantas son de','single_choice',159,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (233,2,'Señala si habitualmente','single_choice',160,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (234,2,'Transportar manualmente objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',161,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (235,2,'Los pesos que con mayor frecuencia levantas son de','single_choice',162,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (236,2,'Señala si habitualmente','single_choice',163,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (237,2,'Empujar y/o arrastrar manualmente utilizando algún equipo (carretilla, transpaleta, carro...) objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',164,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (238,2,'Señala si habitualmente','single_choice',165,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (239,2,'Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave','single_choice',166,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (240,2,'Actos violentos que derivaron de lesiones graves','single_choice',167,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
+	 (179,2,'Selecciona la última ocasión que consumiste','single_choice',106,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
+	 (180,2,'¿Ha recibido tratamiento con relación al consumo de drogas psicoactivas?','single_choice',107,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL);
+	  INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
+	 (181,2,'¿Pertenece o ha pertenecido a instituciones para su rehabilitación?','single_choice',108,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
+	 /*Hábitos y salud 176-181 103-108*/
 	 
+	/*	Ponderación Médica 182-238 109-165*/	 
+	 (182,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas oculares','matrix',109,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Sequedad ocular", "Lagrimeo", "Enrojecimiento o comezón ocular", "Dolor ocular", "Hinchazón ocular", "Visión Borrosa"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (183,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas nasales','matrix',110,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Estornudos frecuentes", "Sequedad nasal", "Congestión nasal", "Rinorrea (goteo o liquido nasal)", "Pérdida del olfato", "Hemorragia nasal"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (184,2,'Síntomas de garganta','matrix',111,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Resequedad", "Ronquera", "Irritación", "Dolor de garganta", "Sensación de cuerpo extraño", "Dificultad o dolor al tragar"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (185,2,'Síntomas bucales','matrix',112,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Halitosis o mal aliento", "Sequedad bucal", "Sangrado de encías", "Ulceras bucales", "Lesiones o placas blanquecinas"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (186,2,'Síntomas cutáneos','matrix',113,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Sequedad en la piel", "Comezón en la piel", "Enrojecimiento", "Ampollas o vesículas", "Ulceras o necrosis"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (187,2,'Síntomas digestivos','matrix',114,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Nauseas", "Pérdida del apetito", "Estreñimiento", "Diarrea o vomito", "Dolor abdominal", "Heces o vomito con sangre"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (188,2,'Síntomas parecidos a la gripe','matrix',115,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Cansancio o fatiga", "Congestion nasal", "Dolor de cabeza", "Tos", "Fiebre", "Dificultad para respirar"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (189,2,'¿Tiene dolor en esta zona: cuello, hombros o espalda alta?','single_choice',116,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (190,2,'¿Con qué frecuencia?','single_choice',117,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL);
 INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
-	 (241,2,'Asaltos','single_choice',168,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (242,2,'Secuestros','single_choice',169,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
+	 (191,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en articulaciones','matrix',118,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Dolor en las articulaciones", "Rigidez articular", "Hinchazón en las articulaciones", "Limitación para mover las articulaciones"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (192,2,'Las preguntas que a continuación se presentan, se refieren a síntomas que usted puede experimentar en su trabajo, por favor señale cuales son aquellos síntomas que se relacionen con usted y con que frecuencia lo presenta Síntomas en extremidades','matrix',119,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"rows": ["Hormigueo", "Adormecimiento", "Debilidad en brazos o piernas", "Dolor en brazos o piernas"], "columns": ["Muchas veces", "A veces", "Nunca"], "selection": "checkbox"}'),
+	 (193,2,'¿Con qué frecuencia?','single_choice',120,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (194,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',121,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (195,2,'Dolor de codos manos y/o muñecas','single_choice',126,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (196,2,'¿Con qué frecuencia?','single_choice',127,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (197,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',128,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (198,2,'¿Con qué frecuencia?','single_choice',129,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (199,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',130,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (200,2,'Dolor de piernas y pies','single_choice',131,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (201,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (202,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (203,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (204,2,'Esta molestia ¿es consecuencia de las tareas del puesto que ocupa?','single_choice',135,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (205,2,'Dolor de piernas y pies','single_choice',131,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (206,2,'¿Con qué frecuencia?','single_choice',132,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (207,2,'Esta molestia ¿le ha impedido realizar su trabajo?','single_choice',133,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (208,2,'¿Con qué frecuencia?','single_choice',134,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (209,2,'En su trabajo,  ¿Cuánto tiempo tiene que adoptar o realizar estas posturas? Sentado','single_choice',136,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (210,2,'De pie','single_choice',137,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL);
+INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
+	 (211,2,'Caminando','single_choice',138,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (212,2,'Caminando mientras subo o bajo niveles diferentes (peldaños, escalera, rampa, etc.)','single_choice',139,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (213,2,'En postura de rodillas/en cuclillas','single_choice',140,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (214,2,'Tumbado sobre la espalda o sobre un lado','single_choice',141,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (215,2,'En su trabajo durante cuanto tiempo tiene que adoptar o realizar estas posturas de cuello/cabeza y ¿con que frecuencia? Inclinar el cuello/ cabeza a hacia delante.','single_choice',142,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (216,2,'Inclinar el cuello/cabeza','single_choice',143,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (217,2,'Inclinar el cuello/cabeza hacia un lado o ambos','single_choice',144,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (218,2,'En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de espalda/tronco y ¿con que frecuencia? Inclinar la espalda/tronco hacia delante','single_choice',145,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (219,2,'Inclinar la espalda/tronco hacia atrás','single_choice',146,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (220,2,'Inclinar la espalda/tronco hacia un lado o ambos','single_choice',147,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben','{"otherOption": true, "otherPrompts": ["Otros:"]}');
+INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
+	 (221,2,'Girar la espalda/tronco','single_choice',148,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (222,2,'En su trabajo, durante cuanto tiempo tiene que adoptar o realizar estas posturas de hombros, muñecas y tobillos/pies, y ¿con que frecuencia? Las manos por encima de la cabeza o los codos por encima de los hombros','single_choice',149,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (223,2,'Ejerciendo presión con uno de los pies','single_choice',150,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (224,2,'En su trabajo, durante ¿Cuánto tiempo tiene que adoptar o realizar estas acciones con las manos? Sostener, presionar o levantar objetos o herramientas con los dedos en forma de pinza','single_choice',151,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (225,2,'Agarrar o sujetar con fuerza objetos o herramientas con las manos','single_choice',152,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (226,2,'Utilizar de manera intensiva los dedos, (ordenador, controles, botoneras, mando, calculadora, caja registradora, etc.)','single_choice',153,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (227,2,'En su trabajo, ¿durante cuanto tiempo tiene que trabajar realizando estas acciones relacionadas con la exposición a vibraciones y/o impactos?','single_choice',154,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (228,2,'Trabajar sobre superficies vibrantes (asiento de vehículo, plataforma o suelo vibrante, etc.)','single_choice',155,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (229,2,'Utilizar herramientas y máquinas de impacto o vibrantes (taladro, remachadora, amoladora, martillo, grapadora neumática, etc.)','single_choice',156,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (230,2,'Utilizar la mano (el pie o la rodilla) como martillo, golpeando de forma repetida','single_choice',157,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL);
+INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
+	 (231,2,'Levantar Manualmente , objetos, herramientas, materiales de mas de  3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',158,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (232,2,'Los pesos que con mayor frecuencia levantas son de','single_choice',159,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (233,2,'Señala si habitualmente','single_choice',160,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (234,2,'Transportar manualmente objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',161,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (235,2,'Los pesos que con mayor frecuencia levantas son de','single_choice',162,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (236,2,'Señala si habitualmente','single_choice',163,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (237,2,'Empujar y/o arrastrar manualmente utilizando algún equipo (carretilla, transpaleta, carro...) objetos, herramientas, materiales de mas de 3kg. ¿Durante cuanto tiempo tienes que trabajar realizando esta acción?','single_choice',164,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	 (238,2,'Señala si habitualmente','single_choice',165,NULL,'Ponderación Médica','Personalizado','Encuesta Médica Leben',NULL),
+	  /*	Ponderación Médica 182-191 109-118*/
+	 
+	 
+	 /*Psicologicos*/
+	 (239,2,'Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave','single_choice',166,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (240,2,'Actos violentos que derivaron de lesiones graves','single_choice',167,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL); 
+INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,category,guide_type,survey_title,metadata) VALUES
+	 (241,2,'Asaltos','single_choice',168,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (242,2,'Secuestros','single_choice',169,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
 	 (243,2,'Si usted ha contestado que ''SI'' a una o más de las preguntas anteriores, favor de contestar las siguientes:
-¿Durante el último mes?','single_choice',170,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (244,2,'¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?','single_choice',171,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (245,2,'¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?','single_choice',172,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (246,2,'Durante el último mes ¿Se ha esforzado para evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?','single_choice',173,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (247,2,'¿Se ha esforzado para evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?','single_choice',174,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (248,2,'¿Ha tenido dificultad para recordar alguna parte importante del evento?','single_choice',175,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (249,2,'¿Ha disminuido su interés en sus actividades cotidianas?','single_choice',176,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (250,2,'¿Se ha sentido usted alejado o distante de las demás?','single_choice',177,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (251,2,'¿Ha notado que tiene dificultad para expresar sus sentimientos?','single_choice',178,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (252,2,'Ha tenido la impresión de que su vida se va a acortar, ¿Qué va a morir antes que otras personas o que tiene un futuro limitado?','single_choice',179,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (253,2,'¿Ha estado particularmente irritable o le han dado arranques de coraje?','single_choice',180,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (254,2,'¿Ha tenido dificultad para concentrarse?','single_choice',181,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (255,2,'¿Ha estado nervioso o constantemente en alerta?','single_choice',182,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL),
-	 (256,2,'¿Se ha sobresaltado fácilmente para cualquier cosa?','single_choice',183,NULL,'Eventos críticos','Personalizado','Encuesta Médica Leben',NULL);
+¿Durante el último mes?','single_choice',170,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (244,2,'¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?','single_choice',171,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (245,2,'¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?','single_choice',172,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (246,2,'Durante el último mes ¿Se ha esforzado para evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?','single_choice',173,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (247,2,'¿Se ha esforzado para evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?','single_choice',174,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (248,2,'¿Ha tenido dificultad para recordar alguna parte importante del evento?','single_choice',175,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (249,2,'¿Ha disminuido su interés en sus actividades cotidianas?','single_choice',176,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (250,2,'¿Se ha sentido usted alejado o distante de las demás?','single_choice',177,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (251,2,'¿Ha notado que tiene dificultad para expresar sus sentimientos?','single_choice',178,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (252,2,'Ha tenido la impresión de que su vida se va a acortar, ¿Qué va a morir antes que otras personas o que tiene un futuro limitado?','single_choice',179,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (253,2,'¿Ha estado particularmente irritable o le han dado arranques de coraje?','single_choice',180,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (254,2,'¿Ha tenido dificultad para concentrarse?','single_choice',181,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (255,2,'¿Ha estado nervioso o constantemente en alerta?','single_choice',182,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL),
+	 (256,2,'¿Se ha sobresaltado fácilmente para cualquier cosa?','single_choice',183,NULL,'Psicologicos','Personalizado','Encuesta Médica Leben',NULL);
 
 -- ================================
 -- OPTION_ANSWER (rebuild deterministically for all 73 questions)
