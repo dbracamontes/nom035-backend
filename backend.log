@@ -1,36 +1,36 @@
-2026-01-08T18:03:24.136-06:00  INFO 2620 --- [main] com.example.nom035.Nom035Application     : Starting Nom035Application v0.0.1-SNAPSHOT using Java 21.0.8 with PID 2620 (C:\Users\Lenovo\Documents\GitHub\nom035-backend\target\nom035-backend-0.0.1-SNAPSHOT.jar started by Lenovo in C:\Users\Lenovo\Documents\GitHub\nom035-backend)
-2026-01-08T18:03:24.146-06:00  INFO 2620 --- [main] com.example.nom035.Nom035Application     : No active profile set, falling back to 1 default profile: "default"
-2026-01-08T18:03:25.396-06:00  INFO 2620 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-01-08T18:03:25.608-06:00  INFO 2620 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 189 ms. Found 16 JPA repository interfaces.
-2026-01-08T18:03:26.668-06:00  INFO 2620 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-01-08T18:03:26.690-06:00  INFO 2620 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-01-08T18:03:26.691-06:00  INFO 2620 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
-2026-01-08T18:03:26.744-06:00  INFO 2620 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-01-08T18:03:26.746-06:00  INFO 2620 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2528 ms
-2026-01-08T18:03:26.957-06:00  INFO 2620 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-01-08T18:03:27.310-06:00  INFO 2620 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4dc52559
-2026-01-08T18:03:27.313-06:00  INFO 2620 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-01-08T18:03:29.411-06:00  INFO 2620 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-01-08T18:03:29.529-06:00  INFO 2620 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-01-08T18:03:29.586-06:00  INFO 2620 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-01-08T18:03:30.030-06:00  INFO 2620 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-01-08T18:03:30.141-06:00  WARN 2620 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-01-08T18:03:31.806-06:00  INFO 2620 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-01-08T18:03:33.864-06:00  INFO 2620 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-01-08T18:03:34.396-06:00  INFO 2620 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
-2026-01-08T18:03:34.397-06:00  WARN 2620 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
-2026-01-08T18:03:34.735-06:00  INFO 2620 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-01-08T18:03:36.284-06:00  WARN 2620 --- [main] n.s.j.engine.xml.JRTextFieldFactory      : The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-01-08T18:03:36.954-06:00  WARN 2620 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-01-08T18:03:37.414-06:00 DEBUG 2620 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-01-08T18:03:37.690-06:00  WARN 2620 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
-2026-01-08T18:03:37.694-06:00  INFO 2620 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-01-08T18:03:37.698-06:00  INFO 2620 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-01-08T18:03:37.705-06:00  INFO 2620 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-01-08T18:03:37.722-06:00  INFO 2620 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+2026-01-13T14:03:57.288-06:00  INFO 13316 --- [main] com.example.nom035.Nom035Application     : Starting Nom035Application v0.0.1-SNAPSHOT using Java 21.0.8 with PID 13316 (C:\Users\Lenovo\Documents\GitHub\nom035-backend\target\nom035-backend-0.0.1-SNAPSHOT.jar started by Lenovo in C:\Users\Lenovo\Documents\GitHub\nom035-backend)
+2026-01-13T14:03:57.301-06:00  INFO 13316 --- [main] com.example.nom035.Nom035Application     : No active profile set, falling back to 1 default profile: "default"
+2026-01-13T14:03:58.738-06:00  INFO 13316 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-13T14:03:58.903-06:00  INFO 13316 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 153 ms. Found 17 JPA repository interfaces.
+2026-01-13T14:04:00.296-06:00  INFO 13316 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-01-13T14:04:00.321-06:00  INFO 13316 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-13T14:04:00.322-06:00  INFO 13316 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-01-13T14:04:00.377-06:00  INFO 13316 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-13T14:04:00.378-06:00  INFO 13316 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2988 ms
+2026-01-13T14:04:00.505-06:00  INFO 13316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:04:00.922-06:00  INFO 13316 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50598a1a
+2026-01-13T14:04:00.925-06:00  INFO 13316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-01-13T14:04:01.061-06:00  INFO 13316 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-13T14:04:01.173-06:00  INFO 13316 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2026-01-13T14:04:01.232-06:00  INFO 13316 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-01-13T14:04:01.686-06:00  INFO 13316 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-13T14:04:01.817-06:00  WARN 13316 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-13T14:04:03.543-06:00  INFO 13316 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-13T14:04:05.973-06:00  INFO 13316 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-13T14:04:06.493-06:00  INFO 13316 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-01-13T14:04:06.494-06:00  WARN 13316 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2026-01-13T14:04:06.756-06:00  INFO 13316 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-01-13T14:04:08.387-06:00  WARN 13316 --- [main] n.s.j.engine.xml.JRTextFieldFactory      : The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
+2026-01-13T14:04:09.172-06:00  WARN 13316 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-01-13T14:04:09.691-06:00 DEBUG 13316 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-01-13T14:04:12.304-06:00  WARN 13316 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-01-13T14:04:12.310-06:00  INFO 13316 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-13T14:04:12.314-06:00  INFO 13316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-01-13T14:04:12.323-06:00  INFO 13316 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-01-13T14:04:12.341-06:00  INFO 13316 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-01-08T18:03:37.752-06:00 ERROR 2620 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+2026-01-13T14:04:12.378-06:00 ERROR 13316 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
 
 ***************************
 APPLICATION FAILED TO START
@@ -44,49 +44,43 @@ Action:
 
 Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
 
-2026-01-08T18:04:49.796-06:00  INFO 10648 --- [main] com.example.nom035.Nom035Application     : Starting Nom035Application v0.0.1-SNAPSHOT using Java 21.0.8 with PID 10648 (C:\Users\Lenovo\Documents\GitHub\nom035-backend\target\nom035-backend-0.0.1-SNAPSHOT.jar started by Lenovo in C:\Users\Lenovo\Documents\GitHub\nom035-backend)
-2026-01-08T18:04:49.801-06:00  INFO 10648 --- [main] com.example.nom035.Nom035Application     : No active profile set, falling back to 1 default profile: "default"
-2026-01-08T18:04:51.090-06:00  INFO 10648 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-01-08T18:04:51.251-06:00  INFO 10648 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 147 ms. Found 16 JPA repository interfaces.
-2026-01-08T18:04:52.282-06:00  INFO 10648 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-01-08T18:04:52.305-06:00  INFO 10648 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-01-08T18:04:52.306-06:00  INFO 10648 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
-2026-01-08T18:04:52.365-06:00  INFO 10648 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-01-08T18:04:52.366-06:00  INFO 10648 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2485 ms
-2026-01-08T18:04:52.491-06:00  INFO 10648 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-01-08T18:04:52.795-06:00  INFO 10648 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2c6c302f
-2026-01-08T18:04:52.798-06:00  INFO 10648 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-01-08T18:04:54.889-06:00  INFO 10648 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-01-08T18:04:55.004-06:00  INFO 10648 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2026-01-08T18:04:55.073-06:00  INFO 10648 --- [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-01-08T18:04:55.502-06:00  INFO 10648 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-01-08T18:04:55.611-06:00  WARN 10648 --- [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-01-08T18:04:57.262-06:00  INFO 10648 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-01-08T18:04:59.091-06:00  INFO 10648 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-01-08T18:04:59.643-06:00  INFO 10648 --- [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
-2026-01-08T18:04:59.645-06:00  WARN 10648 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
-2026-01-08T18:04:59.957-06:00  INFO 10648 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-01-08T18:05:01.440-06:00  WARN 10648 --- [main] n.s.j.engine.xml.JRTextFieldFactory      : The 'isStretchWithOverflow' attribute is deprecated. Use the 'textAdjust' attribute instead.
-2026-01-08T18:05:02.147-06:00  WARN 10648 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-01-08T18:05:02.617-06:00 DEBUG 10648 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-01-08T18:05:02.923-06:00  WARN 10648 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
-2026-01-08T18:05:02.927-06:00  INFO 10648 --- [main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-01-08T18:05:02.930-06:00  INFO 10648 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-01-08T18:05:02.944-06:00  INFO 10648 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-01-08T18:05:02.960-06:00  INFO 10648 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-01-08T18:05:02.995-06:00 ERROR 10648 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Web server failed to start. Port 8080 was already in use.
-
-Action:
-
-Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
-
+2026-01-13T14:06:18.369-06:00  INFO 7240 --- [main] com.example.nom035.Nom035Application     : Starting Nom035Application v0.0.1-SNAPSHOT using Java 21.0.8 with PID 7240 (C:\Users\Lenovo\Documents\GitHub\nom035-backend\target\nom035-backend-0.0.1-SNAPSHOT.jar started by Lenovo in C:\Users\Lenovo\Documents\GitHub\nom035-backend)
+2026-01-13T14:06:18.373-06:00  INFO 7240 --- [main] com.example.nom035.Nom035Application     : No active profile set, falling back to 1 default profile: "default"
+2026-01-13T14:06:19.700-06:00  INFO 7240 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-13T14:06:19.845-06:00  INFO 7240 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 134 ms. Found 17 JPA repository interfaces.
+2026-01-13T14:06:20.875-06:00  INFO 7240 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-01-13T14:06:20.902-06:00  INFO 7240 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-13T14:06:20.903-06:00  INFO 7240 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-01-13T14:06:20.972-06:00  INFO 7240 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-13T14:06:20.974-06:00  INFO 7240 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2513 ms
+2026-01-13T14:06:21.116-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:23.303-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:25.366-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:27.424-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:29.481-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:31.522-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:33.541-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:35.556-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:37.602-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:39.627-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:41.649-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:43.666-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:45.685-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:47.723-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:49.768-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:51.813-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:53.866-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:55.889-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:57.934-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:06:59.979-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:02.008-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:04.032-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:06.072-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:08.116-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:10.147-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:12.192-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:14.245-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:16.276-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:18.316-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:20.364-06:00  INFO 7240 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-01-13T14:07:21.394-06:00  WARN 7240 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaConfiguration': Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'dataSource' defined in class path resource [com/example/nom035/config/DbStartupRetryConfig.class]: Failed to instantiate [javax.sql.DataSource]: Factory method 'dataSource' threw exception with message: Timed out waiting for database after 60 seconds
