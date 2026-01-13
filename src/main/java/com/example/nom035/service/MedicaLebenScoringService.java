@@ -32,12 +32,11 @@ public class MedicaLebenScoringService {
     private MatrixOptionAnswerRepository matrixOptionAnswerRepository;
 
     // Categorías de la Encuesta Médica Leben
-    public static final String CAT_DATOS_GENERALES = "Datos generales";
+    public static final String CAT_GENERAL = "General";
     public static final String CAT_AMBIENTE_LABORAL = "Ambiente laboral";
-    public static final String CAT_CONDICIONES_LABORALES = "Condiciones laborales";
     public static final String CAT_HABITOS_SALUD = "Hábitos y salud";
-    public static final String CAT_SINTOMAS_DOLOR = "Síntomas y dolor";
-    public static final String CAT_EVENTOS_CRITICOS = "Eventos críticos";
+    public static final String CAT_PONDERACION_MEDICA = "Ponderación Médica";
+    public static final String CAT_PSICOLOGICOS = "Psicologicos";
 
     /**
      * Resultado del scoring de Médica Leben
@@ -255,10 +254,10 @@ public class MedicaLebenScoringService {
                 totalResponses += answeredRows;
 
                 // Para síntomas/eventos críticos, usamos el valor agregado
-                if (CAT_EVENTOS_CRITICOS.equals(category) && isHighRiskValue(valueMatrix, q)) {
+                if (CAT_PSICOLOGICOS.equals(category) && isHighRiskValue(valueMatrix, q)) {
                     criticalEvents.add(q.getText());
                 }
-                if (CAT_SINTOMAS_DOLOR.equals(category) && isPositiveSymptom(valueMatrix, q)) {
+                if (CAT_PONDERACION_MEDICA.equals(category) && isPositiveSymptom(valueMatrix, q)) {
                     String symptomType = extractSymptomType(q.getText());
                     symptomCounts.put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
                 }
@@ -280,11 +279,11 @@ public class MedicaLebenScoringService {
             globalScore += value;
             totalResponses++;
 
-            if (CAT_EVENTOS_CRITICOS.equals(category) && isHighRiskValue(value, q)) {
+            if (CAT_PSICOLOGICOS.equals(category) && isHighRiskValue(value, q)) {
                 criticalEvents.add(q.getText());
             }
 
-            if (CAT_SINTOMAS_DOLOR.equals(category) && isPositiveSymptom(value, q)) {
+            if (CAT_PONDERACION_MEDICA.equals(category) && isPositiveSymptom(value, q)) {
                 String symptomType = extractSymptomType(q.getText());
                 symptomCounts.put(symptomType, symptomCounts.getOrDefault(symptomType, 0) + 1);
             }
@@ -537,12 +536,11 @@ public class MedicaLebenScoringService {
      */
     private List<String> getAllCategories() {
         return Arrays.asList(
-            CAT_DATOS_GENERALES,
+            CAT_GENERAL,
             CAT_AMBIENTE_LABORAL,
-            CAT_CONDICIONES_LABORALES,
             CAT_HABITOS_SALUD,
-            CAT_SINTOMAS_DOLOR,
-            CAT_EVENTOS_CRITICOS
+            CAT_PONDERACION_MEDICA,
+            CAT_PSICOLOGICOS
         );
     }
 
@@ -566,19 +564,17 @@ public class MedicaLebenScoringService {
         
         // Mapear a categorías estándar
         switch (normalized) {
-            case "Datos generales":
+            case "General":
                 // Mostrar como "General" en reportes de Médica Leben
-                return CAT_DATOS_GENERALES;
+                return CAT_GENERAL;
             case "Ambiente laboral":
                 return CAT_AMBIENTE_LABORAL;
-            case "Condiciones laborales":
-                return CAT_CONDICIONES_LABORALES;
             case "Hábitos y salud":
                 return CAT_HABITOS_SALUD;
-            case "Síntomas y dolor":
-                return CAT_SINTOMAS_DOLOR;
-            case "Eventos críticos":
-                return CAT_EVENTOS_CRITICOS;
+            case "Ponderación Médica":
+                return CAT_PONDERACION_MEDICA;
+            case "Psicologicos":
+                return CAT_PSICOLOGICOS;
             default:
                 return null;
         }
@@ -625,15 +621,14 @@ public class MedicaLebenScoringService {
         // Rangos personalizados por categoría
         switch (category) {
             case CAT_AMBIENTE_LABORAL:
-            case CAT_CONDICIONES_LABORALES:
                 // Escala 0-5:  condiciones físicas y laborales
                 if (average <= 1.5) return "Óptimo";
                 if (average <= 2.5) return "Aceptable";
                 if (average <= 3.5) return "Requiere atención";
                 return "Crítico";
 
-            case CAT_SINTOMAS_DOLOR:
-            case CAT_EVENTOS_CRITICOS:
+            case CAT_PONDERACION_MEDICA:
+            case CAT_PSICOLOGICOS:
                 // Mayor sensibilidad para síntomas y eventos
                 if (average <= 1.0) return "Sin riesgo";
                 if (average <= 2.0) return "Riesgo bajo";
@@ -647,7 +642,7 @@ public class MedicaLebenScoringService {
                 if (average <= 4.0) return "Requiere mejora";
                 return "Requiere intervención";
 
-            case CAT_DATOS_GENERALES:
+            case CAT_GENERAL:
             default:
                 return "Informativo";
         }
