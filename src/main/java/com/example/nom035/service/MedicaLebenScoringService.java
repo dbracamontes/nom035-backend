@@ -100,10 +100,17 @@ public class MedicaLebenScoringService {
         List<Response> safeResponses = responses != null ? responses : java.util.Collections.emptyList();
         List<Question> allQuestions = questionRepository.findBySurveyId(2L);
         
+        Map<String, Object> insights = new HashMap<>();
+
         // Calcular rangos teóricos por categoría
         Map<String, Integer> categoryMaxPossible = new LinkedHashMap<>();
         Map<String, Integer> categoryMinPossible = new LinkedHashMap<>();
-        calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible);
+        // NUEVO: mapa de debug por categoría con detalle por pregunta
+        Map<String, List<Map<String, Object>>> debugRangesByCategory = new LinkedHashMap<>();
+        calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible, debugRangesByCategory);
+
+        // Guardar en insights para exponerlo en el DTO
+        insights.put("debugRangesByCategory", debugRangesByCategory);
 
         // Contar total de preguntas por categoría (tratando matrix como múltiples preguntas lógicas)
         Map<String, Integer> categoryTotalQuestions = new LinkedHashMap<>();
@@ -142,7 +149,6 @@ public class MedicaLebenScoringService {
         int globalScore = 0;
 
         // Map para insights adicionales
-        Map<String, Object> insights = new HashMap<>();
         List<String> criticalEvents = new ArrayList<>();
         Map<String, Integer> symptomCounts = new HashMap<>();
         // Nueva lista para preguntas no contestadas (se llenará al final)
@@ -170,6 +176,7 @@ public class MedicaLebenScoringService {
             Question q = r.getQuestion();
             String category = normalizeCategory(q.getCategory());
             if (category == null) {
+            	System.out.println(" - Categoría no reconocida, se omite.");
                 continue;
             }
 
@@ -266,12 +273,12 @@ public class MedicaLebenScoringService {
                 continue;
             }
 
-            // Flujo actual para preguntas normales basadas en value
-            if (r.getValue() == null) {
+            // Flujo actual para preguntas normales basadas en option_answer.value
+            if (r.getOptionAnswer() == null || r.getOptionAnswer().getValue() == null) {
                 continue;
             }
 
-            Integer value = r.getValue();
+            Integer value = r.getOptionAnswer().getValue();
 
             categoryScores.put(category, categoryScores.getOrDefault(category, 0) + value);
             categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
@@ -358,13 +365,17 @@ public class MedicaLebenScoringService {
     private void calculateTheoreticalRanges(
         List<Question> questions,
         Map<String, Integer> categoryMaxPossible,
-        Map<String, Integer> categoryMinPossible
+        Map<String, Integer> categoryMinPossible,
+        Map<String, List<Map<String, Object>>> debugRangesByCategory
     ) {
         // Inicializar categorías
         for (String cat : getAllCategories()) {
             categoryMaxPossible.put(cat, 0);
             categoryMinPossible.put(cat, 0);
+            debugRangesByCategory.put(cat, new ArrayList<>());
         }
+
+        if (questions == null) return;
 
         // Para cada pregunta, obtener min/max de sus opciones
         for (Question q : questions) {
@@ -373,15 +384,48 @@ public class MedicaLebenScoringService {
                 continue;
             }
 
-            // Preguntas tipo matriz usan matrix_option_answer
             if ("matrix".equalsIgnoreCase(q.getType())) {
-                Integer minValue = matrixOptionAnswerRepository.findMinValueByQuestionId(q.getId());
-                Integer maxValue = matrixOptionAnswerRepository.findMaxValueByQuestionId(q.getId());
-                if (minValue != null && maxValue != null) {
-                    categoryMinPossible.put(category,
-                        categoryMinPossible.getOrDefault(category, 0) + minValue);
-                    categoryMaxPossible.put(category,
-                        categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+                // Para MATRIX: tratar cada fila (MatrixOptionAnswer.category) como una "pregunta lógica"
+                List<MatrixOptionAnswer> matrixOptions = matrixOptionAnswerRepository.findByQuestionId(q.getId());
+                if (matrixOptions == null || matrixOptions.isEmpty()) {
+                    continue;
+                }
+
+                Map<String, List<MatrixOptionAnswer>> byRow = matrixOptions.stream()
+                    .collect(Collectors.groupingBy(MatrixOptionAnswer::getCategory));
+
+                for (Map.Entry<String, List<MatrixOptionAnswer>> e : byRow.entrySet()) {
+                    String rowCategory = e.getKey();
+                    List<MatrixOptionAnswer> rowOptions = e.getValue();
+
+                    int minValue = rowOptions.stream()
+                        .filter(mo -> mo.getValue() != null)
+                        .mapToInt(MatrixOptionAnswer::getValue)
+                        .min()
+                        .orElse(0);
+                    int maxValue = rowOptions.stream()
+                        .filter(mo -> mo.getValue() != null)
+                        .mapToInt(MatrixOptionAnswer::getValue)
+                        .max()
+                        .orElse(0);
+
+                    categoryMinPossible.put(
+                        category,
+                        categoryMinPossible.getOrDefault(category, 0) + minValue
+                    );
+                    categoryMaxPossible.put(
+                        category,
+                        categoryMaxPossible.getOrDefault(category, 0) + maxValue
+                    );
+
+                    Map<String, Object> qDebug = new LinkedHashMap<>();
+                    qDebug.put("questionId", q.getId());
+                    qDebug.put("questionText", q.getText());
+                    qDebug.put("responseType", q.getType());
+                    qDebug.put("rowCategory", rowCategory);
+                    qDebug.put("minValue", minValue);
+                    qDebug.put("maxValue", maxValue);
+                    debugRangesByCategory.get(category).add(qDebug);
                 }
             } else {
                 Integer minValue = optionAnswerRepository.findMinValueByQuestionId(q.getId());
@@ -391,6 +435,14 @@ public class MedicaLebenScoringService {
                         categoryMinPossible.getOrDefault(category, 0) + minValue);
                     categoryMaxPossible.put(category,
                         categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+
+                    Map<String, Object> qDebug = new LinkedHashMap<>();
+                    qDebug.put("questionId", q.getId());
+                    qDebug.put("questionText", q.getText());
+                    qDebug.put("responseType", q.getType());
+                    qDebug.put("minValue", minValue);
+                    qDebug.put("maxValue", maxValue);
+                    debugRangesByCategory.get(category).add(qDebug);
                 }
             }
         }
