@@ -24,6 +24,11 @@ public class MedicaLebenReportDto {
     private int totalQuestions;
     private double globalAverage;
     private String globalLevel;
+
+    // NUEVO: factor de ajuste global calculado a partir de los niveles Bajo/Alto
+    private double adjustmentFactor;
+    private int countLow;
+    private int countHigh;
     
     // Scores por categoría
     private List<CategoryDetail> categories;
