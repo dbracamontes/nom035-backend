@@ -43,6 +43,25 @@ public class MedicaLebenReportDto {
     // NUEVO: preguntas no contestadas (solo id y texto) para fines de testing
     private List<Map<String, Object>> unansweredQuestions;
 
+    // NUEVO: sección de debug de respuestas, agrupada por categoría de pregunta
+    // Estructura esperada:
+    // {
+    //   "categoria1": [
+    //      {"questionId": 1, "responseId": 10, "value": 2, "optionAnswerId": 5, "optionAnswerValue": 2},
+    //      ...
+    //   ],
+    //   "categoria2": [ ... ]
+    // }
+    private Map<String, List<Map<String, Object>>> debugByCategory;
+
+    // NUEVO: sección de debug de rangos teóricos por categoría y pregunta
+    // Estructura:
+    // {
+    //   "General": [ { questionId, questionText, minValue, maxValue }, ... ],
+    //   "Ambiente laboral": [ ... ]
+    // }
+    private Map<String, List<Map<String, Object>>> debugRangesByCategory;
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

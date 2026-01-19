@@ -22,6 +22,8 @@ import com.example.nom035.repository.ResponseRepository;
 import com.example.nom035.repository.SurveyApplicationRepository;
 import com.example.nom035.repository.UserRepository;
 import com.example.nom035.service.MedicaLebenScoringService;
+import com.example.nom035.entity.MatrixOptionAnswer;
+import com.example.nom035.repository.MatrixOptionAnswerRepository;
 
 @RestController
 @RequestMapping("/api/reports/medica-leben")
@@ -38,6 +40,9 @@ public class MedicaLebenReportController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MatrixOptionAnswerRepository matrixOptionAnswerRepository;
 
     /**
      * GET /api/reports/medica-leben/application/{applicationId}
@@ -196,6 +201,69 @@ public class MedicaLebenReportController {
                 })
                 .collect(Collectors.toList());
             report.setUnansweredQuestions(unansweredSimple);
+        }
+
+        // === NUEVO: sección de debug agrupada por question.category ===
+        // Estructura: Map<categoria, List<map-con-campos-debug>>
+        Map<String, List<Map<String, Object>>> debugByCategory = sa.getResponses().stream()
+            .collect(Collectors.groupingBy(
+                r -> r.getQuestion() != null && r.getQuestion().getCategory() != null
+                        ? r.getQuestion().getCategory()
+                        : "(SIN_CATEGORIA)",
+                Collectors.mapping(r -> {
+                    Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    Long questionId = r.getQuestion() != null ? r.getQuestion().getId() : null;
+                    m.put("questionId", questionId);
+                    m.put("responseId", r.getId());
+
+                    // Default values (non-matrix)
+                    Integer value = r.getValue();
+                    Long optionId = r.getOptionAnswer() != null ? r.getOptionAnswer().getId() : null;
+                    Integer optionValue = r.getOptionAnswer() != null ? r.getOptionAnswer().getValue() : null;
+
+                    if ("MATRIX".equalsIgnoreCase(
+                            r.getQuestion() != null ? r.getQuestion().getType() : null)) {
+                        // Para MATRIX: usar freeText como fila (category) y optionAnswer.text como columna
+                        String matrixCategory = r.getFreeText();
+                        String matrixText = r.getOptionAnswer() != null ? r.getOptionAnswer().getText() : null;
+
+                        if (questionId != null && matrixCategory != null && matrixText != null) {
+                            matrixOptionAnswerRepository
+                                .findByQuestionIdAndCategoryAndText(questionId, matrixCategory, matrixText)
+                                .ifPresent(mo -> {
+                                    // Sobrescribir con los datos reales de matrix_option_answer
+                                    m.put("matrixOptionAnswerId", mo.getId());
+                                    m.put("matrixCategory", mo.getCategory());
+                                    m.put("matrixText", mo.getText());
+                                    m.put("value", mo.getValue());
+                                });
+                        }
+
+                        // Por claridad, también exponemos lo que llegó en Response
+                        m.put("matrixFreeTextRaw", matrixCategory);
+                        m.put("matrixColumnTextRaw", matrixText);
+                    } else {
+                        m.put("optionAnswerId", optionId);
+                        m.put("optionAnswerValue", optionValue);
+                    }
+
+                    // Para no perder compatibilidad, si aún no se ha seteado value, usar el de Response
+                    if (!m.containsKey("value")) {
+                        m.put("value", value);
+                    }
+
+                    return m;
+                }, Collectors.toList())
+            ));
+
+        report.setDebugByCategory(debugByCategory);
+
+        // === NUEVO: debug de rangos teóricos por categoría y pregunta ===
+        Object rangesObj = result.insights.get("debugRangesByCategory");
+        if (rangesObj instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, List<Map<String, Object>>> ranges = (Map<String, List<Map<String, Object>>>) rangesObj;
+            report.setDebugRangesByCategory(ranges);
         }
 
         return report;

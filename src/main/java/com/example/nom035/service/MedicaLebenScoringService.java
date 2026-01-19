@@ -100,10 +100,17 @@ public class MedicaLebenScoringService {
         List<Response> safeResponses = responses != null ? responses : java.util.Collections.emptyList();
         List<Question> allQuestions = questionRepository.findBySurveyId(2L);
         
+        Map<String, Object> insights = new HashMap<>();
+
         // Calcular rangos teóricos por categoría
         Map<String, Integer> categoryMaxPossible = new LinkedHashMap<>();
         Map<String, Integer> categoryMinPossible = new LinkedHashMap<>();
-        calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible);
+        // NUEVO: mapa de debug por categoría con detalle por pregunta
+        Map<String, List<Map<String, Object>>> debugRangesByCategory = new LinkedHashMap<>();
+        calculateTheoreticalRanges(allQuestions, categoryMaxPossible, categoryMinPossible, debugRangesByCategory);
+
+        // Guardar en insights para exponerlo en el DTO
+        insights.put("debugRangesByCategory", debugRangesByCategory);
 
         // Contar total de preguntas por categoría (tratando matrix como múltiples preguntas lógicas)
         Map<String, Integer> categoryTotalQuestions = new LinkedHashMap<>();
@@ -142,7 +149,6 @@ public class MedicaLebenScoringService {
         int globalScore = 0;
 
         // Map para insights adicionales
-        Map<String, Object> insights = new HashMap<>();
         List<String> criticalEvents = new ArrayList<>();
         Map<String, Integer> symptomCounts = new HashMap<>();
         // Nueva lista para preguntas no contestadas (se llenará al final)
@@ -170,6 +176,7 @@ public class MedicaLebenScoringService {
             Question q = r.getQuestion();
             String category = normalizeCategory(q.getCategory());
             if (category == null) {
+            	System.out.println(" - Categoría no reconocida, se omite.");
                 continue;
             }
 
@@ -266,12 +273,12 @@ public class MedicaLebenScoringService {
                 continue;
             }
 
-            // Flujo actual para preguntas normales basadas en value
-            if (r.getValue() == null) {
+            // Flujo actual para preguntas normales basadas en option_answer.value
+            if (r.getOptionAnswer() == null || r.getOptionAnswer().getValue() == null) {
                 continue;
             }
 
-            Integer value = r.getValue();
+            Integer value = r.getOptionAnswer().getValue();
 
             categoryScores.put(category, categoryScores.getOrDefault(category, 0) + value);
             categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);
@@ -297,9 +304,17 @@ public class MedicaLebenScoringService {
         int globalMaxPossible = categoryMaxPossible.values().stream().mapToInt(Integer::intValue).sum();
         int globalMinPossible = categoryMinPossible.values().stream().mapToInt(Integer::intValue).sum();
 
-        // Interpretar niveles de riesgo
-        Map<String, String> categoryLevels = interpretCategoryLevels(categoryAverages);
-        String globalLevel = interpretGlobalLevel(globalAverage, categoryAverages);
+        // Interpretar niveles de riesgo usando rango teórico (min/max) y score real
+        Map<String, String> categoryLevels = interpretCategoryLevels(
+            categoryScores,
+            categoryMinPossible,
+            categoryMaxPossible
+        );
+        String globalLevel = interpretGlobalLevel(
+            globalScore,
+            globalMinPossible,
+            globalMaxPossible
+        );
 
         // ==== NUEVO: detectar preguntas no contestadas para fines de testing ====
         if (allQuestions != null && !allQuestions.isEmpty()) {
@@ -358,13 +373,17 @@ public class MedicaLebenScoringService {
     private void calculateTheoreticalRanges(
         List<Question> questions,
         Map<String, Integer> categoryMaxPossible,
-        Map<String, Integer> categoryMinPossible
+        Map<String, Integer> categoryMinPossible,
+        Map<String, List<Map<String, Object>>> debugRangesByCategory
     ) {
         // Inicializar categorías
         for (String cat : getAllCategories()) {
             categoryMaxPossible.put(cat, 0);
             categoryMinPossible.put(cat, 0);
+            debugRangesByCategory.put(cat, new ArrayList<>());
         }
+
+        if (questions == null) return;
 
         // Para cada pregunta, obtener min/max de sus opciones
         for (Question q : questions) {
@@ -373,24 +392,90 @@ public class MedicaLebenScoringService {
                 continue;
             }
 
-            // Preguntas tipo matriz usan matrix_option_answer
             if ("matrix".equalsIgnoreCase(q.getType())) {
-                Integer minValue = matrixOptionAnswerRepository.findMinValueByQuestionId(q.getId());
-                Integer maxValue = matrixOptionAnswerRepository.findMaxValueByQuestionId(q.getId());
-                if (minValue != null && maxValue != null) {
-                    categoryMinPossible.put(category,
-                        categoryMinPossible.getOrDefault(category, 0) + minValue);
-                    categoryMaxPossible.put(category,
-                        categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+                // Para MATRIX: tratar cada fila (MatrixOptionAnswer.category) como una "pregunta lógica"
+                List<MatrixOptionAnswer> matrixOptions = matrixOptionAnswerRepository.findByQuestionId(q.getId());
+                if (matrixOptions == null || matrixOptions.isEmpty()) {
+                    continue;
+                }
+
+                Map<String, List<MatrixOptionAnswer>> byRow = matrixOptions.stream()
+                    .collect(Collectors.groupingBy(MatrixOptionAnswer::getCategory));
+
+                for (Map.Entry<String, List<MatrixOptionAnswer>> e : byRow.entrySet()) {
+                    String rowCategory = e.getKey();
+                    List<MatrixOptionAnswer> rowOptions = e.getValue();
+
+                    int minValue = rowOptions.stream()
+                        .filter(mo -> mo.getValue() != null)
+                        .mapToInt(MatrixOptionAnswer::getValue)
+                        .min()
+                        .orElse(0);
+                    int maxValue = rowOptions.stream()
+                        .filter(mo -> mo.getValue() != null)
+                        .mapToInt(MatrixOptionAnswer::getValue)
+                        .max()
+                        .orElse(0);
+
+                    categoryMinPossible.put(
+                        category,
+                        categoryMinPossible.getOrDefault(category, 0) + minValue
+                    );
+                    categoryMaxPossible.put(
+                        category,
+                        categoryMaxPossible.getOrDefault(category, 0) + maxValue
+                    );
+
+                    Map<String, Object> qDebug = new LinkedHashMap<>();
+                    qDebug.put("questionId", q.getId());
+                    qDebug.put("questionText", q.getText());
+                    qDebug.put("responseType", q.getType());
+                    qDebug.put("rowCategory", rowCategory);
+                    qDebug.put("minValue", minValue);
+                    qDebug.put("maxValue", maxValue);
+                    debugRangesByCategory.get(category).add(qDebug);
                 }
             } else {
-                Integer minValue = optionAnswerRepository.findMinValueByQuestionId(q.getId());
-                Integer maxValue = optionAnswerRepository.findMaxValueByQuestionId(q.getId());
-                if (minValue != null && maxValue != null) {
+                // Lógica especial para preguntas multi_select donde el puntaje es suma de valores
+                if (q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+                    // min teórico: 0 (puede marcar solo la opción 0 o ninguna)
+                    int minValue = 0;
+                    // max teórico: suma de todos los valores > 0 de sus option_answer
+                    int maxValue = optionAnswerRepository.findByQuestionId(q.getId()).stream()
+                        .filter(oa -> oa.getValue() != null && oa.getValue() > 0)
+                        .mapToInt(oa -> oa.getValue())
+                        .sum();
+
                     categoryMinPossible.put(category,
                         categoryMinPossible.getOrDefault(category, 0) + minValue);
                     categoryMaxPossible.put(category,
                         categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+
+                    Map<String, Object> qDebug = new LinkedHashMap<>();
+                    qDebug.put("questionId", q.getId());
+                    qDebug.put("questionText", q.getText());
+                    qDebug.put("responseType", q.getType());
+                    qDebug.put("minValue", minValue);
+                    qDebug.put("maxValue", maxValue);
+                    debugRangesByCategory.get(category).add(qDebug);
+                } else {
+                    // Comportamiento estándar: tomar min/max de una sola opción marcada
+                    Integer minValue = optionAnswerRepository.findMinValueByQuestionId(q.getId());
+                    Integer maxValue = optionAnswerRepository.findMaxValueByQuestionId(q.getId());
+                    if (minValue != null && maxValue != null) {
+                        categoryMinPossible.put(category,
+                            categoryMinPossible.getOrDefault(category, 0) + minValue);
+                        categoryMaxPossible.put(category,
+                            categoryMaxPossible.getOrDefault(category, 0) + maxValue);
+
+                        Map<String, Object> qDebug = new LinkedHashMap<>();
+                        qDebug.put("questionId", q.getId());
+                        qDebug.put("questionText", q.getText());
+                        qDebug.put("responseType", q.getType());
+                        qDebug.put("minValue", minValue);
+                        qDebug.put("maxValue", maxValue);
+                        debugRangesByCategory.get(category).add(qDebug);
+                    }
                 }
             }
         }
@@ -600,70 +685,56 @@ public class MedicaLebenScoringService {
     }
 
     /**
-     * Interpreta niveles de riesgo por categoría
+     * Interpreta niveles de riesgo por categoría usando score y rangos teóricos.
+     * Devuelve solo "Alto", "Bajo" u "ok".
      */
-    private Map<String, String> interpretCategoryLevels(Map<String, Double> averages) {
+    private Map<String, String> interpretCategoryLevels(
+        Map<String, Integer> categoryScores,
+        Map<String, Integer> categoryMinPossible,
+        Map<String, Integer> categoryMaxPossible
+    ) {
         Map<String, String> levels = new LinkedHashMap<>();
-        
-        for (Map.Entry<String, Double> entry : averages.entrySet()) {
-            String category = entry.getKey();
-            double avg = entry.getValue();
-            levels.put(category, interpretCategoryLevel(category, avg));
+
+        for (String category : categoryScores.keySet()) {
+            int score = categoryScores.getOrDefault(category, 0);
+            int minPossible = categoryMinPossible.getOrDefault(category, 0);
+            int maxPossible = categoryMaxPossible.getOrDefault(category, 0);
+            levels.put(category, interpretLevelFromRange(score, minPossible, maxPossible));
         }
-        
+
         return levels;
     }
 
     /**
-     * Interpreta el nivel de riesgo para una categoría específica
+     * Interpreta el nivel de riesgo global usando score y rangos teóricos.
+     * Devuelve solo "Alto", "Bajo" u "ok".
      */
-    private String interpretCategoryLevel(String category, double average) {
-        // Rangos personalizados por categoría
-        switch (category) {
-            case CAT_AMBIENTE_LABORAL:
-                // Escala 0-5:  condiciones físicas y laborales
-                if (average <= 1.5) return "Óptimo";
-                if (average <= 2.5) return "Aceptable";
-                if (average <= 3.5) return "Requiere atención";
-                return "Crítico";
-
-            case CAT_PONDERACION_MEDICA:
-            case CAT_PSICOLOGICOS:
-                // Mayor sensibilidad para síntomas y eventos
-                if (average <= 1.0) return "Sin riesgo";
-                if (average <= 2.0) return "Riesgo bajo";
-                if (average <= 3.0) return "Riesgo medio";
-                return "Riesgo alto";
-
-            case CAT_HABITOS_SALUD:
-                // Hábitos saludables
-                if (average <= 2.0) return "Buenos hábitos";
-                if (average <= 3.0) return "Hábitos regulares";
-                if (average <= 4.0) return "Requiere mejora";
-                return "Requiere intervención";
-
-            case CAT_GENERAL:
-            default:
-                return "Informativo";
-        }
+    private String interpretGlobalLevel(int globalScore, int globalMinPossible, int globalMaxPossible) {
+        return interpretLevelFromRange(globalScore, globalMinPossible, globalMaxPossible);
     }
 
     /**
-     * Interpreta el nivel de riesgo global
+     * Aplica la fórmula: promedio = (min+max)/2, rangoAjustado = (max-min)/5,
+     * y compara el score contra [promedio - rangoAjustado, promedio + rangoAjustado].
+     * Resultado: "Bajo", "Alto" u "ok".
      */
-    private String interpretGlobalLevel(double globalAvg, Map<String, Double> categoryAverages) {
-        long highRiskCategories = categoryAverages.values().stream()
-            .filter(avg -> avg > 3.0)
-            .count();
+    private String interpretLevelFromRange(int score, int minPossible, int maxPossible) {
+        if (maxPossible <= minPossible) {
+            // Sin rango válido, consideramos "ok" por defecto
+            return "ok";
+        }
 
-        if (globalAvg <= 2.0) {
-            return "Bajo riesgo";
-        } else if (globalAvg <= 3.0) {
-            return highRiskCategories >= 2 ? "Riesgo medio-alto" : "Riesgo medio";
-        } else if (globalAvg <= 4.0) {
-            return "Riesgo alto";
+        double promedio = (minPossible + maxPossible) / 2.0;
+        double rangoAjustado = (maxPossible - minPossible) / 5.0;
+        double limiteInferior = promedio - rangoAjustado;
+        double limiteSuperior = promedio + rangoAjustado;
+
+        if (score < limiteInferior) {
+            return "Bajo";
+        } else if (score > limiteSuperior) {
+            return "Alto";
         } else {
-            return "Riesgo muy alto";
+            return "ok";
         }
     }
 
