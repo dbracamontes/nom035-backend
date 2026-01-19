@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="categories_subreport"
+              pageWidth="515" pageHeight="842" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3837f7e7-6f00-4fe0-b42b-a04dc208ff11">
+    
+    <field name="category" class="java.lang.String"/>
+    <field name="score" class="java.lang.Integer"/>
+    <field name="level" class="java.lang.String"/>
+    <field name="min" class="java.lang.Integer"/>
+    <field name="max" class="java.lang.Integer"/>
+    <field name="responsesCount" class="java.lang.Integer"/>
+    <field name="questionsCount" class="java.lang.Integer"/>
+    
+    <columnHeader>
+        <band height="18" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="515" height="18" backcolor="#EEEEEE" uuid="5a6b7c8d-9e0f-4a1b-c2d3-e4f5a6b7c8d9"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#000000"/>
+                    <topPen lineWidth="1.0" lineColor="#000000"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="1.0" lineColor="#000000"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <staticText>
+                    <reportElement x="0" y="0" width="200" height="18" uuid="1a2b3c4d-5e6f-4a7b-c8d9-e0f1a2b3c4d5"/>
+                    <box leftPadding="3">
+                        <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="DejaVu Sans" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Categoría + Nivel]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="200" y="0" width="180" height="18" uuid="2b3c4d5e-6f7a-4b8c-d9e0-f1a2b3c4d5e6"/>
+                    <box leftPadding="3">
+                        <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="DejaVu Sans" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Puntaje]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="380" y="0" width="135" height="18" uuid="3c4d5e6f-7a8b-4c9d-e0f1-a2b3c4d5e6f7"/>
+                    <box leftPadding="3"/>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="DejaVu Sans" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Promedio · Respuestas]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </columnHeader>
+    
+    <detail>
+        <band height="20" splitType="Stretch">
+            <frame>
+                <reportElement x="0" y="0" width="515" height="20" uuid="ff228d3a-9510-4e8d-b563-87f8cee3077f"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    <leftPen lineWidth="1.0" lineColor="#000000"/>
+                    <bottomPen lineWidth="0.5"/>
+                    <rightPen lineWidth="1.0" lineColor="#000000"/>
+                </box>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="0" y="0" width="200" height="20" uuid="68b2a39f-3c01-4fb4-a0a6-c1579a9846de"/>
+                    <box leftPadding="3" topPadding="2" bottomPadding="2">
+                        <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    </box>
+                    <textElement verticalAlignment="Top">
+                        <font fontName="DejaVu Sans" size="8"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{category} + " (" + $F{level} + ")"]]></textFieldExpression>
+                </textField>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="200" y="0" width="180" height="20" uuid="12323d43-44f6-4204-b6a2-965c3b0f64a2"/>
+                    <box leftPadding="3" topPadding="2" bottomPadding="2">
+                        <rightPen lineWidth="0.5" lineColor="#CCCCCC"/>
+                    </box>
+                    <textElement verticalAlignment="Top">
+                        <font fontName="DejaVu Sans" size="8"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{score} + "/" + $F{max} + " (rango: " + $F{min} + "-" + $F{max} + ")"]]></textFieldExpression>
+                </textField>
+                <textField isStretchWithOverflow="true">
+                    <reportElement x="380" y="0" width="135" height="20" uuid="3770c8ae-a725-45f1-b8ae-b8ace1930aeb"/>
+                    <box leftPadding="3" topPadding="2" bottomPadding="2"/>
+                    <textElement verticalAlignment="Top">
+                        <font fontName="DejaVu Sans" size="8"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[String.format("%.1f", $F{score}.doubleValue() / $F{questionsCount}) + " · " + $F{responsesCount} + " resp."]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </detail>
+</jasperReport>

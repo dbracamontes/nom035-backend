@@ -2,6 +2,7 @@ package com.example.nom035.service;
 
 import java.awt.Color;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class JasperPonderacionReportService {
 
     private JasperReport ponderacionesTemplate;
+    private JasperReport categoriesSubreport;
 
     @PostConstruct
     public void loadTemplate() {
@@ -40,6 +42,16 @@ public class JasperPonderacionReportService {
             ponderacionesTemplate = JasperCompileManager.compileReport(is);
         } catch (Exception e) {
             throw new IllegalStateException("Error al compilar la plantilla de ponderaciones", e);
+        }
+        
+        // Compilar subreport
+        try (InputStream subIs = getClass().getResourceAsStream("/reports/categories_subreport.jrxml")) {
+            if (subIs == null) {
+                throw new IllegalStateException("No se encontró el subreport categories_subreport.jrxml");
+            }
+            categoriesSubreport = JasperCompileManager.compileReport(subIs);
+        } catch (Exception e) {
+            throw new IllegalStateException("Error al compilar el subreport de categorías", e);
         }
     }
 
@@ -119,7 +131,16 @@ public class JasperPonderacionReportService {
         params.put("SECONDARY_COLOR", secondary);
 
         List<CategoryScoreDto> categories = dto.getCategories() != null ? dto.getCategories() : List.of();
-        params.put("CATEGORIES_DS", new JRBeanCollectionDataSource(categories));
+        
+        // Pasar las 5 categorías como parámetros individuales (jr:list NO funciona después de 7 intentos)
+        for (int i = 0; i < 5; i++) {
+            CategoryScoreDto cat = i < categories.size() ? categories.get(i) : null;
+            params.put("CAT" + (i+1), cat);
+            params.put("CAT" + (i+1) + "_NAME", cat != null ? cat.getCategory() : "");
+            params.put("CAT" + (i+1) + "_LEVEL", cat != null ? cat.getLevel() : "");
+            params.put("CAT" + (i+1) + "_SCORE", cat != null ? "Puntaje: " + cat.getScore() + " / " + cat.getMax() + " (mín " + cat.getMin() + " · máx " + cat.getMax() + ")" : "");
+            params.put("CAT" + (i+1) + "_AVG", cat != null ? "Promedio: " + String.format("%.2f", (double)cat.getScore() / Math.max(1, cat.getResponsesCount())) + " · Respuestas: " + cat.getResponsesCount() + " / " + cat.getQuestionsCount() : "");
+        }
 
         try {
             JasperPrint jp = JasperFillManager.fillReport(ponderacionesTemplate, params, new JREmptyDataSource(1));

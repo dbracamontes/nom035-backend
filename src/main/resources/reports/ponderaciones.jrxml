@@ -62,25 +62,52 @@
     <parameter name="CONCLUSION" class="java.lang.String"/>
     <parameter name="PRIMARY_COLOR" class="java.awt.Color"/>
     <parameter name="SECONDARY_COLOR" class="java.awt.Color"/>
-    <parameter name="CATEGORIES_DS" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+    
+    <!-- Parámetros para categorías individuales (reemplazo de jr:list que no funcionó) -->
+    <parameter name="CAT1" class="com.example.nom035.dto.CategoryScoreDto"/>
+    <parameter name="CAT1_NAME" class="java.lang.String"/>
+    <parameter name="CAT1_LEVEL" class="java.lang.String"/>
+    <parameter name="CAT1_SCORE" class="java.lang.String"/>
+    <parameter name="CAT1_AVG" class="java.lang.String"/>
+    <parameter name="CAT2" class="com.example.nom035.dto.CategoryScoreDto"/>
+    <parameter name="CAT2_NAME" class="java.lang.String"/>
+    <parameter name="CAT2_LEVEL" class="java.lang.String"/>
+    <parameter name="CAT2_SCORE" class="java.lang.String"/>
+    <parameter name="CAT2_AVG" class="java.lang.String"/>
+    <parameter name="CAT3" class="com.example.nom035.dto.CategoryScoreDto"/>
+    <parameter name="CAT3_NAME" class="java.lang.String"/>
+    <parameter name="CAT3_LEVEL" class="java.lang.String"/>
+    <parameter name="CAT3_SCORE" class="java.lang.String"/>
+    <parameter name="CAT3_AVG" class="java.lang.String"/>
+    <parameter name="CAT4" class="com.example.nom035.dto.CategoryScoreDto"/>
+    <parameter name="CAT4_NAME" class="java.lang.String"/>
+    <parameter name="CAT4_LEVEL" class="java.lang.String"/>
+    <parameter name="CAT4_SCORE" class="java.lang.String"/>
+    <parameter name="CAT4_AVG" class="java.lang.String"/>
+    <parameter name="CAT5" class="com.example.nom035.dto.CategoryScoreDto"/>
+    <parameter name="CAT5_NAME" class="java.lang.String"/>
+    <parameter name="CAT5_LEVEL" class="java.lang.String"/>
+    <parameter name="CAT5_SCORE" class="java.lang.String"/>
+    <parameter name="CAT5_AVG" class="java.lang.String"/>
+    
     <parameter name="LOGO_IMAGE" class="java.io.InputStream"/>
 
     <!-- Title band -->
     <title>
-        <band height="140">
+        <band height="85">
             <image scaleImage="RetainShape" isUsingCache="false" onErrorType="Blank" hAlign="Left" vAlign="Top" evaluationTime="Now">
-                <reportElement x="0" y="10" width="120" height="70" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
+                <reportElement x="0" y="5" width="100" height="50" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
                 <imageExpression><![CDATA[$P{LOGO_IMAGE}]]></imageExpression>
             </image>
             <textField pattern="">
-                <reportElement x="0" y="50" width="515" height="20" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
+                <reportElement x="0" y="30" width="515" height="18" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
                 <textElement textAlignment="Center">
                     <font isBold="true" size="17"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "REPORTE VERIFICACIÓN ESPACIADO" : $P{REPORT_TITLE}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="0" y="72" width="515" height="16" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
+                <reportElement x="0" y="50" width="515" height="14" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
                 <textElement textAlignment="Center">
                     <font size="12"/>
                 </textElement>
@@ -90,7 +117,7 @@
     </title>
 
     <detail>
-        <band height="480">
+        <band height="640" splitType="Stretch">
             <!-- Fechas -->
             <frame>
                 <reportElement x="0" y="0" width="515" height="40" uuid="d1e2f3a4-b5c6-d7e8-f9a0-b1c2d3e4f5a6"/>
@@ -122,7 +149,7 @@
 
             <!-- Sección Generales -->
             <frame>
-                <reportElement x="0" y="50" width="515" height="100" uuid="e7f8a9b0-c1d2-345b-6c7d-8e9f0a1b2c3d"/>
+                <reportElement x="0" y="48" width="515" height="78" uuid="e7f8a9b0-c1d2-345b-6c7d-8e9f0a1b2c3d"/>
                 <staticText>
                     <reportElement x="0" y="0" width="515" height="16" uuid="f8a9b0c1-d2e3-456c-7d8e-9f0a1b2c3d4e" style="Subtitle"/>
                     <text><![CDATA[Generales]]></text>
@@ -249,223 +276,282 @@
                 </textField>
             </frame>
 
-            <!-- Sección Ponderaciones (encabezado tabla) -->
+            <!-- Sección Categorías (tabla horizontal compacta) -->
             <staticText>
-                <reportElement x="0" y="160" width="515" height="16" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Subtitle"/>
-                <text><![CDATA[Ponderaciones]]></text>
+                <reportElement x="0" y="150" width="515" height="12" uuid="e3f4a5b6-c7d8-901b-2c3d-4e5f6a7b8c9d" style="Subtitle"/>
+                <text><![CDATA[Categorías]]></text>
             </staticText>
 
-            <!-- Categories table -->
-            <componentElement>
-                <reportElement x="0" y="178" width="515" height="100" uuid="b6e6d8e2-0c5a-4f07-9fde-94b3b9eb5e11"/>
-                <jr:table>
-                    <datasetRun subDataset="categoriesDataset">
-                        <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
-                    </datasetRun>
-                    <jr:column width="140" uuid="0c6db35b-9c17-4f06-84bc-f3ca6f6bde2b">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="140" height="20"/>
-                                <textElement textAlignment="Left"/>
-                                <text><![CDATA[Categoría]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="140" height="18"/>
-                                <textElement/>
-                                <textFieldExpression><![CDATA[$F{category}]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="50" uuid="1b269e5e-9b64-4f2a-a36a-c35a7f8cfd2e">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="50" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[Min]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="50" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{min} == null ? "" : String.valueOf($F{min})]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="55" uuid="ba84f2e8-68e9-4c23-aabf-9383d9cc4d53">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="55" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[Resultado]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="55" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{score} == null ? "" : String.valueOf($F{score})]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="55" uuid="d7dc9f2b-a2c1-4b5b-8d0e-6b0e590df3f6">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="55" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[Máximo]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="55" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{max} == null ? "" : String.valueOf($F{max})]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="70" uuid="5017a260-7d45-4268-8c56-508a6d1097fa">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="70" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[Rango]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="70" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{level}]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="70" uuid="a1f9b0f4-9d49-43ef-9c7b-1e5ac9b41f1b">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="70" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[# Respuestas]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="70" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{responsesCount} == null ? "" : String.valueOf($F{responsesCount})]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                    <jr:column width="75" uuid="4a65f837-ae85-49b5-9ea3-30cfb1c2e3f3">
-                        <jr:columnHeader height="20" style="TableHeader">
-                            <staticText>
-                                <reportElement x="0" y="0" width="75" height="20"/>
-                                <textElement textAlignment="Center"/>
-                                <text><![CDATA[# Preguntas]]></text>
-                            </staticText>
-                        </jr:columnHeader>
-                        <jr:detailCell height="18">
-                            <textField>
-                                <reportElement x="0" y="0" width="75" height="18"/>
-                                <textElement textAlignment="Center"/>
-                                <textFieldExpression><![CDATA[$F{questionsCount} == null ? "" : String.valueOf($F{questionsCount})]]></textFieldExpression>
-                            </textField>
-                        </jr:detailCell>
-                    </jr:column>
-                </jr:table>
-            </componentElement>
+            <!-- Tabla horizontal de categorías (5 columnas x 4 filas) -->
+            <!-- Fila 1: Nombres -->
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="166" width="103" height="12" uuid="aabbcc11-2233-4455-6677-8899aabbcc01">
+                    <printWhenExpression><![CDATA[$P{CAT1} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="7" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT1_NAME}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="103" y="166" width="103" height="12" uuid="bbccdd22-3344-5566-7788-99aabbccdd01">
+                    <printWhenExpression><![CDATA[$P{CAT2} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="7" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT2_NAME}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="206" y="166" width="103" height="12" uuid="ccddee33-4455-6677-8899-aabbccddee01">
+                    <printWhenExpression><![CDATA[$P{CAT3} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="7" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT3_NAME}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="309" y="166" width="103" height="12" uuid="ddeeff44-5566-7788-99aa-bbccddeeff01">
+                    <printWhenExpression><![CDATA[$P{CAT4} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="7" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT4_NAME}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="412" y="166" width="103" height="12" uuid="eeff0055-6677-8899-aabb-ccddeeff0001">
+                    <printWhenExpression><![CDATA[$P{CAT5} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="7" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT5_NAME}]]></textFieldExpression>
+            </textField>
+
+            <!-- Fila 2: Niveles -->
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="178" width="103" height="10" uuid="aabbcc11-2233-4455-6677-8899aabbcc02">
+                    <printWhenExpression><![CDATA[$P{CAT1} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT1_LEVEL}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="103" y="178" width="103" height="10" uuid="bbccdd22-3344-5566-7788-99aabbccdd02">
+                    <printWhenExpression><![CDATA[$P{CAT2} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT2_LEVEL}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="206" y="178" width="103" height="10" uuid="ccddee33-4455-6677-8899-aabbccddee02">
+                    <printWhenExpression><![CDATA[$P{CAT3} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT3_LEVEL}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="309" y="178" width="103" height="10" uuid="ddeeff44-5566-7788-99aa-bbccddeeff02">
+                    <printWhenExpression><![CDATA[$P{CAT4} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT4_LEVEL}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="412" y="178" width="103" height="10" uuid="eeff0055-6677-8899-aabb-ccddeeff0002">
+                    <printWhenExpression><![CDATA[$P{CAT5} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6" isItalic="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT5_LEVEL}]]></textFieldExpression>
+            </textField>
+
+            <!-- Fila 3: Puntajes -->
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="188" width="103" height="18" uuid="aabbcc11-2233-4455-6677-8899aabbcc03">
+                    <printWhenExpression><![CDATA[$P{CAT1} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT1_SCORE}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="103" y="188" width="103" height="18" uuid="bbccdd22-3344-5566-7788-99aabbccdd03">
+                    <printWhenExpression><![CDATA[$P{CAT2} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT2_SCORE}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="206" y="188" width="103" height="18" uuid="ccddee33-4455-6677-8899-aabbccddee03">
+                    <printWhenExpression><![CDATA[$P{CAT3} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT3_SCORE}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="309" y="188" width="103" height="18" uuid="ddeeff44-5566-7788-99aa-bbccddeeff03">
+                    <printWhenExpression><![CDATA[$P{CAT4} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT4_SCORE}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="412" y="188" width="103" height="18" uuid="eeff0055-6677-8899-aabb-ccddeeff0003">
+                    <printWhenExpression><![CDATA[$P{CAT5} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT5_SCORE}]]></textFieldExpression>
+            </textField>
+
+            <!-- Fila 4: Promedios -->
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="206" width="103" height="18" uuid="aabbcc11-2233-4455-6677-8899aabbcc04">
+                    <printWhenExpression><![CDATA[$P{CAT1} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT1_AVG}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="103" y="206" width="103" height="18" uuid="bbccdd22-3344-5566-7788-99aabbccdd04">
+                    <printWhenExpression><![CDATA[$P{CAT2} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT2_AVG}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="206" y="206" width="103" height="18" uuid="ccddee33-4455-6677-8899-aabbccddee04">
+                    <printWhenExpression><![CDATA[$P{CAT3} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT3_AVG}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="309" y="206" width="103" height="18" uuid="ddeeff44-5566-7788-99aa-bbccddeeff04">
+                    <printWhenExpression><![CDATA[$P{CAT4} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT4_AVG}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="412" y="206" width="103" height="18" uuid="eeff0055-6677-8899-aabb-ccddeeff0004">
+                    <printWhenExpression><![CDATA[$P{CAT5} != null]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="2"><pen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="6"/></textElement>
+                <textFieldExpression><![CDATA[$P{CAT5_AVG}]]></textFieldExpression>
+            </textField>
 
             <!-- Factor de ajuste -->
             <staticText>
-                <reportElement x="0" y="288" width="100" height="14" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
-                <textElement><font size="9" isBold="true"/></textElement>
+                <reportElement x="0" y="234" width="100" height="11" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
+                <textElement><font size="8" isBold="true"/></textElement>
                 <text><![CDATA[Factor ajuste:]]></text>
             </staticText>
             <textField>
-                <reportElement x="110" y="288" width="100" height="14" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
-                <textElement><font size="9" isBold="true"/></textElement>
+                <reportElement x="110" y="234" width="100" height="11" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
+                <textElement><font size="8" isBold="true"/></textElement>
                 <textFieldExpression><![CDATA[$P{FACTOR_AJUSTE} == null ? "1.0" : $P{FACTOR_AJUSTE}]]></textFieldExpression>
             </textField>
+            
+            <!-- Conclusión (movida de summary para que quepa en 1 página) -->
 
-            <!-- Gráficos lado a lado -->
-            <!-- Gráfico de Barras -->
+            <!-- Gráfica de barras con resultados por categoría (paleta morado-azul) -->
             <barChart>
-                <chart isShowLegend="true">
-                    <reportElement x="0" y="308" width="250" height="160" uuid="28db7c6c-d7db-4a0a-9e8b-2fa0c1f2bb0a"/>
+                <chart isShowLegend="false" evaluationTime="Report">
+                    <reportElement x="30" y="256" width="455" height="240" uuid="aabbccdd-eeff-0011-2233-445566778899"/>
                     <chartTitle>
-                        <titleExpression><![CDATA["Puntaje por categoría"]]></titleExpression>
+                        <font fontName="DejaVu Sans" size="11" isBold="true"/>
+                        <titleExpression><![CDATA["Puntajes por Categoría"]]></titleExpression>
                     </chartTitle>
-                    <chartLegend position="Bottom"/>
                 </chart>
                 <categoryDataset>
-                    <dataset>
-                        <datasetRun subDataset="categoriesDataset">
-                            <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
-                        </datasetRun>
-                    </dataset>
+                    <dataset resetType="Report"/>
                     <categorySeries>
-                        <seriesExpression><![CDATA["Resultado"]]></seriesExpression>
-                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
-                        <valueExpression><![CDATA[$F{score}]]></valueExpression>
+                        <seriesExpression><![CDATA["Puntaje"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$P{CAT1} != null ? $P{CAT1}.getCategory() : "N/A"]]></categoryExpression>
+                        <valueExpression><![CDATA[$P{CAT1} != null ? $P{CAT1}.getScore() : 0]]></valueExpression>
                     </categorySeries>
                     <categorySeries>
-                        <seriesExpression><![CDATA["Máximo"]]></seriesExpression>
-                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
-                        <valueExpression><![CDATA[$F{max}]]></valueExpression>
+                        <seriesExpression><![CDATA["Puntaje"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$P{CAT2} != null ? $P{CAT2}.getCategory() : "N/A"]]></categoryExpression>
+                        <valueExpression><![CDATA[$P{CAT2} != null ? $P{CAT2}.getScore() : 0]]></valueExpression>
+                    </categorySeries>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Puntaje"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$P{CAT3} != null ? $P{CAT3}.getCategory() : "N/A"]]></categoryExpression>
+                        <valueExpression><![CDATA[$P{CAT3} != null ? $P{CAT3}.getScore() : 0]]></valueExpression>
+                    </categorySeries>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Puntaje"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$P{CAT4} != null ? $P{CAT4}.getCategory() : "N/A"]]></categoryExpression>
+                        <valueExpression><![CDATA[$P{CAT4} != null ? $P{CAT4}.getScore() : 0]]></valueExpression>
+                    </categorySeries>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Puntaje"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$P{CAT5} != null ? $P{CAT5}.getCategory() : "N/A"]]></categoryExpression>
+                        <valueExpression><![CDATA[$P{CAT5} != null ? $P{CAT5}.getScore() : 0]]></valueExpression>
                     </categorySeries>
                 </categoryDataset>
-                <barPlot>
-                    <plot/>
+                <barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+                    <plot labelRotation="-45.0">
+                        <seriesColor seriesOrder="0" color="#7B2CBF"/>
+                        <seriesColor seriesOrder="1" color="#9D4EDD"/>
+                        <seriesColor seriesOrder="2" color="#5A189A"/>
+                        <seriesColor seriesOrder="3" color="#3C096C"/>
+                        <seriesColor seriesOrder="4" color="#240046"/>
+                    </plot>
+                    <itemLabel>
+                        <font fontName="DejaVu Sans" size="8"/>
+                    </itemLabel>
+                    <categoryAxisFormat labelRotation="-45.0">
+                        <axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+                            <labelFont>
+                                <font fontName="DejaVu Sans" size="8"/>
+                            </labelFont>
+                            <tickLabelFont>
+                                <font fontName="DejaVu Sans" size="8"/>
+                            </tickLabelFont>
+                        </axisFormat>
+                    </categoryAxisFormat>
+                    <valueAxisFormat>
+                        <axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+                            <labelFont>
+                                <font fontName="DejaVu Sans" size="8"/>
+                            </labelFont>
+                            <tickLabelFont>
+                                <font fontName="DejaVu Sans" size="8"/>
+                            </tickLabelFont>
+                        </axisFormat>
+                    </valueAxisFormat>
                 </barPlot>
             </barChart>
-
-            <!-- Gráfico de Líneas -->
-            <lineChart>
-                <chart isShowLegend="true">
-                    <reportElement x="265" y="308" width="250" height="160" uuid="b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e"/>
-                    <chartTitle>
-                        <titleExpression><![CDATA["Tendencia por categoría"]]></titleExpression>
-                    </chartTitle>
-                    <chartLegend position="Bottom"/>
-                </chart>
-                <categoryDataset>
-                    <dataset>
-                        <datasetRun subDataset="categoriesDataset">
-                            <dataSourceExpression><![CDATA[$P{CATEGORIES_DS}]]></dataSourceExpression>
-                        </datasetRun>
-                    </dataset>
-                    <categorySeries>
-                        <seriesExpression><![CDATA["Resultado"]]></seriesExpression>
-                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
-                        <valueExpression><![CDATA[$F{score}]]></valueExpression>
-                    </categorySeries>
-                    <categorySeries>
-                        <seriesExpression><![CDATA["Máximo"]]></seriesExpression>
-                        <categoryExpression><![CDATA[$F{category}]]></categoryExpression>
-                        <valueExpression><![CDATA[$F{max}]]></valueExpression>
-                    </categorySeries>
-                </categoryDataset>
-                <linePlot>
-                    <plot/>
-                </linePlot>
-            </lineChart>
-        </band>
-    </detail>
-
-    <summary>
-        <band height="80">
+            
+            <!-- Conclusión movida debajo de la gráfica -->
             <staticText>
-                <reportElement x="0" y="0" width="515" height="16" uuid="a26a95e5-7bd8-4dbc-8a96-0e5a4f2433e5" style="Label"/>
-                <textElement/>
+                <reportElement x="0" y="508" width="515" height="12" uuid="a26a95e5-7bd8-4dbc-8a96-0e5a4f2433e5" style="Label"/>
+                <textElement><font size="10" isBold="true"/></textElement>
                 <text><![CDATA[Conclusión]]></text>
             </staticText>
             <textField isStretchWithOverflow="true">
-                <reportElement x="0" y="18" width="515" height="50" uuid="c512e6a2-ef16-4d5c-90e4-546759937245" style="Value"/>
-                <textElement/>
+                <reportElement x="0" y="525" width="515" height="115" uuid="c512e6a2-ef16-4d5c-90e4-546759937245" style="Value"/>
+                <textElement><font size="9"/></textElement>
                 <textFieldExpression><![CDATA[$P{CONCLUSION} == null ? "" : $P{CONCLUSION}]]></textFieldExpression>
             </textField>
         </band>
+    </detail>
+
+    <!-- Summary band vacío - todo movido a detail -->
+    <summary>
+        <band height="0"/>
     </summary>
 </jasperReport>
