@@ -182,8 +182,8 @@ public class MedicaLebenScoringService {
 
             boolean isMatrix = "matrix".equalsIgnoreCase(q.getType());
 
-            // *** Lógica especial para Preguntas multi_select 103, 149 y 166 (usar option_answer.value a partir de freeText) ***
-            if (!isMatrix && q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+            // *** Lógica especial para Preguntas multi_select 103, 149, 166 y 167 (usar option_answer.value a partir de freeText) ***
+            if (!isMatrix && q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L || q.getId() == 167L)) {
                 int valueMulti = computeMultiSelectValueFromFreeTextOptionIds(r);
                 if (valueMulti > 0) {
                     categoryScores.put(category, categoryScores.getOrDefault(category, 0) + valueMulti);
@@ -437,7 +437,7 @@ public class MedicaLebenScoringService {
                 }
             } else {
                 // Lógica especial para preguntas multi_select donde el puntaje es suma de valores
-                if (q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+                if (q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L || q.getId() == 167L)) {
                     // min teórico: 0 (puede marcar solo la opción 0 o ninguna)
                     int minValue = 0;
                     // max teórico: suma de todos los valores > 0 de sus option_answer
