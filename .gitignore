@@ -14,3 +14,7 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# Logs (no version control)
+backend.log
+*.log.gz
