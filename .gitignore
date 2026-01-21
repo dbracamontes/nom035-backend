@@ -14,3 +14,7 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# Backend logs
+backend.log
+*.log.gz
