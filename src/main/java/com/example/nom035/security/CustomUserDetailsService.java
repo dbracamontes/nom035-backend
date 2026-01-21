@@ -35,8 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         User user = userOpt.get();
         logger.info("[CustomUserDetailsService] Usuario cargado: {} (enabled: {})", user.getUsername(), user.isEnabled());
-        logger.warn("[DEBUG] Contraseña leída de BD para {}: {}", user.getUsername(), user.getPassword());
-        logger.info("[CustomUserDetailsService] Contraseña leída de BD: {}", user.getPassword());
+        // No registrar contraseñas en texto plano
+        logger.warn("[DEBUG] Contraseña leída de BD para {}: [PROTECTED]", user.getUsername());
+        logger.info("[CustomUserDetailsService] Contraseña leída de BD: [PROTECTED]");
         if (user.getRoles() != null) {
             logger.info("[CustomUserDetailsService] Roles: {}", user.getRoles().stream().map(r -> r.getName()).toList());
         } else {
