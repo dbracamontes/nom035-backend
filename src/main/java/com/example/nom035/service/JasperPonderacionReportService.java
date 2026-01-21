@@ -37,21 +37,40 @@ public class JasperPonderacionReportService {
     public void loadTemplate() {
         try (InputStream is = getClass().getResourceAsStream("/reports/ponderaciones.jrxml")) {
             if (is == null) {
-                throw new IllegalStateException("No se encontró la plantilla ponderaciones.jrxml en classpath");
+                System.err.println("No se encontró la plantilla ponderaciones.jrxml en classpath; se omitirá la funcionalidad de reports");
+            } else {
+                try {
+                    ponderacionesTemplate = JasperCompileManager.compileReport(is);
+                } catch (Exception e) {
+                    System.err.println("Error al compilar la plantilla de ponderaciones, se omitirá la funcionalidad de reports: " + e.getMessage());
+                    e.printStackTrace();
+                    ponderacionesTemplate = null;
+                }
             }
-            ponderacionesTemplate = JasperCompileManager.compileReport(is);
         } catch (Exception e) {
-            throw new IllegalStateException("Error al compilar la plantilla de ponderaciones", e);
+            // Seguridad: no detener toda la aplicación por un fallo en templates
+            System.err.println("Error inesperado al intentar leer ponderaciones.jrxml: " + e.getMessage());
+            e.printStackTrace();
+            ponderacionesTemplate = null;
         }
         
         // Compilar subreport
         try (InputStream subIs = getClass().getResourceAsStream("/reports/categories_subreport.jrxml")) {
             if (subIs == null) {
-                throw new IllegalStateException("No se encontró el subreport categories_subreport.jrxml");
+                System.err.println("No se encontró el subreport categories_subreport.jrxml; se omitirá la funcionalidad de reports");
+            } else {
+                try {
+                    categoriesSubreport = JasperCompileManager.compileReport(subIs);
+                } catch (Exception e) {
+                    System.err.println("Error al compilar el subreport de categorías, se omitirá la funcionalidad de reports: " + e.getMessage());
+                    e.printStackTrace();
+                    categoriesSubreport = null;
+                }
             }
-            categoriesSubreport = JasperCompileManager.compileReport(subIs);
         } catch (Exception e) {
-            throw new IllegalStateException("Error al compilar el subreport de categorías", e);
+            System.err.println("Error inesperado al intentar leer categories_subreport.jrxml: " + e.getMessage());
+            e.printStackTrace();
+            categoriesSubreport = null;
         }
     }
 
