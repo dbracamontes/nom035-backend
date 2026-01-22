@@ -50,7 +50,7 @@
     <parameter name="APPLICATION_DATE" class="java.lang.String"/>
     <parameter name="COMPLETED_DATE" class="java.lang.String"/>
     <parameter name="GENERATED_DATE" class="java.lang.String"/>
-    <parameter name="FACTOR_AJUSTE" class="java.lang.String"/>
+    <parameter name="FACTOR_AJUSTE" class="java.lang.Double"/>
     <parameter name="GLOBAL_SCORE" class="java.lang.Integer"/>
     <parameter name="GLOBAL_MIN" class="java.lang.Integer"/>
     <parameter name="GLOBAL_MAX" class="java.lang.Integer"/>
@@ -94,27 +94,37 @@
 
     <!-- Title band -->
     <title>
-        <band height="85">
+        <!-- Increased height to fit larger logo and title without overlap; extra space after company -->
+        <band height="120">
             <image scaleImage="RetainShape" isUsingCache="false" onErrorType="Blank" hAlign="Left" vAlign="Top" evaluationTime="Now">
                 <reportElement x="0" y="5" width="100" height="50" uuid="5cf4a3b7-1b73-4302-83c4-4d0e6b77e6ed"/>
                 <imageExpression><![CDATA[$P{LOGO_IMAGE}]]></imageExpression>
             </image>
+            <!-- Título dinámico: forzar renderizado PDF-embebido para evitar problemas de encoding/z-order -->
             <textField pattern="">
-                <reportElement x="0" y="30" width="515" height="18" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title"/>
+                <reportElement x="0" y="60" width="515" height="28" uuid="e0db656d-1c9e-4e4b-b830-1ab1cc0c48b3" style="Title" positionType="Float"/>
                 <textElement textAlignment="Center">
-                    <font isBold="true" size="17"/>
+                    <font isBold="true" size="18" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null ? "REPORTE VERIFICACIÓN ESPACIADO" : $P{REPORT_TITLE}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE} == null || $P{REPORT_TITLE}.trim().length() == 0 ? "Ponderación Médica Leben" : $P{REPORT_TITLE}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="0" y="50" width="515" height="14" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
+                <reportElement x="0" y="90" width="515" height="14" uuid="3c0fb8a9-88e1-4b26-afba-45a2b4459028" style="Value"/>
                 <textElement textAlignment="Center">
                     <font size="12"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Empresa: " + ($P{COMPANY_NAME} == null ? "-" : $P{COMPANY_NAME})]]></textFieldExpression>
             </textField>
+            <!-- Espacio en blanco para separar visualmente la empresa de las fechas -->
+            <staticText>
+                <reportElement x="0" y="104" width="515" height="10" uuid="00000000-0000-0000-0000-000000000003"/>
+                <textElement/>
+                <text><![CDATA[]]></text>
+            </staticText>
         </band>
     </title>
+
+    
 
     <detail>
         <band height="640" splitType="Stretch">
@@ -451,16 +461,22 @@
                 <textFieldExpression><![CDATA[$P{CAT5_AVG}]]></textFieldExpression>
             </textField>
 
+            <!-- Espacio adicional antes del Factor de ajuste -->
+            <staticText>
+                <reportElement x="0" y="228" width="515" height="6" uuid="11111111-2222-3333-4444-555555555555"/>
+                <textElement/>
+                <text><![CDATA[]]></text>
+            </staticText>
             <!-- Factor de ajuste -->
             <staticText>
                 <reportElement x="0" y="234" width="100" height="11" uuid="b7c8d9e0-f1a2-3b4c-5d6e-7f8a9b0c1d2e" style="Label"/>
                 <textElement><font size="8" isBold="true"/></textElement>
                 <text><![CDATA[Factor ajuste:]]></text>
             </staticText>
-            <textField>
+            <textField pattern="#0.00">
                 <reportElement x="110" y="234" width="100" height="11" uuid="c8d9e0f1-a2b3-4c5d-6e7f-8a9b0c1d2e3f" style="Value"/>
                 <textElement><font size="8" isBold="true"/></textElement>
-                <textFieldExpression><![CDATA[$P{FACTOR_AJUSTE} == null ? "1.0" : $P{FACTOR_AJUSTE}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{FACTOR_AJUSTE} == null ? 1.00 : $P{FACTOR_AJUSTE}]]></textFieldExpression>
             </textField>
             
             <!-- Conclusión (movida de summary para que quepa en 1 página) -->

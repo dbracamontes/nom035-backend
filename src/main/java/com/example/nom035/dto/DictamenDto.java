@@ -45,6 +45,9 @@ public class DictamenDto {
     private String applicationDate;
     private String completedDate;
 
+    // Ajuste calculado para ponderaciones (ej. 1.120)
+    private Double adjustmentFactor;
+
     public Long getApplicationId() { return applicationId; }
     public void setApplicationId(Long applicationId) { this.applicationId = applicationId; }
     public Long getEmployeeId() { return employeeId; }
@@ -111,4 +114,7 @@ public class DictamenDto {
     public void setApplicationDate(String applicationDate) { this.applicationDate = applicationDate; }
     public String getCompletedDate() { return completedDate; }
     public void setCompletedDate(String completedDate) { this.completedDate = completedDate; }
+
+    public Double getAdjustmentFactor() { return adjustmentFactor; }
+    public void setAdjustmentFactor(Double adjustmentFactor) { this.adjustmentFactor = adjustmentFactor; }
 }

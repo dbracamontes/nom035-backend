@@ -1,6 +1,9 @@
 package com.example.nom035.service;
 
 import java.awt.Color;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -29,6 +32,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 @Service
 public class JasperPonderacionReportService {
+    
+    // Logger kept out in case it's useful later
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(JasperPonderacionReportService.class);
 
     private JasperReport ponderacionesTemplate;
     private JasperReport categoriesSubreport;
@@ -78,8 +84,8 @@ public class JasperPonderacionReportService {
         ensureTemplate();
         Map<String, Object> params = new HashMap<>();
 
-        params.put("REPORT_TITLE", brand != null && brand.getTitle() != null ? brand.getTitle() : "Ponderación Medica Leben");
-        params.put("REPORT_SUBTITLE", brand != null && brand.getSubtitle() != null ? brand.getSubtitle() : "Resultados por categoría");
+        params.put("REPORT_TITLE", brand != null && brand.getTitle() != null && !brand.getTitle().isBlank() ? brand.getTitle() : "Ponderación Médica Leben");
+        params.put("REPORT_SUBTITLE", brand != null && brand.getSubtitle() != null && !brand.getSubtitle().isBlank() ? brand.getSubtitle() : "Resultados por categoría");
         params.put("COMPANY_NAME", dto.getCompanyName());
         params.put("EMPLOYEE_NAME", dto.getEmployeeName());
         params.put("EMPLOYEE_EMAIL", dto.getEmployeeEmail());
@@ -101,7 +107,9 @@ public class JasperPonderacionReportService {
         params.put("APPLICATION_DATE", dto.getApplicationDate());
         params.put("COMPLETED_DATE", dto.getCompletedDate());
         params.put("GENERATED_DATE", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(LocalDateTime.now()));
-        params.put("FACTOR_AJUSTE", "1.12"); // TODO: calcular si aplica
+        // Usar el valor calculado en el DictamenDto si está presente. Formatear a 2 decimales para el PDF.
+        Double factorAjuste = dto.getAdjustmentFactor() != null ? Double.valueOf(Math.round(dto.getAdjustmentFactor() * 100.0) / 100.0) : null;
+        params.put("FACTOR_AJUSTE", factorAjuste);
         params.put("GLOBAL_SCORE", dto.getGlobalScore());
         params.put("GLOBAL_MIN", dto.getGlobalMin());
         params.put("GLOBAL_MAX", dto.getGlobalMax());
@@ -126,7 +134,6 @@ public class JasperPonderacionReportService {
                     if (logoBytes.length > 0) {
                         // Crear ByteArrayInputStream que se puede leer múltiples veces
                         params.put("LOGO_IMAGE", new java.io.ByteArrayInputStream(logoBytes));
-                        System.out.println("Logo cargado como ByteArrayInputStream desde: " + path + " (" + logoBytes.length + " bytes)");
                     } else {
                         System.err.println("Logo vacío: " + path);
                         params.put("LOGO_IMAGE", null);
@@ -157,11 +164,38 @@ public class JasperPonderacionReportService {
             params.put("CAT" + (i+1), cat);
             params.put("CAT" + (i+1) + "_NAME", cat != null ? cat.getCategory() : "");
             params.put("CAT" + (i+1) + "_LEVEL", cat != null ? cat.getLevel() : "");
-            params.put("CAT" + (i+1) + "_SCORE", cat != null ? "Puntaje: " + cat.getScore() + " / " + cat.getMax() + " (mín " + cat.getMin() + " · máx " + cat.getMax() + ")" : "");
-            params.put("CAT" + (i+1) + "_AVG", cat != null ? "Promedio: " + String.format("%.2f", (double)cat.getScore() / Math.max(1, cat.getResponsesCount())) + " · Respuestas: " + cat.getResponsesCount() + " / " + cat.getQuestionsCount() : "");
+
+            if (cat != null) {
+                int score = cat.getScore();
+                int min = cat.getMin() != null ? cat.getMin() : 0;
+                int max = cat.getMax() != null ? cat.getMax() : 0;
+                int responses = cat.getResponsesCount() != null ? cat.getResponsesCount() : 0;
+                int questions = cat.getQuestionsCount() != null ? cat.getQuestionsCount() : 0;
+
+                params.put("CAT" + (i+1) + "_SCORE", "Puntaje: " + score + " / " + max + " (mín " + min + " · máx " + max + ")");
+                String avg = "Promedio: " + String.format("%.2f", responses > 0 ? (double)score / responses : 0.0) + " · Respuestas: " + responses + " / " + questions;
+                params.put("CAT" + (i+1) + "_AVG", avg);
+            } else {
+                params.put("CAT" + (i+1) + "_SCORE", "");
+                params.put("CAT" + (i+1) + "_AVG", "");
+            }
         }
 
         try {
+            // Parameters prepared; generate the report
+
+            // Escribir un log temporal en target/last_report_title.log para confirmar el valor del parámetro
+            try {
+                Object rt = params.get("REPORT_TITLE");
+                Object fa = params.get("FACTOR_AJUSTE");
+                String line = java.time.LocalDateTime.now().toString() + " REPORT_TITLE=" + (rt == null ? "<null>" : rt.toString()) + " FACTOR_AJUSTE=" + (fa == null ? "<null>" : fa.toString()) + System.lineSeparator();
+                Path out = Path.of("target", "last_report_title.log");
+                Files.createDirectories(out.getParent());
+                Files.writeString(out, line, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            } catch (Exception ex) {
+                // no detener generación por fallo en escritura de log
+            }
+
             JasperPrint jp = JasperFillManager.fillReport(ponderacionesTemplate, params, new JREmptyDataSource(1));
             return JasperExportManager.exportReportToPdf(jp);
         } catch (JRException e) {
@@ -185,7 +219,6 @@ public class JasperPonderacionReportService {
             }
             var url = getClass().getResource(path);
             if (url != null) {
-                System.out.println("Logo encontrado: " + url.toString());
                 return url.toString();
             } else {
                 System.err.println("Logo NO encontrado en classpath: " + path);

@@ -57,6 +57,10 @@ public class MedicaLebenScoringService {
         public final int globalMinPossible;
         public final String globalLevel;
         public final Map<String, Object> insights;
+        // Nuevo: conteos y factor de ajuste calculados a partir de levels
+        public final int countLow;
+        public final int countHigh;
+        public final double adjustmentFactor;
 
         public Result(
             Map<String, Integer> categoryScores,
@@ -73,7 +77,10 @@ public class MedicaLebenScoringService {
             int globalMaxPossible,
             int globalMinPossible,
             String globalLevel,
-            Map<String, Object> insights
+            Map<String, Object> insights,
+            int countLow,
+            int countHigh,
+            double adjustmentFactor
         ) {
             this.categoryScores = categoryScores;
             this.categoryCounts = categoryCounts;
@@ -90,6 +97,9 @@ public class MedicaLebenScoringService {
             this.globalMinPossible = globalMinPossible;
             this.globalLevel = globalLevel;
             this.insights = insights;
+            this.countLow = countLow;
+            this.countHigh = countHigh;
+            this.adjustmentFactor = adjustmentFactor;
         }
     }
 
@@ -347,6 +357,19 @@ public class MedicaLebenScoringService {
         insights.put("symptomCounts", symptomCounts);
         insights.put("hasHighRiskEvents", criticalEvents.size() > 0);
 
+        // Calcular conteos LOW/ALTO y factor de ajuste en un único lugar
+        int countLow = 0;
+        int countHigh = 0;
+        for (String catName : categoryLevels.keySet()) {
+            String level = categoryLevels.get(catName);
+            if ("Bajo".equalsIgnoreCase(level)) {
+                countLow++;
+            } else if ("Alto".equalsIgnoreCase(level)) {
+                countHigh++;
+            }
+        }
+        double adjustmentFactor = (((countLow * 3) + (countHigh * 5)) / 100.0) + 1.0;
+
         return new Result(
             categoryScores,
             categoryCounts,
@@ -362,7 +385,10 @@ public class MedicaLebenScoringService {
             globalMaxPossible,
             globalMinPossible,
             globalLevel,
-            insights
+            insights,
+            countLow,
+            countHigh,
+            adjustmentFactor
         );
     }
 
@@ -788,6 +814,7 @@ public class MedicaLebenScoringService {
             emptyTotals.put(cat, 0);
         }
 
+        // Para resultado vacío, los conteos y factor son cero / 1.0 respectivamente
         return new Result(
             emptyScores,
             emptyCounts,
@@ -803,7 +830,10 @@ public class MedicaLebenScoringService {
             0,
             0,
             "Sin datos",
-            new HashMap<>()
+            new HashMap<>(),
+            0,
+            0,
+            1.0
         );
     }
 }

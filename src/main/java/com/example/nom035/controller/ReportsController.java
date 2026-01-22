@@ -212,6 +212,9 @@ public class ReportsController {
             }
             dto.setCategories(cats);
 
+            // Usar el factor de ajuste calculado por MedicaLebenScoringService
+            dto.setAdjustmentFactor(res.adjustmentFactor);
+
             StringBuilder sb = new StringBuilder();
             sb.append("Nivel global ").append(dto.getGlobalLevel()).append(".");
             if (dto.isTraumaticAlert()) {
@@ -231,7 +234,8 @@ public class ReportsController {
 
             for (Map.Entry<String, Integer> e : res.categoryScores.entrySet()) {
                 String level = res.categoryLevels.getOrDefault(e.getKey(), "N/A");
-                cats.add(new CategoryScoreDto(e.getKey(), e.getValue(), level));
+                // Rellenar con valores por defecto para evitar NPEs en los reportes (responsesCount/questionsCount)
+                cats.add(new CategoryScoreDto(e.getKey(), e.getValue(), level, 0, 0, 0, 1));
             }
             dto.setCategories(cats);
 

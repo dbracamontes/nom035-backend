@@ -160,21 +160,10 @@ public class MedicaLebenReportController {
         report.setGlobalAverage(result.globalAverage);
         report.setGlobalLevel(result.globalLevel);
 
-        // Calcular factor de ajuste a partir de los niveles de categoría
-        int countLow = 0;
-        int countHigh = 0;
-        for (String catName : result.categoryScores.keySet()) {
-            String level = result.categoryLevels.get(catName);
-            if ("Bajo".equalsIgnoreCase(level)) {
-                countLow++;
-            } else if ("Alto".equalsIgnoreCase(level)) {
-                countHigh++;
-            }
-        }
-        report.setCountLow(countLow);
-        report.setCountHigh(countHigh);
-        double adjustmentFactor = (((countLow * 3) + (countHigh * 5)) / 100.0) + 1.0;
-        report.setAdjustmentFactor(adjustmentFactor);
+// Usar el ajuste calculado por el servicio de scoring para evitar duplicación
+            report.setCountLow(result.countLow);
+            report.setCountHigh(result.countHigh);
+            report.setAdjustmentFactor(result.adjustmentFactor);
         
         List<CategoryDetail> categories = new ArrayList<>();
         for (String catName : result.categoryScores.keySet()) {
