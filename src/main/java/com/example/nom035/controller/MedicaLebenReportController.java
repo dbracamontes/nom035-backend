@@ -3,6 +3,7 @@ package com.example.nom035.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -363,7 +364,27 @@ public class MedicaLebenReportController {
                 }
             } else if (qid == 167L) {
                 if (freeText != null && !freeText.isEmpty()) {
-                    notas.add("¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: " + freeText);
+                    String noteText = freeText;
+                    // Intentar parsear JSON de multi_select para presentar labels legibles en vez de raw JSON
+                    try {
+                        if (freeText.trim().startsWith("{")) {
+                            ObjectMapper om = new ObjectMapper();
+                            Map<String, Object> json = om.readValue(freeText, Map.class);
+                            Object labelsObj = json.get("optionLabels");
+                            if (labelsObj instanceof java.util.List) {
+                                @SuppressWarnings("unchecked")
+                                java.util.List<String> labels = (java.util.List<String>) labelsObj;
+                                if (!labels.isEmpty()) {
+                                    noteText = String.join(", ", labels);
+                                }
+                            }
+                        }
+                    } catch (Exception ex) {
+                        // si falla el parseo, dejar texto crudo
+                    }
+                    if (noteText != null && !noteText.isEmpty()) {
+                        notas.add("¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: " + noteText);
+                    }
                 } else if (r.getOptionAnswer() != null && r.getOptionAnswer().getText() != null) {
                     notas.add("¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?: " + r.getOptionAnswer().getText());
                 }

@@ -182,8 +182,8 @@ public class MedicaLebenScoringService {
 
             boolean isMatrix = "matrix".equalsIgnoreCase(q.getType());
 
-            // *** Lógica especial para Preguntas multi_select 103, 149 y 166 (usar option_answer.value a partir de freeText) ***
-            if (!isMatrix && q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+            // *** Lógica especial para Preguntas multi_select 103, 149, 166 y 167 (usar option_answer.value a partir de freeText) ***
+            if (!isMatrix && q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L || q.getId() == 167L)) {
                 int valueMulti = computeMultiSelectValueFromFreeTextOptionIds(r);
                 if (valueMulti > 0) {
                     categoryScores.put(category, categoryScores.getOrDefault(category, 0) + valueMulti);

@@ -333,7 +333,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (164,2,'Realiza actividad física?','single_choice',91,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (165,2,'Con que frecuencia realiza actividad física a la semana (Tomando en cuenta que mínimo son 30 min al día)','single_choice',92,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (166,2,'Seleccione si en su familia ha habido casos de','multi_select',93,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (167,2,'¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?','single_choice',94,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
+	 (167,2,'¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?','multi_select',94,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (168,2,'Si la respuesta anterior fue "Otros" favor de especificar la enfermedad que padece','text',95,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (169,2,'Si padece alguno o algunos de los padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?','single_choice',96,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (170,2,'Favor de especificar el nombre del  medicamento (os) o suplementos que consume','text',97,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}');
@@ -2042,7 +2042,7 @@ INSERT INTO response (survey_application_id, question_id, option_answer_id, valu
   (10003, 91, 428, 1, NULL),
   (10003, 92, NULL, NULL, '{"kind":"matrix","selection":"checkbox","rows":{"Frutas y verduras":"3 a 4 veces a la semana","Carnes Rojas y Lácteos":"1 a 2 veces a la semana","Cereales (Tortilla Arroz Quinoa Papa)":"5 o mas veces a la semana","Semillas (Cacahuate Almendras Pistache)":"5 o mas veces a la semana"}, "columns": ["No consumo", "menos de 1 vez a la semana", "1 a 2 veces a la semana", "3 a 4 veces a la semana", "5 o mas veces a la semana"], "otherOption":true,"otherPrompts":["Otros:"]}'),
   (10003, 93, 433, 1, NULL),
-  (10003, 94, 435, 2, NULL),
+  (10003, 94, NULL, NULL, '{"kind":"multi_select","optionIds":["435"],"optionAnswerIds":[435],"optionLabels":["Mas de 3 veces al año"],"otherText":null}'),
   (10003, 95, 438, 3, NULL),
   (10003, 96, 442, 1, NULL),
   (10003, 97, 444, 1, NULL),
