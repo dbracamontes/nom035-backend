@@ -362,7 +362,7 @@ public class MedicaLebenReportController {
                 if (freeText != null && !freeText.isEmpty()) {
                     notas.add("El tipo de alcohol (cerveza, tequila, etc.), la cantidad de consumo por semana (latas, vasos, botella) y el número de años que ha consumido alcohol: " + freeText);
                 }
-            } else if (qid == 167L) {
+            } else if (qid == 103L || qid == 111L || qid == 149L || qid == 166L || qid == 167L) {
                 if (freeText != null && !freeText.isEmpty()) {
                     String noteText = freeText;
                     // Intentar parsear JSON de multi_select para presentar labels legibles en vez de raw JSON

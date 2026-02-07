@@ -437,7 +437,7 @@ public class MedicaLebenScoringService {
                 }
             } else {
                 // Lógica especial para preguntas multi_select donde el puntaje es suma de valores
-                if (q.getId() != null && (q.getId() == 103L || q.getId() == 149L || q.getId() == 166L)) {
+                if (q.getId() != null && (q.getId() == 103L || q.getId() == 111L || q.getId() == 149L || q.getId() == 166L || q.getId() == 167L)) {
                     // min teórico: 0 (puede marcar solo la opción 0 o ninguna)
                     int minValue = 0;
                     // max teórico: suma de todos los valores > 0 de sus option_answer
