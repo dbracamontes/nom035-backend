@@ -28,6 +28,9 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: your_mysql_password
       MEDICA_LEBEN_UPLOAD_BASE_PATH: /uploads/medica-leben
+      DOC_AI_MAX_PAGES: 3
+      DOC_AI_MAX_FILE_MB: 30
+      DOC_AI_STORAGE_BASE_PATH: /uploads/doc-generator/tmp
     ports:
       - "8080:8080"
     depends_on:
@@ -36,6 +39,7 @@ services:
     restart: on-failure
     volumes:
       - ./uploads/medica-leben:/uploads/medica-leben
+      - ./uploads/doc-generator/tmp:/uploads/doc-generator/tmp
 
 volumes:
   db_data:

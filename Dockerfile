@@ -19,7 +19,12 @@ ENV SPRING_DATASOURCE_PASSWORD=your_mysql_password
 # Instala zona horaria y configura America/Mexico_City
 RUN apk add --no-cache tzdata \
 	&& cp /usr/share/zoneinfo/America/Mexico_City /etc/localtime \
-	&& echo "America/Mexico_City" > /etc/timezone
+	&& echo "America/Mexico_City" > /etc/timezone \
+	# OCR runtime: native Tesseract engine + Spanish language data
+	&& apk add --no-cache tesseract-ocr tesseract-ocr-data-spa tesseract-ocr-data-osd
+
+# Point tess4j at the packaged language data
+ENV TESSDATA_PREFIX=/usr/share/tessdata
 
 # Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-Duser.timezone=America/Mexico_City", "-jar", "app.jar"]

@@ -44,6 +44,20 @@ Spring Boot backend for NOM-035 compliance, with MySQL, dynamic survey generatio
    - `/api/survey-responses`
    - `/api/reports`
 
+## Document AI / OCR configuration
+
+- Copia `.env.example` a `.env` y agrega tus secretos locales (no los subas al repo). Variables clave:
+   - `OPENAI_API_KEY` y `OPENAI_MODEL` (p.ej. gpt-4.1-mini)
+   - `OCR_PROVIDER` (`local` si usas Tesseract)
+   - `DOC_AI_MAX_PAGES`, `DOC_AI_MAX_FILE_MB`, `DOC_AI_STORAGE_BASE_PATH`
+- Si usas OCR local, instala Tesseract y apunta `TESSDATA_PREFIX` al directorio `tessdata`.
+- En Docker ya viene Tesseract con `spa` y `TESSDATA_PREFIX=/usr/share/tessdata`; no necesitas instalarlo en el host.
+- Endpoints del módulo (roles ADMIN/COMPANY):
+   - `POST /api/documents/interpret` (multipart PDF)
+   - `GET /api/documents/{jobId}/status`
+   - `GET /api/documents/{jobId}/preview`
+   - `GET /api/documents/{jobId}/download`
+
 ## PDF Reports
 
 Two PDF endpoints are available (authentication required):
