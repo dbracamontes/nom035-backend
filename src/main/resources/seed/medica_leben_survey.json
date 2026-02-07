@@ -1194,9 +1194,9 @@
     {
       "number": 94,
       "text": "¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?",
-      "type": "single_choice",
+      "type": "multi_select",
       "category": "Hábitos y salud",
-      "allowMultiple": false,
+      "allowMultiple": true,
       "options": [
         "Hipertensión Arterial Esencial",
         "Obesidad Mórbida",

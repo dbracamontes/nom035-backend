@@ -181,7 +181,7 @@ INSERT INTO question (id,survey_id,`text`,response_type,sort_order,risk_factor,c
 	 (164,2,'Realiza actividad física?','single_choice',91,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (165,2,'Con que frecuencia realiza actividad física a la semana (Tomando en cuenta que mínimo son 30 min al día)','single_choice',92,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (166,2,'Seleccione si en su familia ha habido casos de','multi_select',93,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
-	 (167,2,'¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?','single_choice',94,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
+	 (167,2,'¿Tiene usted alguno de los siguientes padecimientos heredofamiliares o crónicos degenerativos?','multi_select',94,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (168,2,'Si la respuesta anterior fue "Otros" favor de especificar la enfermedad que padece','text',95,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}'),
 	 (169,2,'Si padece alguno o algunos de los padecimientos señalados en la pregunta anterior, ¿lleva algún tratamiento de control?','single_choice',96,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben',NULL),
 	 (170,2,'Favor de especificar el nombre del  medicamento (os) o suplementos que consume','text',97,NULL,'Hábitos y salud','Personalizado','Encuesta Médica Leben','{"otherPrompts": ["Tu Respuesta:"]}');
