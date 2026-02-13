@@ -21,7 +21,9 @@ RUN apk add --no-cache tzdata \
 	&& cp /usr/share/zoneinfo/America/Mexico_City /etc/localtime \
 	&& echo "America/Mexico_City" > /etc/timezone \
 	# OCR runtime: native Tesseract engine + Spanish language data
-	&& apk add --no-cache tesseract-ocr tesseract-ocr-data-spa tesseract-ocr-data-osd
+	&& apk add --no-cache tesseract-ocr tesseract-ocr-data-spa tesseract-ocr-data-osd \
+	# PDF conversion runtime with high fidelity to DOCX layout
+	&& apk add --no-cache libreoffice
 
 # Point tess4j at the packaged language data
 ENV TESSDATA_PREFIX=/usr/share/tessdata
