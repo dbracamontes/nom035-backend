@@ -42,6 +42,7 @@ public class DocumentInterpretationService {
     private final long maxFileSizeBytes;
     private final String ocrProvider;
     private final String model;
+    private final long simulateDelayMs;
 
     public DocumentInterpretationService(DocumentJobRepository documentJobRepository,
                                          DocumentChunkRepository documentChunkRepository,
@@ -53,7 +54,8 @@ public class DocumentInterpretationService {
                                          @Value("${docai.max-pages:30}") int maxPages,
                                          @Value("${docai.max-file-size-mb:20}") int maxFileSizeMb,
                                          @Value("${docai.ocr.provider:local}") String ocrProvider,
-                                         @Value("${docai.openai.model:gpt-4.1-mini}") String model) {
+                                         @Value("${docai.openai.model:gpt-4.1-mini}") String model,
+                                         @Value("${DOC_AI_SIMULATE_DELAY_MS:0}") long simulateDelayMs) {
         this.documentJobRepository = documentJobRepository;
         this.documentChunkRepository = documentChunkRepository;
         this.documentOcrService = documentOcrService;
@@ -65,6 +67,7 @@ public class DocumentInterpretationService {
         this.maxFileSizeBytes = maxFileSizeMb * 1024L * 1024L;
         this.ocrProvider = ocrProvider;
         this.model = model;
+        this.simulateDelayMs = simulateDelayMs;
     }
 
     public DocumentJob process(MultipartFile file, String documentTypeStr) {
@@ -102,6 +105,11 @@ public class DocumentInterpretationService {
             documentJobRepository.save(job);
 
             updateStatus(job, DocumentJob.Status.INTERPRETING);
+            // Paso B (cleanText): limpiar cada página localmente antes de chunking
+            for (DocumentOcrPage p : pages) {
+                String cleaned = documentOcrService.cleanText(p.getText());
+                p.setText(cleaned);
+            }
             List<DocumentChunk> chunks = documentChunkingService.buildChunks(job, pages);
             for (DocumentChunk chunk : chunks) {
                 String interpreted = documentOpenAiService.interpret(chunk.getRawText(), job.getDocumentType() != null ? job.getDocumentType().name() : "ACTA");
@@ -113,6 +121,14 @@ public class DocumentInterpretationService {
                 logger.debug("Job {}: about to save processedPages = {}/{}", job.getId(), job.getProcessedPages(), job.getTotalPages());
                 documentJobRepository.save(job);
                 logger.info("Job {}: updated processedPages = {}/{}", job.getId(), job.getProcessedPages(), job.getTotalPages());
+                // If configured, sleep to simulate slower processing so frontend can poll intermediate states
+                if (simulateDelayMs > 0) {
+                    try {
+                        Thread.sleep(simulateDelayMs);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
             documentChunkRepository.saveAll(chunks);
             updateStatus(job, DocumentJob.Status.INTERPRETED);

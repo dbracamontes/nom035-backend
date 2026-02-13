@@ -80,8 +80,14 @@ public class DocumentOpenAiService {
             "2. NO inventes información legal.\n" +
             "3. Cualquier palabra, nombre, fecha, número o dato dudoso debe ir entre corchetes [ ].\n" +
             "4. Mantén estructura jurídica exacta: capítulos, artículos, numeración.\n" +
-            "5. Usa redacción notarial formal en español de México.\n" +
-            "6. Devuelve el texto completo, sin explicaciones.";
+            "5. Usa redacción notarial formal en español de México.\n\n" +
+            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
+            "{\n" +
+            "  \"title\": \"Título corto del documento o sección principal\",\n" +
+            "  \"sections\": [ { \"heading\": \"Encabezado\", \"text\": \"Contenido del párrafo\" } ],\n" +
+            "  \"plain_text\": \"(opcional) versión en texto plano del contenido\"\n" +
+            "}\n" +
+            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
     }
 
     // Prompt específico para actas de Asamblea
@@ -94,8 +100,14 @@ public class DocumentOpenAiService {
             "2. NO inventes información de asistentes, votos o acuerdos.\n" +
             "3. Marca entre corchetes [ ] cualquier nombre, fecha, número o dato dudoso.\n" +
             "4. Mantén la estructura del acta: lista de asistentes, orden del día, acuerdos, firmas.\n" +
-            "5. Usa redacción notarial formal en español de México.\n" +
-            "6. Devuelve el texto completo, sin explicaciones.";
+            "5. Usa redacción notarial formal en español de México.\n\n" +
+            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
+            "{\n" +
+            "  \"title\": \"Título corto del acta (ej. Acta de Asamblea Ordinaria)\",\n" +
+            "  \"sections\": [ { \"heading\": \"Asistentes\", \"text\": \"Lista de asistentes...\" } ],\n" +
+            "  \"plain_text\": \"(opcional) versión en texto plano del acta\"\n" +
+            "}\n" +
+            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
     }
 
     private static class OpenAiChatResponse {

@@ -28,7 +28,9 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: your_mysql_password
       MEDICA_LEBEN_UPLOAD_BASE_PATH: /uploads/medica-leben
-      DOC_AI_MAX_PAGES: 3
+      # Force small chunks for testing intermediate progress
+      DOC_AI_MAX_PAGES: 1
+      DOC_AI_SIMULATE_DELAY_MS: 1500
       DOC_AI_MAX_FILE_MB: 30
       DOC_AI_STORAGE_BASE_PATH: /uploads/doc-generator/tmp
     ports:
