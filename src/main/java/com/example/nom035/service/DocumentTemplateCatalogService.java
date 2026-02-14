@@ -2,6 +2,8 @@ package com.example.nom035.service;
 
 import com.example.nom035.dto.DocumentTemplateDto;
 import com.example.nom035.dto.DocumentTemplateFieldDto;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +30,7 @@ public class DocumentTemplateCatalogService {
     public enum TemplateType {
         PROPUESTA_NEGOCIACION(
             "PROPUESTA_NEGOCIACION",
-            "PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO",
+            "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO",
             "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO.docx",
             "propuesta_negociacion.py",
             true
@@ -38,16 +42,84 @@ public class DocumentTemplateCatalogService {
             "2.1/patron_nom2u.py",
             true
         ),
-        DOCUMENTO_03("DOCUMENTO_03", "Documento 3 (Pendiente)", null, null, false),
-        DOCUMENTO_04("DOCUMENTO_04", "Documento 4 (Pendiente)", null, null, false),
-        DOCUMENTO_05("DOCUMENTO_05", "Documento 5 (Pendiente)", null, null, false),
-        DOCUMENTO_06("DOCUMENTO_06", "Documento 6 (Pendiente)", null, null, false),
-        DOCUMENTO_07("DOCUMENTO_07", "Documento 7 (Pendiente)", null, null, false),
-        DOCUMENTO_08("DOCUMENTO_08", "Documento 8 (Pendiente)", null, null, false),
-        DOCUMENTO_09("DOCUMENTO_09", "Documento 9 (Pendiente)", null, null, false),
+        DOCUMENTO_02(
+            "DOCUMENTO_02",
+            "2.- COLECTIVO HANFU",
+            "2/2.-Colectivo HANFU.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_03(
+            "DOCUMENTO_03",
+            "3.- FORMATO PROPUESTA DE SERVICIOS NOMS",
+            "3/3.-FORMATO PROPUESTA DE SERVICIOS NOMS.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_04(
+            "DOCUMENTO_04",
+            "4.- CONTRATO DE PRESTACIÓN DE SERVICIOS",
+            "4/4.-CONTRATO DE PRESTACIÓN DE SERVICIOS.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_05(
+            "DOCUMENTO_05",
+            "5.- BIENVENIDO",
+            "5/5.-BIENVENIDO.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_06(
+            "DOCUMENTO_06",
+            "6.- REQUISITOS ALTA",
+            "6/6.-REQUISITOS ALTA.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_06_1(
+            "DOCUMENTO_06_1",
+            "6.1.- PREDICTAMEN PARA EL PAGO PROVISIONAL DE LA INDEMNIZACIÓN",
+            "6.1/6.1.-PREDICTAMEN PARA EL PAGO PROVISIONAL DE LA INDEMNIZACIÓN.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_07(
+            "DOCUMENTO_07",
+            "7.- CERTIFICADO MÉDICO DE NIVEL DE RIESGO Y POSIBLES ENFERMEDADES OCUPACIONALES",
+            "7/7.-CERTIFICADO MÉDICO DE NIVEL DE RIESGO Y POSIBLES ENFERMEDADES OCUPACIONALES.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_08(
+            "DOCUMENTO_08",
+            "8.- DICTAMEN DE NIVEL DE CUMPLIMIENTO NORMATIVO",
+            "8/8.-DICTAMEN DE NIVEL DE CUMPLIMIENTO NORMATIVO.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_09(
+            "DOCUMENTO_09",
+            "9.- DICTAMEN DE NIVEL DE RIESGO DE TRABAJO",
+            "9/9.-DICTAMEN DE NIVEL DE RIESGO DE TRABAJO.docx",
+            null,
+            true
+        ),
         DOCUMENTO_10("DOCUMENTO_10", "Documento 10 (Pendiente)", null, null, false),
-        DOCUMENTO_11("DOCUMENTO_11", "Documento 11 (Pendiente)", null, null, false),
-        DOCUMENTO_12("DOCUMENTO_12", "Documento 12 (Pendiente)", null, null, false);
+        DOCUMENTO_11(
+            "DOCUMENTO_11",
+            "11.- CONTRATO DE PRESTACIÓN DE SERVICIOS",
+            "11/11.-CONTRATO DE PRESTACIÓN DE SERVICIOS.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_12(
+            "DOCUMENTO_12",
+            "12.- MANDATO PARA EL PAGO DE LAS INDEMNIZACIONES POR RIESGO DE TRABAJO A LOS TRABAJADORES",
+            "12/12.-MANDATO PARA EL PAGO DE LAS INDEMINZACIONES POR RIESGO DE TRABAJO A LOS TRABAJADORES.docx",
+            null,
+            true
+        );
 
         private final String code;
         private final String displayName;
@@ -85,6 +157,16 @@ public class DocumentTemplateCatalogService {
     }
 
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\[sg\\.Text\\(\"([^\"]+)\"\\),\\s*sg\\.Input\\(key=\"([^\"]+)\"");
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{([\\p{L}\\p{N}_]+)}}|\\$\\{([\\p{L}\\p{N}_]+)}");
+    private static final Map<String, String> FIELD_LABEL_OVERRIDES = Map.of(
+        "VID", "VIGENCIA CONTRATO INICIA EL DIA",
+        "VIM", "VIGENCIA CONTRATO INICIA EL MES",
+        "VIA", "VIGENCIA CONTRATO INICIA EL AÑO",
+        "VTD", "VIGENCIA CONTRATO TERMINA EL DIA",
+        "VTM", "VIGENCIA CONTRATO TERMINA EL MES",
+        "VTA", "VIGENCIA CONTRATO TERMINA EL AÑO",
+        "APODERADO_LEGAL", "APODERADO LEGAL DE"
+    );
     private static final List<DocumentTemplateFieldDto> FALLBACK_PROPUESTA_FIELDS = List.of(
         new DocumentTemplateFieldDto("EN_CONTRAPOSICION_A", "En contraposición a", true),
         new DocumentTemplateFieldDto("CONSEDE_EN", "Con sede en", true),
@@ -142,14 +224,27 @@ public class DocumentTemplateCatalogService {
 
     public List<DocumentTemplateFieldDto> getFieldsByType(String typeCode) {
         TemplateType template = resolve(typeCode);
+        if (!template.isEnabled()) {
+            return List.of();
+        }
+
+        List<DocumentTemplateFieldDto> extractedFromScript = parseFieldsFromScript(template);
+        if (!extractedFromScript.isEmpty()) {
+            return extractedFromScript;
+        }
+
+        List<DocumentTemplateFieldDto> extractedFromDocx = parseFieldsFromTemplateDocx(template);
+        if (!extractedFromDocx.isEmpty()) {
+            return extractedFromDocx;
+        }
+
         if (template == TemplateType.PROPUESTA_NEGOCIACION) {
-            List<DocumentTemplateFieldDto> extracted = parseFieldsFromScript(template);
-            return extracted.isEmpty() ? FALLBACK_PROPUESTA_FIELDS : extracted;
+            return FALLBACK_PROPUESTA_FIELDS;
         }
         if (template == TemplateType.CLAUSULA_CONTRATO_PATRON_NOM2U) {
-            List<DocumentTemplateFieldDto> extracted = parseFieldsFromScript(template);
-            return extracted.isEmpty() ? FALLBACK_PATRON_NOM2U_FIELDS : extracted;
+            return FALLBACK_PATRON_NOM2U_FIELDS;
         }
+
         return List.of();
     }
 
@@ -209,11 +304,65 @@ public class DocumentTemplateCatalogService {
                 if ("-PATH-".equalsIgnoreCase(key)) {
                     continue;
                 }
-                fields.add(new DocumentTemplateFieldDto(key, label, true));
+                fields.add(new DocumentTemplateFieldDto(key, toFieldLabel(key), true));
             }
         } catch (IOException e) {
             return List.of();
         }
         return fields;
+    }
+
+    private List<DocumentTemplateFieldDto> parseFieldsFromTemplateDocx(TemplateType template) {
+        if (template.getDocxFilename() == null) {
+            return List.of();
+        }
+
+        Set<String> orderedKeys = new LinkedHashSet<>();
+        try (InputStream in = openTemplateInputStream(template);
+             XWPFDocument document = new XWPFDocument(in);
+             XWPFWordExtractor extractor = new XWPFWordExtractor(document)) {
+            String content = extractor.getText();
+            Matcher matcher = TOKEN_PATTERN.matcher(content == null ? "" : content);
+            while (matcher.find()) {
+                String key = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+                if (key != null && !key.isBlank()) {
+                    orderedKeys.add(key);
+                }
+            }
+        } catch (Exception e) {
+            return List.of();
+        }
+
+        List<DocumentTemplateFieldDto> fields = new ArrayList<>();
+        for (String key : orderedKeys) {
+            fields.add(new DocumentTemplateFieldDto(key, toFieldLabel(key), true));
+        }
+        return fields;
+    }
+
+    private InputStream openTemplateInputStream(TemplateType templateType) throws IOException {
+        Path path = templatesBasePath.resolve(templateType.getDocxFilename());
+        if (Files.exists(path)) {
+            return Files.newInputStream(path);
+        }
+
+        Path legacyPath = Paths.get("Genera Documento").resolve(templateType.getDocxFilename());
+        if (Files.exists(legacyPath)) {
+            return Files.newInputStream(legacyPath);
+        }
+
+        ClassPathResource classPathResource = new ClassPathResource("templates/docgen/" + templateType.getDocxFilename());
+        if (classPathResource.exists()) {
+            return classPathResource.getInputStream();
+        }
+
+        throw new IOException("No se encontró plantilla: " + templateType.getDocxFilename());
+    }
+
+    private String toFieldLabel(String key) {
+        if (FIELD_LABEL_OVERRIDES.containsKey(key)) {
+            return FIELD_LABEL_OVERRIDES.get(key);
+        }
+        return key.replace('_', ' ').toUpperCase(Locale.ROOT);
     }
 }
