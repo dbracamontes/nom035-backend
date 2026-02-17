@@ -37,21 +37,21 @@ public class DocumentTemplateCatalogService {
         ),
         CLAUSULA_CONTRATO_PATRON_NOM2U(
             "CLAUSULA_CONTRATO_PATRON_NOM2U",
-            "2.1.- CLAUSULA CONTRATO PATRÓN NOM2U",
+            "2.1.-CLAUSULA CONTRATO PATRÓN",
             "2.1/2.1.- CLAUSULA CONTRATO PATRÓN NOM2U.docx",
             "2.1/patron_nom2u.py",
             true
         ),
         DOCUMENTO_02(
             "DOCUMENTO_02",
-            "2.- COLECTIVO HANFU",
+            "2.-CONTRATO COLECTIVO DE TRABAJO",
             "2/2.-Colectivo HANFU.docx",
             null,
             true
         ),
         DOCUMENTO_03(
             "DOCUMENTO_03",
-            "3.- FORMATO PROPUESTA DE SERVICIOS NOMS",
+            "3.-PROPUESTA DE SERVICIOS",
             "3/3.-FORMATO PROPUESTA DE SERVICIOS NOMS.docx",
             null,
             true
@@ -204,9 +204,43 @@ public class DocumentTemplateCatalogService {
             if (templateType.isEnabled()) {
                 dto.setFields(getFieldsByType(templateType.getCode()));
             }
+            // Ensure display name is uppercase for headers
+            if (dto.getName() != null) {
+                dto.setName(dto.getName().toUpperCase(Locale.ROOT));
+            }
             list.add(dto);
         }
+
+        // Sort by leading numeric prefix in the display name (e.g., "1.-", "2.1"), then by name
+        list.sort((a, b) -> {
+            Double na = extractLeadingNumber(a.getName());
+            Double nb = extractLeadingNumber(b.getName());
+            if (na != null && nb != null) {
+                int cmp = Double.compare(na, nb);
+                if (cmp != 0) return cmp;
+            } else if (na != null) {
+                return -1;
+            } else if (nb != null) {
+                return 1;
+            }
+            return a.getName().compareTo(b.getName());
+        });
+
         return list;
+    }
+
+    private Double extractLeadingNumber(String s) {
+        if (s == null) return null;
+        // Match patterns like "1.-", "2.1.-", "10.-" or "2.1"
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("^\\s*(\\d+(?:\\.\\d+)*)").matcher(s);
+        if (m.find()) {
+            try {
+                return Double.parseDouble(m.group(1));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     public TemplateType resolve(String typeCode) {
