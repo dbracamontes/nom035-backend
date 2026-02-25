@@ -5,6 +5,7 @@ import java.util.List;
 
 public class DocumentTemplateDto {
     private String type;
+    private String displayType;
     private String name;
     private boolean enabled;
     private List<DocumentTemplateFieldDto> fields = new ArrayList<>();
@@ -28,6 +29,14 @@ public class DocumentTemplateDto {
 
     public String getName() {
         return name;
+    }
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
     }
 
     public void setName(String name) {

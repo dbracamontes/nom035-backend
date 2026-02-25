@@ -30,6 +30,7 @@ public class DocumentTemplateCatalogService {
     public enum TemplateType {
         PROPUESTA_NEGOCIACION(
             "PROPUESTA_NEGOCIACION",
+            "PROPUESTA",
             "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO",
             "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO.docx",
             "propuesta_negociacion.py",
@@ -37,6 +38,7 @@ public class DocumentTemplateCatalogService {
         ),
         CLAUSULA_CONTRATO_PATRON_NOM2U(
             "CLAUSULA_CONTRATO_PATRON_NOM2U",
+            "CONTRATO",
             "2.1.-CLAUSULA CONTRATO PATRÓN",
             "2.1/2.1.- CLAUSULA CONTRATO PATRÓN NOM2U.docx",
             "2.1/patron_nom2u.py",
@@ -44,6 +46,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_02(
             "DOCUMENTO_02",
+            "CONTRATO",
             "2.-CONTRATO COLECTIVO DE TRABAJO",
             "2/2.-Colectivo HANFU.docx",
             null,
@@ -51,6 +54,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_03(
             "DOCUMENTO_03",
+            "PROPUESTA",
             "3.-PROPUESTA DE SERVICIOS",
             "3/3.-FORMATO PROPUESTA DE SERVICIOS NOMS.docx",
             null,
@@ -58,13 +62,23 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_04(
             "DOCUMENTO_04",
-            "4.- CONTRATO DE PRESTACIÓN DE SERVICIOS",
+            "CONTRATO",
+            "4.- CONTRATO DE PRESTACIÓN DE SERVICIOS (FISICA)",
             "4/4.-CONTRATO DE PRESTACIÓN DE SERVICIOS.docx",
+            null,
+            true
+        ),
+        DOCUMENTO_04_1(
+            "DOCUMENTO_04_1",
+            "CONTRATO",
+            "4.1.- CONTRATO DE PRESTACIÓN DE SERVICIOS (MORAL)",
+            "4.1/4.1.-CONTRATO DE PRESTACIÓN DE SERVICIOS (MORAL).docx",
             null,
             true
         ),
         DOCUMENTO_05(
             "DOCUMENTO_05",
+            "DOCUMENTO",
             "5.- BIENVENIDO",
             "5/5.-BIENVENIDO.docx",
             null,
@@ -72,6 +86,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_06(
             "DOCUMENTO_06",
+            "DOCUMENTO",
             "6.- REQUISITOS ALTA",
             "6/6.-REQUISITOS ALTA.docx",
             null,
@@ -79,6 +94,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_06_1(
             "DOCUMENTO_06_1",
+            "PREDICTAMEN",
             "6.1.- PREDICTAMEN PARA EL PAGO PROVISIONAL DE LA INDEMNIZACIÓN",
             "6.1/6.1.-PREDICTAMEN PARA EL PAGO PROVISIONAL DE LA INDEMNIZACIÓN.docx",
             null,
@@ -86,6 +102,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_07(
             "DOCUMENTO_07",
+            "CERTIFICADO",
             "7.- CERTIFICADO MÉDICO DE NIVEL DE RIESGO Y POSIBLES ENFERMEDADES OCUPACIONALES",
             "7/7.-CERTIFICADO MÉDICO DE NIVEL DE RIESGO Y POSIBLES ENFERMEDADES OCUPACIONALES.docx",
             null,
@@ -93,6 +110,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_08(
             "DOCUMENTO_08",
+            "DICTAMEN",
             "8.- DICTAMEN DE NIVEL DE CUMPLIMIENTO NORMATIVO",
             "8/8.-DICTAMEN DE NIVEL DE CUMPLIMIENTO NORMATIVO.docx",
             null,
@@ -100,14 +118,15 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_09(
             "DOCUMENTO_09",
+            "DICTAMEN",
             "9.- DICTAMEN DE NIVEL DE RIESGO DE TRABAJO",
             "9/9.-DICTAMEN DE NIVEL DE RIESGO DE TRABAJO.docx",
             null,
             true
         ),
-        DOCUMENTO_10("DOCUMENTO_10", "Documento 10 (Pendiente)", null, null, false),
         DOCUMENTO_11(
             "DOCUMENTO_11",
+            "CONTRATO",
             "11.- CONTRATO DE PRESTACIÓN DE SERVICIOS",
             "11/11.-CONTRATO DE PRESTACIÓN DE SERVICIOS.docx",
             null,
@@ -115,6 +134,7 @@ public class DocumentTemplateCatalogService {
         ),
         DOCUMENTO_12(
             "DOCUMENTO_12",
+            "MANDATO",
             "12.- MANDATO PARA EL PAGO DE LAS INDEMNIZACIONES POR RIESGO DE TRABAJO A LOS TRABAJADORES",
             "12/12.-MANDATO PARA EL PAGO DE LAS INDEMINZACIONES POR RIESGO DE TRABAJO A LOS TRABAJADORES.docx",
             null,
@@ -122,13 +142,15 @@ public class DocumentTemplateCatalogService {
         );
 
         private final String code;
+        private final String displayType;
         private final String displayName;
         private final String docxFilename;
         private final String scriptFilename;
         private final boolean enabled;
 
-        TemplateType(String code, String displayName, String docxFilename, String scriptFilename, boolean enabled) {
+        TemplateType(String code, String displayType, String displayName, String docxFilename, String scriptFilename, boolean enabled) {
             this.code = code;
+            this.displayType = displayType;
             this.displayName = displayName;
             this.docxFilename = docxFilename;
             this.scriptFilename = scriptFilename;
@@ -141,6 +163,10 @@ public class DocumentTemplateCatalogService {
 
         public String getDisplayName() {
             return displayName;
+        }
+
+        public String getDisplayType() {
+            return displayType;
         }
 
         public String getDocxFilename() {
@@ -201,6 +227,7 @@ public class DocumentTemplateCatalogService {
         List<DocumentTemplateDto> list = new ArrayList<>();
         for (TemplateType templateType : TemplateType.values()) {
             DocumentTemplateDto dto = new DocumentTemplateDto(templateType.getCode(), templateType.getDisplayName(), templateType.isEnabled());
+            dto.setDisplayType(templateType.getDisplayType());
             if (templateType.isEnabled()) {
                 dto.setFields(getFieldsByType(templateType.getCode()));
             }
