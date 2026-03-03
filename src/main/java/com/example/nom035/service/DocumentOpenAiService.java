@@ -42,6 +42,8 @@ public class DocumentOpenAiService {
         String prompt = systemPrompt;
         if (documentType != null && documentType.equalsIgnoreCase("ASAMBLEA")) {
             prompt = buildPromptForAsamblea();
+        } else if (documentType != null && documentType.equalsIgnoreCase("CONSTANCIA_SITUACION_FISCAL")) {
+            prompt = buildPromptForConstanciaFiscal();
         }
 
         Map<String, Object> request = Map.of(
@@ -106,6 +108,24 @@ public class DocumentOpenAiService {
             "  \"title\": \"Título corto del acta (ej. Acta de Asamblea Ordinaria)\",\n" +
             "  \"sections\": [ { \"heading\": \"Asistentes\", \"text\": \"Lista de asistentes...\" } ],\n" +
             "  \"plain_text\": \"(opcional) versión en texto plano del acta\"\n" +
+            "}\n" +
+            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
+    }
+
+    private String buildPromptForConstanciaFiscal() {
+        return "Eres un analista documental experto en Constancia de Situación Fiscal (México).\n" +
+            "Voy a enviarte texto OCR de una constancia; puede contener errores de reconocimiento.\n\n" +
+            "REGLAS OBLIGATORIAS:\n" +
+            "1. Corrige ortografía solo cuando sea evidente.\n" +
+            "2. NO inventes RFC, razón social, régimen, domicilio, fechas o C.P.\n" +
+            "3. Si un dato es dudoso, márcalo entre corchetes [ ].\n" +
+            "4. Conserva estructura y etiquetas fiscales originales.\n" +
+            "5. Prioriza extraer identificación fiscal y domicilio.\n\n" +
+            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
+            "{\n" +
+            "  \"title\": \"Constancia de Situación Fiscal\",\n" +
+            "  \"sections\": [ { \"heading\": \"Identificación\", \"text\": \"RFC: ...\" } ],\n" +
+            "  \"plain_text\": \"(opcional) versión en texto plano\"\n" +
             "}\n" +
             "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
     }

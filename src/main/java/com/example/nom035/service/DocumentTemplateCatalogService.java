@@ -32,7 +32,7 @@ public class DocumentTemplateCatalogService {
             "PROPUESTA_NEGOCIACION",
             "PROPUESTA",
             "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO",
-            "1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO.docx",
+            "1/1.- PROPUESTA DE NEGOCIACIÓN DE CONTRATO COLECTIVO DE TRABAJO.docx",
             "propuesta_negociacion.py",
             true
         ),

@@ -20,7 +20,8 @@ public class DocumentJob {
 
     public enum DocumentType {
         ACTA,
-        ASAMBLEA
+        ASAMBLEA,
+        CONSTANCIA_SITUACION_FISCAL
     }
 
     @Id
