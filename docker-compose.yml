@@ -30,9 +30,9 @@ services:
       DOCGEN_TEMPLATES_BASE_PATH: /app/templates/docgen
       DOCGEN_SCRIPTS_BASE_PATH: /app/Genera Documento
       MEDICA_LEBEN_UPLOAD_BASE_PATH: /uploads/medica-leben
-      # Force small chunks for testing intermediate progress
-      DOC_AI_MAX_PAGES: 1
-      DOC_AI_SIMULATE_DELAY_MS: 1500
+      # 0 means no page limit: process all pages from each document
+      DOC_AI_MAX_PAGES: 0
+      DOC_AI_SIMULATE_DELAY_MS: 0
       DOC_AI_MAX_FILE_MB: 30
       DOC_AI_STORAGE_BASE_PATH: /uploads/doc-generator/tmp
     ports:

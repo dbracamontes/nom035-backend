@@ -7,6 +7,8 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
@@ -18,6 +20,8 @@ import java.util.List;
 @Service
 public class DocumentOcrService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DocumentOcrService.class);
+
     private final DocumentOcrPageRepository documentOcrPageRepository;
 
     public DocumentOcrService(DocumentOcrPageRepository documentOcrPageRepository) {
@@ -28,7 +32,10 @@ public class DocumentOcrService {
         List<DocumentOcrPage> pages = new ArrayList<>();
         try (PDDocument document = PDDocument.load(pdfPath.toFile())) {
             PDFRenderer renderer = new PDFRenderer(document);
-            int count = Math.min(document.getNumberOfPages(), Math.max(1, pageLimit));
+            int totalPages = document.getNumberOfPages();
+            int count = pageLimit > 0 ? Math.min(totalPages, pageLimit) : totalPages;
+            logger.info("DocAI OCR job {}: totalPagesInPdf={}, requestedPageLimit={}, pagesToProcess={}",
+                job.getId(), totalPages, pageLimit, count);
             Tesseract tesseract = buildTesseract();
             for (int i = 0; i < count; i++) {
                 BufferedImage image = renderer.renderImageWithDPI(i, 400);

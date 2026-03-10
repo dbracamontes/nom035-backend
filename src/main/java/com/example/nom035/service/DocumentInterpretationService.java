@@ -71,11 +71,21 @@ public class DocumentInterpretationService {
     }
 
     public DocumentJob process(MultipartFile file, String documentTypeStr) {
+        return process(file, documentTypeStr, null);
+    }
+
+    public DocumentJob process(MultipartFile file, String documentTypeStr, Integer pageLimitOverride) {
         validateFile(file);
         Path jobDir = createJobDir();
         Path storedPdf = storePdf(file, jobDir);
         int pageCount = countPages(storedPdf);
-        int pagesToProcess = Math.min(pageCount, maxPages);
+        int effectiveMaxPages = pageLimitOverride != null && pageLimitOverride > 0 ? pageLimitOverride : maxPages;
+        int pagesToProcess = effectiveMaxPages > 0 ? Math.min(pageCount, effectiveMaxPages) : pageCount;
+        if (pagesToProcess <= 0 && pageCount > 0) {
+            pagesToProcess = pageCount;
+        }
+        logger.info("DocAI prepare '{}': pageCount={}, configuredMaxPages={}, pageLimitOverride={}, pagesToProcess={}",
+            file.getOriginalFilename(), pageCount, maxPages, pageLimitOverride, pagesToProcess);
 
         DocumentJob job = new DocumentJob();
         job.setOriginalFilename(file.getOriginalFilename());
