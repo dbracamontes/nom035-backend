@@ -42,6 +42,9 @@ public class ContractGenerationService {
     private static final Logger log = LoggerFactory.getLogger(ContractGenerationService.class);
 
     private static final String DEFAULT_TEMPLATE = "DOCUMENTO_04_1";
+    private static final String DOC_TYPE_ACTA = "ACTA";
+    private static final String DOC_TYPE_ASAMBLEA = "ASAMBLEA";
+    private static final String DOC_TYPE_CONSTANCIA = "CONSTANCIA_SITUACION_FISCAL";
     private static final int PREVIEW_MAX_CHARS = 12000;
     private static final int PAGE_LIMIT_ACTA = 4;
     private static final int PAGE_LIMIT_ASAMBLEA = 4;
@@ -169,6 +172,52 @@ public class ContractGenerationService {
     private static final Pattern PATTERN_CIUDADANO_NAME_RFC_FUZZY = Pattern.compile(
         "(?is)([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑa-záéíóúñ\\s]{8,140}?)(?=\\s*[A-Z]{3,5}\\d{6}[A-Z0-9]{2,8})"
     );
+    private static final Pattern PATTERN_CONSTANCIA_IDENTIFICACION_SECTION = Pattern.compile(
+        "(?is)datos\\s+de\\s+identificaci[oó]n\\s+del\\s+contribuyente\\b(.*?)(?=datos\\s+del\\s+domicilio(?:\\s+registrado|\\s+fiscal)?\\b|datos\\s+del\\s+r[eé]gimen|r[eé]gimen\\s+de\\s+capital|actividades?\\s+econ[oó]micas?|$)"
+    );
+    private static final Pattern PATTERN_CONSTANCIA_DOMICILIO_SECTION = Pattern.compile(
+        "(?is)datos\\s+del\\s+domicilio(?:\\s+registrado|\\s+fiscal)?\\b(.*?)(?=datos\\s+de\\s+ubicaci[oó]n|actividades?\\s+econ[oó]micas?|r[eé]gimen\\s+de\\s+capital|$)"
+    );
+    private static final Pattern PATTERN_CONSTANCIA_RFC = Pattern.compile(
+        "(?is)\\brfc(?:\\s*/\\s*curp)?\\s*[:\\-]?\\s*([A-ZÑ&]{3,4}\\s*[A-Z0-9]{6}\\s*[A-Z0-9]{3})\\b"
+    );
+    private static final Pattern PATTERN_CONSTANCIA_RFC_CLAVE = Pattern.compile(
+        "(?is)(?:registro\\s+federal\\s+de\\s+contribuyentes|clave)\\s*(?:bajo\\s+la\\s+clave|rfc|fiscal)?\\s*[:\\-]?\\s*([A-ZÑ&]{3,4}\\d{6}[A-Z0-9]{3})\\b"
+    );
+    private static final Pattern PATTERN_CONSTANCIA_RFC_GENERIC = Pattern.compile(
+        "(?is)\\b([A-ZÑ&]{3,4}\\d{6}[A-Z0-9]{3})\\b"
+    );
+    private static final String DOMICILIO_NEXT_LABEL =
+        "(?=\\b(?:tipo\\s+de\\s+vialidad|tipo\\s+vialidad|vialidad|nombre\\s+de\\s+vialidad|nombre\\s+vialidad|"
+            + "n[uú]mero\\s+exterior|n[uú]mero\\s+interior|num\\.?\\s+exterior|num\\.?\\s+interior|"
+            + "no\\.?\\s*ext(?:erior)?|no\\.?\\s*int(?:erior)?|nombre\\s+de\\s+la\\s+colonia|colonia|"
+            + "nombre\\s+de\\s+la\\s+localidad|localidad|municipio|nombre\\s+de\\s+la\\s+entidad\\s+federativa|"
+            + "entidad\\s+federativa|estado|c[oó]digo\\s+postal|c\\.?p\\.?|cp)\\b|$)";
+    private static final Pattern PATTERN_DOMICILIO_TIPO_VIALIDAD = Pattern.compile(
+        "(?is)(?:tipo\\s+de\\s+vialidad|tipo\\s+vialidad|vialidad)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_NOMBRE_VIALIDAD = Pattern.compile(
+        "(?is)(?:nombre\\s+de\\s+vialidad|nombre\\s+vialidad)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_NUMERO_EXTERIOR = Pattern.compile(
+        "(?is)(?:n[uú]mero|num\\.?|no\\.?)\\s*(?:exterior|ext\\b)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_NUMERO_INTERIOR = Pattern.compile(
+        "(?is)(?:n[uú]mero|num\\.?|no\\.?)\\s*(?:interior|int\\b)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_COLONIA = Pattern.compile(
+        "(?is)(?:nombre\\s+de\\s+la\\s+colonia|colonia)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_LOCALIDAD = Pattern.compile(
+        "(?is)(?:nombre\\s+de\\s+la\\s+localidad|localidad|municipio)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_ENTIDAD = Pattern.compile(
+        "(?is)(?:nombre\\s+de\\s+la\\s+entidad\\s+federativa|entidad\\s+federativa|estado)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_DOMICILIO_CP = Pattern.compile(
+        "(?is)(?:c[oó]digo\\s+postal|c\\.?p\\.?|cp)\\s*[:\\-]?\\s*(.+?)" + DOMICILIO_NEXT_LABEL
+    );
+    private static final Pattern PATTERN_NON_WORD_OR_SPACE = Pattern.compile("[^\\p{L}\\p{N}\\s]");
 
     private final DocumentInterpretationService documentInterpretationService;
     private final DocumentTemplateCatalogService documentTemplateCatalogService;
@@ -190,8 +239,7 @@ public class ContractGenerationService {
         String resolvedTemplate = StringUtils.hasText(templateType) ? templateType : DEFAULT_TEMPLATE;
         List<Long> sourceJobIds = new ArrayList<>();
         StringBuilder mergedText = new StringBuilder();
-        StringBuilder actaText = new StringBuilder();
-        StringBuilder asambleaText = new StringBuilder();
+        Map<String, StringBuilder> extractionTextByType = new LinkedHashMap<>();
         int processedDocuments = 0;
 
         for (MultipartFile file : files) {
@@ -205,19 +253,9 @@ public class ContractGenerationService {
                 Integer pageLimitOverride = resolvePageLimitByDocumentType(effectiveDocumentType);
                 DocumentJob job = documentInterpretationService.process(file, effectiveDocumentType, pageLimitOverride);
                 sourceJobIds.add(job.getId());
-                String interpretedText = appendJobPreview(mergedText, job.getId());
+                appendJobPreview(mergedText, job.getId());
                 String extractionText = collectJobExtractionText(job.getId());
-                if ("ACTA".equalsIgnoreCase(effectiveDocumentType) && StringUtils.hasText(extractionText)) {
-                    if (!actaText.isEmpty()) {
-                        actaText.append("\n\n");
-                    }
-                    actaText.append(extractionText);
-                } else if ("ASAMBLEA".equalsIgnoreCase(effectiveDocumentType) && StringUtils.hasText(extractionText)) {
-                    if (!asambleaText.isEmpty()) {
-                        asambleaText.append("\n\n");
-                    }
-                    asambleaText.append(extractionText);
-                }
+                appendByDocumentType(extractionTextByType, effectiveDocumentType, extractionText);
             } else {
                 String extracted = extractTextFromNonPdf(file, filename);
                 if (!StringUtils.hasText(extracted)) {
@@ -227,17 +265,7 @@ public class ContractGenerationService {
                     mergedText.append("\n\n");
                 }
                 mergedText.append(extracted.trim());
-                if ("ACTA".equalsIgnoreCase(effectiveDocumentType)) {
-                    if (!actaText.isEmpty()) {
-                        actaText.append("\n\n");
-                    }
-                    actaText.append(extracted.trim());
-                } else if ("ASAMBLEA".equalsIgnoreCase(effectiveDocumentType)) {
-                    if (!asambleaText.isEmpty()) {
-                        asambleaText.append("\n\n");
-                    }
-                    asambleaText.append(extracted.trim());
-                }
+                appendByDocumentType(extractionTextByType, effectiveDocumentType, extracted);
             }
             processedDocuments++;
         }
@@ -248,8 +276,7 @@ public class ContractGenerationService {
 
         List<DocumentTemplateFieldDto> templateFields = documentTemplateCatalogService.getFieldsByType(resolvedTemplate);
         Map<String, String> suggestedValues = buildSuggestedValues(templateFields);
-        applyActaSpecificExtraction(suggestedValues, actaText.toString(), mergedText.toString());
-        applyAsambleaSpecificExtraction(suggestedValues, asambleaText.toString(), mergedText.toString());
+        applyDocumentExtractionPipeline(suggestedValues, extractionTextByType, mergedText.toString());
 
         ContractPrepareResponseDto response = new ContractPrepareResponseDto();
         response.setTemplateType(resolvedTemplate);
@@ -258,6 +285,14 @@ public class ContractGenerationService {
         response.setSuggestedValues(suggestedValues);
         response.setCombinedPreview(trimPreview(mergedText.toString()));
         return response;
+    }
+
+    private void applyDocumentExtractionPipeline(Map<String, String> values,
+                                                 Map<String, StringBuilder> extractionTextByType,
+                                                 String mergedText) {
+        applyActaSpecificExtraction(values, resolveSourceText(extractionTextByType, DOC_TYPE_ACTA, mergedText));
+        applyAsambleaSpecificExtraction(values, resolveSourceText(extractionTextByType, DOC_TYPE_ASAMBLEA, mergedText));
+        applyConstanciaSpecificExtraction(values, resolveSourceText(extractionTextByType, DOC_TYPE_CONSTANCIA, mergedText));
     }
 
     public DocumentJob generate(ContractGenerateRequestDto request) {
@@ -337,8 +372,7 @@ public class ContractGenerationService {
         return values;
     }
 
-    private void applyActaSpecificExtraction(Map<String, String> values, String actaText, String mergedText) {
-        String source = StringUtils.hasText(actaText) ? actaText : mergedText;
+    private void applyActaSpecificExtraction(Map<String, String> values, String source) {
         if (!StringUtils.hasText(source)) {
             return;
         }
@@ -354,8 +388,7 @@ public class ContractGenerationService {
         putIfBlank(values, "CORREDURIA_PUBLICA_NO", normalizeActaNumber(correduria));
     }
 
-    private void applyAsambleaSpecificExtraction(Map<String, String> values, String asambleaText, String mergedText) {
-        String source = StringUtils.hasText(asambleaText) ? asambleaText : mergedText;
+    private void applyAsambleaSpecificExtraction(Map<String, String> values, String source) {
         if (!StringUtils.hasText(source)) {
             return;
         }
@@ -406,31 +439,185 @@ public class ContractGenerationService {
         putIfBlank(values, "CIUDAD_ASAMBLEA", ciudad);
     }
 
+    private void applyConstanciaSpecificExtraction(Map<String, String> values, String source) {
+        if (!StringUtils.hasText(source)) {
+            return;
+        }
+
+        String identificacionSection = extractFirstGroup(PATTERN_CONSTANCIA_IDENTIFICACION_SECTION, source);
+        String domicilioSection = extractFirstGroup(PATTERN_CONSTANCIA_DOMICILIO_SECTION, source);
+
+        String rfc = inferRfcFromConstancia(identificacionSection, source);
+        String domicilio = buildConstanciaDomicilio(domicilioSection);
+
+        putIfBlank(values, "RFC", normalizeRfc(rfc));
+        putIfBlank(values, "DOMICILIO", domicilio);
+    }
+
+    private String inferRfcFromConstancia(String identificacionSection, String source) {
+        return firstNonBlank(
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC, identificacionSection),
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC_CLAVE, identificacionSection),
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC, source),
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC_CLAVE, source),
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC_GENERIC, identificacionSection),
+            extractFirstGroup(PATTERN_CONSTANCIA_RFC_GENERIC, source)
+        );
+    }
+
+    private String buildConstanciaDomicilio(String domicilioSection) {
+        if (!StringUtils.hasText(domicilioSection)) {
+            return "";
+        }
+
+        List<String> parts = new ArrayList<>();
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_TIPO_VIALIDAD, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_NOMBRE_VIALIDAD, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_NUMERO_EXTERIOR, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_NUMERO_INTERIOR, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_COLONIA, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_LOCALIDAD, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_ENTIDAD, domicilioSection));
+        addAddressPart(parts, extractFirstGroup(PATTERN_DOMICILIO_CP, domicilioSection));
+
+        return formatConstanciaDomicilio(parts);
+    }
+
+    private void addAddressPart(List<String> parts, String value) {
+        String normalized = normalizeAddressComponent(value);
+        if (StringUtils.hasText(normalized)) {
+            parts.add(normalized);
+        }
+    }
+
+    private String formatConstanciaDomicilio(List<String> parts) {
+        if (parts == null || parts.isEmpty()) {
+            return "";
+        }
+
+        String tipo = safePart(parts, 0);
+        String vialidad = safePart(parts, 1);
+        String numeroExterior = safePart(parts, 2);
+        String numeroInterior = safePart(parts, 3);
+        String colonia = safePart(parts, 4);
+        String localidad = safePart(parts, 5);
+        String entidad = safePart(parts, 6);
+        String cp = safePart(parts, 7);
+
+        String vialidadCompleta = firstNonBlank(
+            joinNonBlank(" ", toTitleCase(tipo), toTitleCase(vialidad)),
+            toTitleCase(vialidad),
+            toTitleCase(tipo)
+        );
+
+        List<String> rendered = new ArrayList<>();
+        addRendered(rendered, vialidadCompleta);
+        addRendered(rendered, StringUtils.hasText(numeroExterior) ? "numero " + sanitizeExtractedText(numeroExterior) : "");
+
+        String interiorSegment = "";
+        if (StringUtils.hasText(numeroInterior)) {
+            String interiorRaw = sanitizeExtractedText(numeroInterior).replaceAll("^[\"'“”]+|[\"'“”]+$", "");
+            interiorSegment = "Interior \"" + interiorRaw + "\"";
+        }
+        if (StringUtils.hasText(colonia)) {
+            interiorSegment = StringUtils.hasText(interiorSegment)
+                ? interiorSegment + " Colonia " + toTitleCase(colonia)
+                : "Colonia " + toTitleCase(colonia);
+        }
+        addRendered(rendered, interiorSegment);
+
+        addRendered(rendered, toTitleCase(localidad));
+        addRendered(rendered, toTitleCase(entidad));
+        addRendered(rendered, StringUtils.hasText(cp) ? "Codigo Postal " + sanitizeExtractedText(cp) : "");
+
+        return String.join(", ", rendered);
+    }
+
+    private String safePart(List<String> parts, int index) {
+        if (parts == null || index < 0 || index >= parts.size()) {
+            return "";
+        }
+        return parts.get(index);
+    }
+
+    private void addRendered(List<String> rendered, String value) {
+        if (StringUtils.hasText(value)) {
+            rendered.add(value);
+        }
+    }
+
+    private String joinNonBlank(String separator, String... values) {
+        List<String> chunks = new ArrayList<>();
+        if (values != null) {
+            for (String value : values) {
+                if (StringUtils.hasText(value)) {
+                    chunks.add(value.trim());
+                }
+            }
+        }
+        return String.join(separator, chunks);
+    }
+
+    private String resolveSourceText(Map<String, StringBuilder> extractionTextByType,
+                                     String documentType,
+                                     String mergedText) {
+        String typeText = getTextByDocumentType(extractionTextByType, documentType);
+        if (StringUtils.hasText(typeText)) {
+            return typeText;
+        }
+        return mergedText;
+    }
+
+    private String getTextByDocumentType(Map<String, StringBuilder> extractionTextByType, String documentType) {
+        if (extractionTextByType == null || !StringUtils.hasText(documentType)) {
+            return "";
+        }
+        StringBuilder text = extractionTextByType.get(documentType.toUpperCase(Locale.ROOT));
+        if (text == null) {
+            return "";
+        }
+        return text.toString();
+    }
+
+    private void appendByDocumentType(Map<String, StringBuilder> extractionTextByType,
+                                      String documentType,
+                                      String text) {
+        if (!StringUtils.hasText(documentType) || !StringUtils.hasText(text)) {
+            return;
+        }
+        String normalizedType = documentType.toUpperCase(Locale.ROOT);
+        StringBuilder sb = extractionTextByType.computeIfAbsent(normalizedType, key -> new StringBuilder());
+        if (!sb.isEmpty()) {
+            sb.append("\n\n");
+        }
+        sb.append(text.trim());
+    }
+
     private String detectDocumentType(String filename, String defaultDocumentType) {
         String base = filename == null ? "" : filename.toLowerCase(Locale.ROOT);
         if (base.contains("acta")) {
-            return "ACTA";
+            return DOC_TYPE_ACTA;
         }
         if (base.contains("asamblea")) {
-            return "ASAMBLEA";
+            return DOC_TYPE_ASAMBLEA;
         }
         if (base.contains("constancia") || base.contains("fiscal") || base.contains("situacion")) {
-            return "CONSTANCIA_SITUACION_FISCAL";
+            return DOC_TYPE_CONSTANCIA;
         }
-        return StringUtils.hasText(defaultDocumentType) ? defaultDocumentType : "ACTA";
+        return StringUtils.hasText(defaultDocumentType) ? defaultDocumentType : DOC_TYPE_ACTA;
     }
 
     private Integer resolvePageLimitByDocumentType(String documentType) {
         if (!StringUtils.hasText(documentType)) {
             return null;
         }
-        if ("ACTA".equalsIgnoreCase(documentType)) {
+        if (DOC_TYPE_ACTA.equalsIgnoreCase(documentType)) {
             return PAGE_LIMIT_ACTA;
         }
-        if ("ASAMBLEA".equalsIgnoreCase(documentType)) {
+        if (DOC_TYPE_ASAMBLEA.equalsIgnoreCase(documentType)) {
             return PAGE_LIMIT_ASAMBLEA;
         }
-        if ("CONSTANCIA_SITUACION_FISCAL".equalsIgnoreCase(documentType)) {
+        if (DOC_TYPE_CONSTANCIA.equalsIgnoreCase(documentType)) {
             return PAGE_LIMIT_CONSTANCIA_SITUACION_FISCAL;
         }
         return null;
@@ -577,6 +764,54 @@ public class ContractGenerationService {
             return formattedNumeric;
         }
         return cleaned;
+    }
+
+    private String normalizeRfc(String text) {
+        if (!StringUtils.hasText(text)) {
+            return "";
+        }
+        String normalized = sanitizeExtractedText(text)
+            .toUpperCase(Locale.ROOT)
+            .replaceAll("[^A-Z0-9Ñ&]", "");
+        if (normalized.length() < 12 || normalized.length() > 13) {
+            return "";
+        }
+        return normalized;
+    }
+
+    private String normalizeAddressComponent(String text) {
+        if (!StringUtils.hasText(text)) {
+            return "";
+        }
+        return sanitizeExtractedText(text)
+            .replaceAll("^[,;:\\-\\s]+", "")
+            .trim();
+    }
+
+    private String toTitleCase(String text) {
+        if (!StringUtils.hasText(text)) {
+            return "";
+        }
+        String cleaned = sanitizeExtractedText(text).trim();
+        if (cleaned.isEmpty()) {
+            return "";
+        }
+        return java.util.Arrays.stream(cleaned.split("\\s+"))
+            .map(this::normalizeTokenCase)
+            .reduce((a, b) -> a + " " + b)
+            .orElse(cleaned);
+    }
+
+    private String normalizeTokenCase(String token) {
+        if (!StringUtils.hasText(token)) {
+            return "";
+        }
+        String preserved = token.trim();
+        String alnumOnly = PATTERN_NON_WORD_OR_SPACE.matcher(preserved).replaceAll("");
+        if (alnumOnly.matches("\\d+")) {
+            return preserved;
+        }
+        return preserved.substring(0, 1).toUpperCase(Locale.ROOT) + preserved.substring(1).toLowerCase(Locale.ROOT);
     }
 
     private String normalizePersonName(String text) {
