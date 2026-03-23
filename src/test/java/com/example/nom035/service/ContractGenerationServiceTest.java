@@ -32,6 +32,9 @@ class ContractGenerationServiceTest {
     @Mock
     private DocumentCreationService documentCreationService;
 
+    @Mock
+    private DocumentOpenAiService documentOpenAiService;
+
     @InjectMocks
     private ContractGenerationService contractGenerationService;
 
@@ -66,6 +69,9 @@ class ContractGenerationServiceTest {
             Nombre de la Entidad Federativa: JALISCO
             Codigo Postal: 45070
             """)));
+
+        when(documentOpenAiService.interpret(anyString(), anyString()))
+            .thenReturn("{\"contract_field_candidates\":{}}");
 
         List<MultipartFile> files = List.of(
             pdf("acta.pdf"),

@@ -1,5 +1,7 @@
 package com.example.nom035.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.nom035.dto.ContractGenerateRequestDto;
 import com.example.nom035.dto.ContractPrepareResponseDto;
 import com.example.nom035.dto.DocumentPreviewChunkDto;
@@ -222,13 +224,18 @@ public class ContractGenerationService {
     private final DocumentInterpretationService documentInterpretationService;
     private final DocumentTemplateCatalogService documentTemplateCatalogService;
     private final DocumentCreationService documentCreationService;
+    private final DocumentOpenAiService documentOpenAiService;
+    private final ObjectMapper objectMapper;
 
     public ContractGenerationService(DocumentInterpretationService documentInterpretationService,
                                      DocumentTemplateCatalogService documentTemplateCatalogService,
-                                     DocumentCreationService documentCreationService) {
+                                     DocumentCreationService documentCreationService,
+                                     DocumentOpenAiService documentOpenAiService) {
         this.documentInterpretationService = documentInterpretationService;
         this.documentTemplateCatalogService = documentTemplateCatalogService;
         this.documentCreationService = documentCreationService;
+        this.documentOpenAiService = documentOpenAiService;
+        this.objectMapper = new ObjectMapper();
     }
 
     public ContractPrepareResponseDto prepare(List<MultipartFile> files, String documentType, String templateType) {
@@ -277,6 +284,8 @@ public class ContractGenerationService {
         List<DocumentTemplateFieldDto> templateFields = documentTemplateCatalogService.getFieldsByType(resolvedTemplate);
         Map<String, String> suggestedValues = buildSuggestedValues(templateFields);
         applyDocumentExtractionPipeline(suggestedValues, extractionTextByType, mergedText.toString());
+        Map<String, String> aiFieldCandidates = collectAiContractFieldCandidates(mergedText.toString());
+        applyAiFieldCandidates(suggestedValues, aiFieldCandidates);
 
         ContractPrepareResponseDto response = new ContractPrepareResponseDto();
         response.setTemplateType(resolvedTemplate);
@@ -344,6 +353,50 @@ public class ContractGenerationService {
             }
         }
         return captured.toString();
+    }
+
+    private Map<String, String> collectAiContractFieldCandidates(String consolidatedText) {
+        Map<String, String> extracted = new LinkedHashMap<>();
+        if (!StringUtils.hasText(consolidatedText)) {
+            return extracted;
+        }
+
+        try {
+            String interpreted = documentOpenAiService.interpret(consolidatedText, "CONTRACT_PACKAGE");
+            if (!StringUtils.hasText(interpreted) || !interpreted.trim().startsWith("{")) {
+                return extracted;
+            }
+            JsonNode root = objectMapper.readTree(interpreted);
+            JsonNode candidates = root.path("contract_field_candidates");
+            if (!candidates.isObject()) {
+                return extracted;
+            }
+            candidates.fields().forEachRemaining(entry -> {
+                String key = entry.getKey() == null ? "" : entry.getKey().trim().toUpperCase(Locale.ROOT);
+                String value = entry.getValue() == null ? "" : sanitizeExtractedText(entry.getValue().asText(""));
+                if (StringUtils.hasText(key) && StringUtils.hasText(value)) {
+                    extracted.putIfAbsent(key, value);
+                }
+            });
+        } catch (Exception ex) {
+            log.debug("No se pudo parsear extraction IA consolidada para contrato", ex);
+        }
+
+        return extracted;
+    }
+
+    private void applyAiFieldCandidates(Map<String, String> values, Map<String, String> aiFieldCandidates) {
+        if (values == null || aiFieldCandidates == null || aiFieldCandidates.isEmpty()) {
+            return;
+        }
+        aiFieldCandidates.forEach((key, candidate) -> {
+            if (!StringUtils.hasText(key) || !StringUtils.hasText(candidate)) {
+                return;
+            }
+            if (values.containsKey(key)) {
+                putIfBlank(values, key, candidate);
+            }
+        });
     }
 
     private Map<String, String> buildSuggestedValues(List<DocumentTemplateFieldDto> templateFields) {

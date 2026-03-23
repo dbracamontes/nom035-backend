@@ -39,18 +39,11 @@ public class DocumentOpenAiService {
             return chunkText;
         }
 
-        String prompt = systemPrompt;
-        if (documentType != null && documentType.equalsIgnoreCase("ASAMBLEA")) {
-            prompt = buildPromptForAsamblea();
-        } else if (documentType != null && documentType.equalsIgnoreCase("CONSTANCIA_SITUACION_FISCAL")) {
-            prompt = buildPromptForConstanciaFiscal();
-        }
-
         Map<String, Object> request = Map.of(
             "model", model,
             "temperature", 0.2,
             "messages", List.of(
-                Map.of("role", "system", "content", prompt),
+                Map.of("role", "system", "content", systemPrompt),
                 Map.of("role", "user", "content", chunkText)
             )
         );
@@ -74,60 +67,44 @@ public class DocumentOpenAiService {
     }
 
     private String buildPrompt() {
-        return "Eres un abogado jurídico senior especializado en actas constitutivas mexicanas.\n" +
-            "Voy a enviarte texto obtenido por OCR de un documento notarial.\n" +
-            "El texto puede contener errores visuales, palabras cortadas o caracteres incorrectos.\n\n" +
+        return "Actua como un abogado corporativo experto en derecho mercantil y contratacion en Mexico, con experiencia en contratos de prestacion de servicios.\n" +
+            "Recibiras texto OCR proveniente del paquete documental empresarial (ACTA CONSTITUTIVA, ACTA DE ASAMBLEA y CONSTANCIA DE SITUACION FISCAL), posiblemente en fragmentos.\n" +
+            "Analiza de forma juridica y extrae solo informacion verificable para llenar campos de plantilla contractual.\n\n" +
+            "OBJETIVO:\n" +
+            "1. Identificar datos relevantes de las partes y facultades de representacion.\n" +
+            "2. Validar coherencia basica entre documentos (ejemplo: representante con facultades vigentes).\n" +
+            "3. Proponer candidatos para campos de contrato sin inventar datos.\n\n" +
             "REGLAS OBLIGATORIAS:\n" +
-            "1. Corrige ortografía, acentos y mayúsculas SOLO cuando el texto sea evidente.\n" +
-            "2. NO inventes información legal.\n" +
-            "3. Cualquier palabra, nombre, fecha, número o dato dudoso debe ir entre corchetes [ ].\n" +
-            "4. Mantén estructura jurídica exacta: capítulos, artículos, numeración.\n" +
-            "5. Usa redacción notarial formal en español de México.\n\n" +
-            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
+            "1. Corrige ortografia solo cuando sea evidente.\n" +
+            "2. NO inventes datos legales, fechas, RFC, nombres o numeros notariales.\n" +
+            "3. Si un dato es dudoso, colocalo entre corchetes [ ].\n" +
+            "4. Si no hay evidencia suficiente, devuelve string vacio en ese campo.\n" +
+            "5. Devuelve UNICAMENTE JSON valido, sin texto adicional.\n\n" +
+            "SALIDA REQUERIDA (JSON):\n" +
             "{\n" +
-            "  \"title\": \"Título corto del documento o sección principal\",\n" +
-            "  \"sections\": [ { \"heading\": \"Encabezado\", \"text\": \"Contenido del párrafo\" } ],\n" +
-            "  \"plain_text\": \"(opcional) versión en texto plano del contenido\"\n" +
+            "  \"document_scope\": \"CONTRACT_PACKAGE\",\n" +
+            "  \"title\": \"Resumen juridico de extraccion\",\n" +
+            "  \"consistency_notes\": [\"nota breve 1\", \"nota breve 2\"],\n" +
+            "  \"sections\": [ { \"heading\": \"Fuente\", \"text\": \"Hallazgos relevantes\" } ],\n" +
+            "  \"plain_text\": \"(opcional) resumen consolidado\",\n" +
+            "  \"contract_field_candidates\": {\n" +
+            "    \"EL_CLIENTE\": \"\",\n" +
+            "    \"REPRESENTANTE_DE\": \"\",\n" +
+            "    \"RFC\": \"\",\n" +
+            "    \"DOMICILIO\": \"\",\n" +
+            "    \"ESCRITURA_PUBLICA_ACTA_NUMERO\": \"\",\n" +
+            "    \"FECHA_ACTA\": \"\",\n" +
+            "    \"LICENCIADO_ACTA_DA_FE\": \"\",\n" +
+            "    \"CORREDURIA_PUBLICA_NO\": \"\",\n" +
+            "    \"ESCRITURA_PUBLICA_ASAMBLEA_NO\": \"\",\n" +
+            "    \"FECHA_ASAMBLEA\": \"\",\n" +
+            "    \"LICENCIADO_ASAMBLEA_DA_FE\": \"\",\n" +
+            "    \"NOTARIA_PUBLICA_NO\": \"\",\n" +
+            "    \"CIUDAD_ASAMBLEA\": \"\",\n" +
+            "    \"CIUDADANO\": \"\"\n" +
+            "  }\n" +
             "}\n" +
-            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
-    }
-
-    // Prompt específico para actas de Asamblea
-    private String buildPromptForAsamblea() {
-        return "Eres un abogado jurídico senior experto en actas de asamblea y actas corporativas.\n" +
-            "Voy a enviarte texto obtenido por OCR de un acta de asamblea.\n" +
-            "El texto puede contener errores visuales, palabras cortadas o caracteres incorrectos.\n\n" +
-            "REGLAS OBLIGATORIAS:\n" +
-            "1. Corrige ortografía, acentos y mayúsculas SOLO cuando el texto sea evidente.\n" +
-            "2. NO inventes información de asistentes, votos o acuerdos.\n" +
-            "3. Marca entre corchetes [ ] cualquier nombre, fecha, número o dato dudoso.\n" +
-            "4. Mantén la estructura del acta: lista de asistentes, orden del día, acuerdos, firmas.\n" +
-            "5. Usa redacción notarial formal en español de México.\n\n" +
-            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
-            "{\n" +
-            "  \"title\": \"Título corto del acta (ej. Acta de Asamblea Ordinaria)\",\n" +
-            "  \"sections\": [ { \"heading\": \"Asistentes\", \"text\": \"Lista de asistentes...\" } ],\n" +
-            "  \"plain_text\": \"(opcional) versión en texto plano del acta\"\n" +
-            "}\n" +
-            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
-    }
-
-    private String buildPromptForConstanciaFiscal() {
-        return "Eres un analista documental experto en Constancia de Situación Fiscal (México).\n" +
-            "Voy a enviarte texto OCR de una constancia; puede contener errores de reconocimiento.\n\n" +
-            "REGLAS OBLIGATORIAS:\n" +
-            "1. Corrige ortografía solo cuando sea evidente.\n" +
-            "2. NO inventes RFC, razón social, régimen, domicilio, fechas o C.P.\n" +
-            "3. Si un dato es dudoso, márcalo entre corchetes [ ].\n" +
-            "4. Conserva estructura y etiquetas fiscales originales.\n" +
-            "5. Prioriza extraer identificación fiscal y domicilio.\n\n" +
-            "Salida requerida (IMPORTANTE): Devuelve UNICAMENTE un objeto JSON válido (sin texto suplementario) con la siguiente estructura:\n" +
-            "{\n" +
-            "  \"title\": \"Constancia de Situación Fiscal\",\n" +
-            "  \"sections\": [ { \"heading\": \"Identificación\", \"text\": \"RFC: ...\" } ],\n" +
-            "  \"plain_text\": \"(opcional) versión en texto plano\"\n" +
-            "}\n" +
-            "El campo 'sections' debe ser un array; cada elemento tiene 'heading' y 'text'. El campo 'plain_text' puede contener la representación completa en texto plano. NO añadas explicaciones ni envíes ningún otro contenido fuera del objeto JSON.";
+            "El objeto contract_field_candidates debe contener SOLO valores con evidencia textual clara; en ausencia de evidencia, deja string vacio.";
     }
 
     private static class OpenAiChatResponse {
