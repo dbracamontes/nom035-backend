@@ -1,6 +1,7 @@
 package com.example.nom035.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -58,6 +59,16 @@ public class DocumentJob {
 
     @Column(length = 500)
     private String outputDocxPath;
+
+    @Column(length = 80)
+    private String templateType;
+
+    @Column(length = 64)
+    private String sourceModule;
+
+    private LocalDate contractDate;
+    private LocalDate vigenciaStartDate;
+    private LocalDate vigenciaEndDate;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
@@ -165,6 +176,46 @@ public class DocumentJob {
 
     public void setOutputDocxPath(String outputDocxPath) {
         this.outputDocxPath = outputDocxPath;
+    }
+
+    public String getTemplateType() {
+        return templateType;
+    }
+
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
+    }
+
+    public String getSourceModule() {
+        return sourceModule;
+    }
+
+    public void setSourceModule(String sourceModule) {
+        this.sourceModule = sourceModule;
+    }
+
+    public LocalDate getContractDate() {
+        return contractDate;
+    }
+
+    public void setContractDate(LocalDate contractDate) {
+        this.contractDate = contractDate;
+    }
+
+    public LocalDate getVigenciaStartDate() {
+        return vigenciaStartDate;
+    }
+
+    public void setVigenciaStartDate(LocalDate vigenciaStartDate) {
+        this.vigenciaStartDate = vigenciaStartDate;
+    }
+
+    public LocalDate getVigenciaEndDate() {
+        return vigenciaEndDate;
+    }
+
+    public void setVigenciaEndDate(LocalDate vigenciaEndDate) {
+        this.vigenciaEndDate = vigenciaEndDate;
     }
 
     public LocalDateTime getCreatedAt() {

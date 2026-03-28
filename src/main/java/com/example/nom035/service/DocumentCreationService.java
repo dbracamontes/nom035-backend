@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,12 @@ public class DocumentCreationService {
     }
 
     public DocumentJob generateManual(String templateType, Map<String, String> inputFields) {
+        return generateManual(templateType, inputFields, DocumentJobMetadata.empty());
+    }
+
+    public DocumentJob generateManual(String templateType,
+                                      Map<String, String> inputFields,
+                                      DocumentJobMetadata metadata) {
         DocumentTemplateCatalogService.TemplateType template = documentTemplateCatalogService.resolve(templateType);
         if (!template.isEnabled()) {
             throw new IllegalArgumentException("La plantilla aún no está habilitada: " + template.getDisplayName());
@@ -71,6 +78,11 @@ public class DocumentCreationService {
         job.setFileSizeBytes(sizeOf(templatePath));
         job.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         job.setStatus(DocumentJob.Status.GENERATING_WORD);
+        job.setTemplateType(metadata.templateType() != null ? metadata.templateType() : template.getCode());
+        job.setSourceModule(metadata.sourceModule());
+        job.setContractDate(metadata.contractDate());
+        job.setVigenciaStartDate(metadata.vigenciaStartDate());
+        job.setVigenciaEndDate(metadata.vigenciaEndDate());
         job = documentJobRepository.save(job);
 
         try {
@@ -258,5 +270,17 @@ public class DocumentCreationService {
     }
 
     private record Segment(String text, boolean highlight) {
+    }
+
+    public record DocumentJobMetadata(
+        String sourceModule,
+        String templateType,
+        LocalDate contractDate,
+        LocalDate vigenciaStartDate,
+        LocalDate vigenciaEndDate
+    ) {
+        public static DocumentJobMetadata empty() {
+            return new DocumentJobMetadata(null, null, null, null, null);
+        }
     }
 }

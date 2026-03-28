@@ -3,10 +3,12 @@ package com.example.nom035.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.nom035.dto.ContractGenerateRequestDto;
+import com.example.nom035.dto.ContractMovementLogItemDto;
 import com.example.nom035.dto.ContractPrepareResponseDto;
 import com.example.nom035.dto.DocumentPreviewChunkDto;
 import com.example.nom035.dto.DocumentTemplateFieldDto;
 import com.example.nom035.entity.DocumentJob;
+import com.example.nom035.repository.DocumentJobRepository;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -27,6 +29,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -47,6 +50,7 @@ public class ContractGenerationService {
     private static final String DOC_TYPE_ACTA = "ACTA";
     private static final String DOC_TYPE_ASAMBLEA = "ASAMBLEA";
     private static final String DOC_TYPE_CONSTANCIA = "CONSTANCIA_SITUACION_FISCAL";
+    private static final String SOURCE_MODULE_CONTRACT_GENERATION = "CONTRACT_GENERATION";
     private static final int PREVIEW_MAX_CHARS = 12000;
     private static final int PAGE_LIMIT_ACTA = 4;
     private static final int PAGE_LIMIT_ASAMBLEA = 4;
@@ -225,16 +229,19 @@ public class ContractGenerationService {
     private final DocumentTemplateCatalogService documentTemplateCatalogService;
     private final DocumentCreationService documentCreationService;
     private final DocumentOpenAiService documentOpenAiService;
+    private final DocumentJobRepository documentJobRepository;
     private final ObjectMapper objectMapper;
 
     public ContractGenerationService(DocumentInterpretationService documentInterpretationService,
                                      DocumentTemplateCatalogService documentTemplateCatalogService,
                                      DocumentCreationService documentCreationService,
-                                     DocumentOpenAiService documentOpenAiService) {
+                                     DocumentOpenAiService documentOpenAiService,
+                                     DocumentJobRepository documentJobRepository) {
         this.documentInterpretationService = documentInterpretationService;
         this.documentTemplateCatalogService = documentTemplateCatalogService;
         this.documentCreationService = documentCreationService;
         this.documentOpenAiService = documentOpenAiService;
+        this.documentJobRepository = documentJobRepository;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -307,7 +314,125 @@ public class ContractGenerationService {
     public DocumentJob generate(ContractGenerateRequestDto request) {
         String resolvedTemplate = StringUtils.hasText(request.getTemplateType()) ? request.getTemplateType() : DEFAULT_TEMPLATE;
         Map<String, String> fields = request.getFields() == null ? Map.of() : request.getFields();
-        return documentCreationService.generateManual(resolvedTemplate, fields);
+
+        LocalDate contractDate = parseDateFromFields(fields, "DIA", "MES", "AÑO");
+
+        LocalDate vigenciaStartDate = parseDateFromFields(
+            fields,
+            "DIA_INICIO_VIGENCIA",
+            "MES_INICIO_VIGENCIA",
+            "AÑO_INICIO_VIGENCIA"
+        );
+        if (vigenciaStartDate == null) {
+            vigenciaStartDate = parseDateFromFields(fields, "VID", "VIM", "VIA");
+        }
+
+        LocalDate vigenciaEndDate = parseDateFromFields(
+            fields,
+            "DIA_TERMINO_VIGENCIA",
+            "MES_TERMINO_VIGENCIA",
+            "AÑO_TERMINO_VIGENCIA"
+        );
+        if (vigenciaEndDate == null) {
+            vigenciaEndDate = parseDateFromFields(fields, "VTD", "VTM", "VTA");
+        }
+
+        DocumentCreationService.DocumentJobMetadata metadata = new DocumentCreationService.DocumentJobMetadata(
+            SOURCE_MODULE_CONTRACT_GENERATION,
+            resolvedTemplate,
+            contractDate,
+            vigenciaStartDate,
+            vigenciaEndDate
+        );
+
+        return documentCreationService.generateManual(resolvedTemplate, fields, metadata);
+    }
+
+    public List<ContractMovementLogItemDto> getMovementLog() {
+        List<DocumentJob> jobs = documentJobRepository
+            .findTop200BySourceModuleOrderByCreatedAtDesc(SOURCE_MODULE_CONTRACT_GENERATION);
+
+        return jobs.stream().map(job -> {
+            ContractMovementLogItemDto dto = new ContractMovementLogItemDto();
+            dto.setJobId(job.getId());
+            dto.setTemplateType(job.getTemplateType());
+            dto.setStatus(job.getStatus() != null ? job.getStatus().name() : null);
+            dto.setContractDate(job.getContractDate());
+            dto.setVigenciaStartDate(job.getVigenciaStartDate());
+            dto.setVigenciaEndDate(job.getVigenciaEndDate());
+            dto.setCreatedAt(job.getCreatedAt());
+            dto.setCompletedAt(job.getCompletedAt());
+            return dto;
+        }).toList();
+    }
+
+    private LocalDate parseDateFromFields(Map<String, String> fields, String dayKey, String monthKey, String yearKey) {
+        if (fields == null || fields.isEmpty()) {
+            return null;
+        }
+        String dayRaw = trimToNull(fields.get(dayKey));
+        String monthRaw = trimToNull(fields.get(monthKey));
+        String yearRaw = trimToNull(fields.get(yearKey));
+        if (dayRaw == null || monthRaw == null || yearRaw == null) {
+            return null;
+        }
+
+        Integer day = parseInteger(dayRaw);
+        Integer year = parseInteger(yearRaw);
+        Integer month = parseMonth(monthRaw);
+        if (day == null || year == null || month == null) {
+            return null;
+        }
+
+        try {
+            return LocalDate.of(year, month, day);
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private Integer parseInteger(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    private Integer parseMonth(String monthRaw) {
+        Integer numericMonth = parseInteger(monthRaw);
+        if (numericMonth != null && numericMonth >= 1 && numericMonth <= 12) {
+            return numericMonth;
+        }
+
+        String normalized = Normalizer
+            .normalize(monthRaw, Normalizer.Form.NFD)
+            .replaceAll("\\p{M}+", "")
+            .trim()
+            .toUpperCase(Locale.ROOT);
+
+        return switch (normalized) {
+            case "ENERO" -> 1;
+            case "FEBRERO" -> 2;
+            case "MARZO" -> 3;
+            case "ABRIL" -> 4;
+            case "MAYO" -> 5;
+            case "JUNIO" -> 6;
+            case "JULIO" -> 7;
+            case "AGOSTO" -> 8;
+            case "SEPTIEMBRE" -> 9;
+            case "OCTUBRE" -> 10;
+            case "NOVIEMBRE" -> 11;
+            case "DICIEMBRE" -> 12;
+            default -> null;
+        };
+    }
+
+    private String trimToNull(String value) {
+        if (!StringUtils.hasText(value)) {
+            return null;
+        }
+        return value.trim();
     }
 
     private String appendJobPreview(StringBuilder mergedText, Long jobId) {

@@ -1,6 +1,7 @@
 package com.example.nom035.controller;
 
 import com.example.nom035.dto.ContractGenerateRequestDto;
+import com.example.nom035.dto.ContractMovementLogItemDto;
 import com.example.nom035.dto.ContractPrepareResponseDto;
 import com.example.nom035.dto.DocumentGenerateResponseDto;
 import com.example.nom035.entity.DocumentJob;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,11 @@ public class ContractGenerationController {
         @RequestParam(value = "templateType", required = false) String templateType
     ) {
         return ResponseEntity.ok(contractGenerationService.prepare(files, documentType, templateType));
+    }
+
+    @GetMapping("/movements")
+    public ResponseEntity<List<ContractMovementLogItemDto>> movements() {
+        return ResponseEntity.ok(contractGenerationService.getMovementLog());
     }
 
     @PostMapping("/generate")
