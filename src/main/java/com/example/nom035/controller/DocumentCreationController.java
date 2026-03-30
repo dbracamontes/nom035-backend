@@ -5,7 +5,9 @@ import com.example.nom035.dto.DocumentGenerateResponseDto;
 import com.example.nom035.dto.DocumentGeneratedPreviewDto;
 import com.example.nom035.dto.DocumentPreviewChunkDto;
 import com.example.nom035.dto.DocumentTemplateDto;
+import com.example.nom035.dto.ContractGenerateRequestDto;
 import com.example.nom035.entity.DocumentJob;
+import com.example.nom035.service.ContractGenerationService;
 import com.example.nom035.service.DocxPdfConversionService;
 import com.example.nom035.service.DocumentCreationService;
 import com.example.nom035.service.DocumentPdfService;
@@ -31,15 +33,18 @@ public class DocumentCreationController {
 
     private final DocumentTemplateCatalogService documentTemplateCatalogService;
     private final DocumentCreationService documentCreationService;
+    private final ContractGenerationService contractGenerationService;
     private final DocxPdfConversionService docxPdfConversionService;
     private final DocumentPdfService documentPdfService;
 
     public DocumentCreationController(DocumentTemplateCatalogService documentTemplateCatalogService,
                                       DocumentCreationService documentCreationService,
+                                      ContractGenerationService contractGenerationService,
                                       DocxPdfConversionService docxPdfConversionService,
                                       DocumentPdfService documentPdfService) {
         this.documentTemplateCatalogService = documentTemplateCatalogService;
         this.documentCreationService = documentCreationService;
+        this.contractGenerationService = contractGenerationService;
         this.docxPdfConversionService = docxPdfConversionService;
         this.documentPdfService = documentPdfService;
     }
@@ -56,8 +61,25 @@ public class DocumentCreationController {
 
     @PostMapping("/generate/manual")
     public ResponseEntity<DocumentGenerateResponseDto> generateManual(@Valid @RequestBody DocumentGenerateManualRequestDto request) {
-        DocumentJob job = documentCreationService.generateManual(request.getTemplateType(), request.getFields());
+        DocumentJob job;
+        if (isContractTemplate(request.getTemplateType())) {
+            ContractGenerateRequestDto contractRequest = new ContractGenerateRequestDto();
+            contractRequest.setTemplateType(request.getTemplateType());
+            contractRequest.setFields(request.getFields());
+            job = contractGenerationService.generate(contractRequest);
+        } else {
+            job = documentCreationService.generateManual(request.getTemplateType(), request.getFields());
+        }
         return ResponseEntity.ok(new DocumentGenerateResponseDto(job.getId(), job.getStatus().name(), request.getTemplateType()));
+    }
+
+    private boolean isContractTemplate(String templateType) {
+        try {
+            DocumentTemplateCatalogService.TemplateType resolved = documentTemplateCatalogService.resolve(templateType);
+            return "CONTRATO".equalsIgnoreCase(resolved.getDisplayType());
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     @GetMapping("/{jobId}/preview")

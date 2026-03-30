@@ -66,6 +66,15 @@ public class DocumentJob {
     @Column(length = 64)
     private String sourceModule;
 
+    @Column(length = 180)
+    private String clientName;
+
+    @Column(length = 180)
+    private String ciudadano;
+
+    @Column(length = 120)
+    private String createdByUser;
+
     private LocalDate contractDate;
     private LocalDate vigenciaStartDate;
     private LocalDate vigenciaEndDate;
@@ -192,6 +201,30 @@ public class DocumentJob {
 
     public void setSourceModule(String sourceModule) {
         this.sourceModule = sourceModule;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getCiudadano() {
+        return ciudadano;
+    }
+
+    public void setCiudadano(String ciudadano) {
+        this.ciudadano = ciudadano;
+    }
+
+    public String getCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(String createdByUser) {
+        this.createdByUser = createdByUser;
     }
 
     public LocalDate getContractDate() {

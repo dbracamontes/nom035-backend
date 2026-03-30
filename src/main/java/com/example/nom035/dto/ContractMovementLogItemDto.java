@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 public class ContractMovementLogItemDto {
 
     private Long jobId;
+    private String createdByUser;
     private String templateType;
+    private String clientName;
     private String status;
     private LocalDate contractDate;
     private LocalDate vigenciaStartDate;
@@ -22,12 +24,28 @@ public class ContractMovementLogItemDto {
         this.jobId = jobId;
     }
 
+    public String getCreatedByUser() {
+        return createdByUser;
+    }
+
+    public void setCreatedByUser(String createdByUser) {
+        this.createdByUser = createdByUser;
+    }
+
     public String getTemplateType() {
         return templateType;
     }
 
     public void setTemplateType(String templateType) {
         this.templateType = templateType;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public String getStatus() {

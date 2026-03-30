@@ -21,6 +21,8 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +36,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -314,6 +317,12 @@ public class ContractGenerationService {
     public DocumentJob generate(ContractGenerateRequestDto request) {
         String resolvedTemplate = StringUtils.hasText(request.getTemplateType()) ? request.getTemplateType() : DEFAULT_TEMPLATE;
         Map<String, String> fields = request.getFields() == null ? Map.of() : request.getFields();
+        String ciudadano = trimToNull(fields.get("CIUDADANO"));
+        String clientName = resolveClientName(fields);
+        if (clientName == null) {
+            clientName = ciudadano;
+        }
+        String createdByUser = resolveCurrentUsername();
 
         LocalDate contractDate = parseDateFromFields(fields, "DIA", "MES", "AÑO");
 
@@ -340,6 +349,9 @@ public class ContractGenerationService {
         DocumentCreationService.DocumentJobMetadata metadata = new DocumentCreationService.DocumentJobMetadata(
             SOURCE_MODULE_CONTRACT_GENERATION,
             resolvedTemplate,
+            clientName,
+            ciudadano,
+            createdByUser,
             contractDate,
             vigenciaStartDate,
             vigenciaEndDate
@@ -355,7 +367,9 @@ public class ContractGenerationService {
         return jobs.stream().map(job -> {
             ContractMovementLogItemDto dto = new ContractMovementLogItemDto();
             dto.setJobId(job.getId());
+            dto.setCreatedByUser(job.getCreatedByUser());
             dto.setTemplateType(job.getTemplateType());
+            dto.setClientName(job.getClientName() != null ? job.getClientName() : job.getCiudadano());
             dto.setStatus(job.getStatus() != null ? job.getStatus().name() : null);
             dto.setContractDate(job.getContractDate());
             dto.setVigenciaStartDate(job.getVigenciaStartDate());
@@ -364,6 +378,18 @@ public class ContractGenerationService {
             dto.setCompletedAt(job.getCompletedAt());
             return dto;
         }).toList();
+    }
+
+    private String resolveCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        String username = trimToNull(authentication.getName());
+        if (username == null || "anonymousUser".equalsIgnoreCase(username)) {
+            return null;
+        }
+        return username;
     }
 
     private LocalDate parseDateFromFields(Map<String, String> fields, String dayKey, String monthKey, String yearKey) {
@@ -433,6 +459,46 @@ public class ContractGenerationService {
             return null;
         }
         return value.trim();
+    }
+
+    private String resolveClientName(Map<String, String> fields) {
+        if (fields == null || fields.isEmpty()) {
+            return null;
+        }
+
+        String[] priorityKeys = {
+            "RAZON_SOCIAL",
+            "NOMBRE_EMPRESA",
+            "EMPRESA",
+            "CLIENTE",
+            "NOMBRE_CLIENTE",
+            "COMPANY_NAME",
+            "CONTRATANTE",
+            "CIUDADANO"
+        };
+
+        for (String key : priorityKeys) {
+            String candidate = trimToNull(fields.get(key));
+            if (candidate != null) {
+                return candidate;
+            }
+        }
+
+        return fields.entrySet().stream()
+            .filter(entry -> StringUtils.hasText(entry.getValue()))
+            .sorted(Comparator.comparing(entry -> entry.getKey() == null ? "" : entry.getKey()))
+            .filter(entry -> {
+                String key = String.valueOf(entry.getKey()).toUpperCase(Locale.ROOT);
+                return key.contains("RAZON")
+                    || key.contains("EMPRESA")
+                    || key.contains("CLIENTE")
+                    || key.contains("CONTRATANTE")
+                    || key.contains("COMPANY");
+            })
+            .map(entry -> trimToNull(entry.getValue()))
+            .filter(StringUtils::hasText)
+            .findFirst()
+            .orElse(null);
     }
 
     private String appendJobPreview(StringBuilder mergedText, Long jobId) {

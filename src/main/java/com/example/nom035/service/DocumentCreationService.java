@@ -80,6 +80,9 @@ public class DocumentCreationService {
         job.setStatus(DocumentJob.Status.GENERATING_WORD);
         job.setTemplateType(metadata.templateType() != null ? metadata.templateType() : template.getCode());
         job.setSourceModule(metadata.sourceModule());
+        job.setClientName(metadata.clientName());
+        job.setCiudadano(metadata.ciudadano());
+        job.setCreatedByUser(metadata.createdByUser());
         job.setContractDate(metadata.contractDate());
         job.setVigenciaStartDate(metadata.vigenciaStartDate());
         job.setVigenciaEndDate(metadata.vigenciaEndDate());
@@ -275,12 +278,15 @@ public class DocumentCreationService {
     public record DocumentJobMetadata(
         String sourceModule,
         String templateType,
+        String clientName,
+        String ciudadano,
+        String createdByUser,
         LocalDate contractDate,
         LocalDate vigenciaStartDate,
         LocalDate vigenciaEndDate
     ) {
         public static DocumentJobMetadata empty() {
-            return new DocumentJobMetadata(null, null, null, null, null);
+            return new DocumentJobMetadata(null, null, null, null, null, null, null, null);
         }
     }
 }
