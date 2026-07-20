@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `password_reset_token`;
 DROP TABLE IF EXISTS `document_type`;
 DROP TABLE IF EXISTS `employee_docs`;
 DROP TABLE IF EXISTS `matrix_option_answer`;
+DROP TABLE IF EXISTS `consultoria_draft`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -258,4 +259,16 @@ CREATE TABLE IF NOT EXISTS matrix_option_answer (
         FOREIGN KEY (question_id) REFERENCES question(id),
     CONSTRAINT uq_matrix_option_answer_question_category_text
         UNIQUE (question_id, category, text)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =============================================
+-- Table: consultoria_draft (estado guardado del modulo Sistema Consultoria)
+-- =============================================
+CREATE TABLE IF NOT EXISTS consultoria_draft (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    payload LONGTEXT NOT NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT uq_consultoria_draft_company UNIQUE (company_id),
+    CONSTRAINT fk_consultoria_draft_company FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
