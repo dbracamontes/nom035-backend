@@ -3,10 +3,10 @@ services:
     image: mysql:8.0
     container_name: nom035-mysql
     environment:
-      MYSQL_DATABASE: nom035
-      MYSQL_ROOT_PASSWORD: your_mysql_password
-      MYSQL_USER: nom035user
-      MYSQL_PASSWORD: nom035pass
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-nom035}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-your_mysql_password}
+      MYSQL_USER: ${MYSQL_USER:-nom035user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-nom035pass}
     ports:
       - "3307:3306"
     volumes:
@@ -17,6 +17,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
 
   backend:
     build:
@@ -24,9 +25,9 @@ services:
       dockerfile: Dockerfile
     container_name: nom035-backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/nom035?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: your_mysql_password
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-nom035}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-${MYSQL_USER:-nom035user}}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-${MYSQL_PASSWORD:-nom035pass}}
       DOCGEN_TEMPLATES_BASE_PATH: /app/templates/docgen
       DOCGEN_SCRIPTS_BASE_PATH: /app/Genera Documento
       MEDICA_LEBEN_UPLOAD_BASE_PATH: /uploads/medica-leben
@@ -40,7 +41,7 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - ./src/main/resources/templates/docgen:/app/templates/docgen
       - './Genera Documento:/app/Genera Documento'
