@@ -203,8 +203,12 @@ public class EmployeeController {
         if (employee.getEmail() != null) existing.setEmail(employee.getEmail());
         if (employee.getPosition() != null) existing.setPosition(employee.getPosition());
         if (employee.getDepartment() != null) existing.setDepartment(employee.getDepartment());
+        if (employee.getDateOfBirth() != null) existing.setDateOfBirth(employee.getDateOfBirth());
+        if (employee.getMaritalStatus() != null) existing.setMaritalStatus(employee.getMaritalStatus());
         if (employee.getSeniorityYears() != null) existing.setSeniorityYears(employee.getSeniorityYears());
         if (employee.getGender() != null) existing.setGender(employee.getGender());
+        if (employee.getEducation() != null) existing.setEducation(employee.getEducation());
+        if (employee.getCompanyCategory() != null) existing.setCompanyCategory(employee.getCompanyCategory());
         if (employee.getAge() != null) existing.setAge(employee.getAge());
         if (employee.getStatus() != null) existing.setStatus(employee.getStatus());
         if (employee.getCurp() != null) existing.setCurp(employee.getCurp());
