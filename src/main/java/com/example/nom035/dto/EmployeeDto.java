@@ -8,8 +8,12 @@ public class EmployeeDto {
     private String email;
     private String position;
     private String department;
+    private String dateOfBirth;
+    private String maritalStatus;
     private Integer seniorityYears;
     private String gender;
+    private String education;
+    private String companyCategory;
     private Integer age;
     private String status;
     private Long companyId;
@@ -26,10 +30,18 @@ public class EmployeeDto {
     public void setPosition(String position) { this.position = position; }
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
+    public String getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public String getMaritalStatus() { return maritalStatus; }
+    public void setMaritalStatus(String maritalStatus) { this.maritalStatus = maritalStatus; }
     public Integer getSeniorityYears() { return seniorityYears; }
     public void setSeniorityYears(Integer seniorityYears) { this.seniorityYears = seniorityYears; }
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
+    public String getEducation() { return education; }
+    public void setEducation(String education) { this.education = education; }
+    public String getCompanyCategory() { return companyCategory; }
+    public void setCompanyCategory(String companyCategory) { this.companyCategory = companyCategory; }
     public Integer getAge() { return age; }
     public void setAge(Integer age) { this.age = age; }
     public String getStatus() { return status; }
@@ -48,8 +60,12 @@ public class EmployeeDto {
         dto.setEmail(employee.getEmail());
         dto.setPosition(employee.getPosition());
         dto.setDepartment(employee.getDepartment());
+        dto.setDateOfBirth(employee.getDateOfBirth() != null ? employee.getDateOfBirth().toString() : null);
+        dto.setMaritalStatus(employee.getMaritalStatus());
         dto.setSeniorityYears(employee.getSeniorityYears());
         dto.setGender(employee.getGender() != null ? employee.getGender().name() : null);
+        dto.setEducation(employee.getEducation());
+        dto.setCompanyCategory(employee.getCompanyCategory());
         dto.setAge(employee.getAge());
         dto.setStatus(employee.getStatus() != null ? employee.getStatus().name() : null);
         dto.setCompanyId(employee.getCompany() != null ? employee.getCompany().getId() : null);
