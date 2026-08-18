@@ -58,7 +58,7 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
         entity.setName(dto.getName());
         entity.setEmployee(employee);
         entity.setType(type);
-        entity.setStatus(DocumentStatus.ACTIVE);
+        entity.setStatus(DocumentStatus.PENDING);
         entity.setCreatedDate(LocalDateTime.now());
 
         entity = employeeDocsRepository.save(entity);
@@ -192,6 +192,16 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> downloadFile(Long employeeId, Long docId) {
+        return buildDocumentResponse(employeeId, docId, true);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<byte[]> previewFile(Long employeeId, Long docId) {
+        return buildDocumentResponse(employeeId, docId, false);
+    }
+
+    private ResponseEntity<byte[]> buildDocumentResponse(Long employeeId, Long docId, boolean forceDownload) {
         EmployeeDocs entity = employeeDocsRepository.findById(docId)
                 .orElseThrow(() -> new ResourceNotFoundException("EmployeeDocs not found with id " + docId));
         if (entity.getEmployee() == null || !entity.getEmployee().getId().equals(employeeId)) {
@@ -214,8 +224,12 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType(contentType));
-            String downloadName = entity.getFileName() != null ? entity.getFileName() : path.getFileName().toString();
-            headers.setContentDispositionFormData("attachment", downloadName);
+            String fileName = entity.getFileName() != null ? entity.getFileName() : path.getFileName().toString();
+            if (forceDownload) {
+                headers.setContentDispositionFormData("attachment", fileName);
+            } else {
+                headers.setContentDispositionFormData("inline", fileName);
+            }
 
             return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
         } catch (java.io.IOException ex) {

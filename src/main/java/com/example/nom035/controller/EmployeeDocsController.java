@@ -104,6 +104,12 @@ public class EmployeeDocsController {
         return employeeDocsService.downloadFile(employeeId, docId);
     }
 
+    @GetMapping("/{docId}/preview")
+    public ResponseEntity<byte[]> previewDocumentFile(@PathVariable Long employeeId,
+                                                     @PathVariable Long docId) {
+        return employeeDocsService.previewFile(employeeId, docId);
+    }
+
     // DELETE /api/employees/{employeeId}/documents/{docId}/file
     @DeleteMapping("/{docId}/file")
     public ResponseEntity<Void> deleteDocumentFile(@PathVariable Long employeeId,
