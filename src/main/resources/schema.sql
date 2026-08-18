@@ -234,7 +234,7 @@ CREATE TABLE document_type (
 CREATE TABLE employee_docs (
     id BIGINT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    status ENUM('Active','Inactive') NOT NULL DEFAULT 'Active',
+    status ENUM('PENDING','APPROVED','REJECTED','ACTIVE','INACTIVE') NOT NULL DEFAULT 'PENDING',
     created_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deactivated_date TIMESTAMP NULL,
     employee_id BIGINT NOT NULL,

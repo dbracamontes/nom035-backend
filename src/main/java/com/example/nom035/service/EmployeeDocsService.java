@@ -23,4 +23,5 @@ public interface EmployeeDocsService {
     EmployeeDocsDto uploadFile(Long employeeId, Long docId, MultipartFile file);
     void deleteFile(Long employeeId, Long docId);
     ResponseEntity<byte[]> downloadFile(Long employeeId, Long docId);
+    ResponseEntity<byte[]> previewFile(Long employeeId, Long docId);
 }

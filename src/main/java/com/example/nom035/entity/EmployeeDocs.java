@@ -1,5 +1,6 @@
 package com.example.nom035.entity;
 
+import com.example.nom035.entity.converter.EmployeeDocsStatusConverter;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -13,9 +14,9 @@ public class EmployeeDocs {
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = EmployeeDocsStatusConverter.class)
     @Column(nullable = false, length = 16)
-    private DocumentStatus status = DocumentStatus.ACTIVE;
+    private DocumentStatus status = DocumentStatus.PENDING;
 
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
@@ -44,16 +45,35 @@ public class EmployeeDocs {
     private String filePath;
 
     public enum DocumentStatus {
-        ACTIVE, INACTIVE;
+        PENDING, APPROVED, REJECTED, ACTIVE, INACTIVE;
 
         public static DocumentStatus fromString(String value) {
             if (value == null) return null;
+            String normalized = value.trim();
+
+            if ("Active".equalsIgnoreCase(normalized) || "ACTIVE".equalsIgnoreCase(normalized)
+                    || "PENDING".equalsIgnoreCase(normalized)) {
+                return PENDING;
+            }
+            if ("Inactive".equalsIgnoreCase(normalized) || "INACTIVE".equalsIgnoreCase(normalized)
+                    || "APPROVED".equalsIgnoreCase(normalized)) {
+                return APPROVED;
+            }
+            if ("Rejected".equalsIgnoreCase(normalized) || "REJECTED".equalsIgnoreCase(normalized)) {
+                return REJECTED;
+            }
+
             for (DocumentStatus status : DocumentStatus.values()) {
-                if (status.name().equalsIgnoreCase(value)) {
+                if (status.name().equalsIgnoreCase(normalized)
+                        || status.name().replace("_", "").equalsIgnoreCase(normalized.replace("_", ""))) {
                     return status;
                 }
             }
             throw new IllegalArgumentException("No enum constant DocumentStatus." + value);
+        }
+
+        public String toDatabaseValue() {
+            return this.name();
         }
     }
 
