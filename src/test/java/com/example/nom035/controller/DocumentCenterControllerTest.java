@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,6 +54,7 @@ class DocumentCenterControllerTest {
         doc.setStatus(EmployeeDocs.DocumentStatus.PENDING);
         doc.setCreatedDate(LocalDateTime.now());
         doc.setFileName("ine.pdf");
+        doc.setFilePath("/tmp/ine.pdf");
 
         when(employeeDocsRepository.findById(1L)).thenReturn(Optional.of(doc));
         when(employeeDocsRepository.save(any(EmployeeDocs.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -64,5 +66,50 @@ class DocumentCenterControllerTest {
         assertEquals("Aprobado", response.getBody().getStatus());
         assertEquals(10L, response.getBody().getEmployeeId());
         assertEquals(EmployeeDocs.DocumentStatus.APPROVED, doc.getStatus());
+    }
+
+    @Test
+    void getDocumentsCenterShouldExcludeDocumentsWithoutAttachedFile() {
+        Employee employee = new Employee();
+        employee.setId(2L);
+        employee.setName("Luis");
+
+        Company company = new Company();
+        company.setId(5L);
+        company.setName("Empresa Test");
+        employee.setCompany(company);
+
+        DocumentType type = new DocumentType();
+        type.setId(3L);
+        type.setName("Comprobante");
+
+        EmployeeDocs visibleDoc = new EmployeeDocs();
+        visibleDoc.setId(11L);
+        visibleDoc.setName("Comprobante activo");
+        visibleDoc.setEmployee(employee);
+        visibleDoc.setType(type);
+        visibleDoc.setStatus(EmployeeDocs.DocumentStatus.PENDING);
+        visibleDoc.setCreatedDate(LocalDateTime.now());
+        visibleDoc.setFileName("comprobante.pdf");
+        visibleDoc.setFilePath("/tmp/comprobante.pdf");
+
+        EmployeeDocs deletedDoc = new EmployeeDocs();
+        deletedDoc.setId(12L);
+        deletedDoc.setName("Comprobante borrado");
+        deletedDoc.setEmployee(employee);
+        deletedDoc.setType(type);
+        deletedDoc.setStatus(EmployeeDocs.DocumentStatus.PENDING);
+        deletedDoc.setCreatedDate(LocalDateTime.now());
+        deletedDoc.setFileName(null);
+        deletedDoc.setFilePath(null);
+
+        when(employeeDocsRepository.findAll()).thenReturn(List.of(visibleDoc, deletedDoc));
+
+        ResponseEntity<List<DocumentCenterItemDto>> response = controller.getDocumentsCenter();
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCode().value());
+        assertEquals(1, response.getBody().size());
+        assertEquals(11L, response.getBody().get(0).getId());
     }
 }

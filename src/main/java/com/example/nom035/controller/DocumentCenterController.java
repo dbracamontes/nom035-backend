@@ -29,6 +29,7 @@ public class DocumentCenterController {
     public ResponseEntity<List<DocumentCenterItemDto>> getDocumentsCenter() {
         List<DocumentCenterItemDto> documents = employeeDocsRepository.findAll().stream()
                 .filter(document -> document.getStatus() != DocumentStatus.INACTIVE)
+                .filter(document -> document.getFilePath() != null && !document.getFilePath().isBlank())
                 .map(this::toDocumentCenterItem)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(documents);
