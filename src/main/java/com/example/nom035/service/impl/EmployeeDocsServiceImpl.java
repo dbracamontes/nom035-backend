@@ -186,6 +186,8 @@ public class EmployeeDocsServiceImpl implements EmployeeDocsService {
         entity.setContentType(null);
         entity.setFileSize(null);
         entity.setFilePath(null);
+        entity.setStatus(DocumentStatus.PENDING);
+        entity.setDeactivatedDate(null);
         employeeDocsRepository.save(entity);
     }
 
