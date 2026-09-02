@@ -14,6 +14,12 @@ import org.springframework.security.access.AccessDeniedException;
 public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        logger.warn("[GlobalExceptionHandler] Error de validación: {}", ex.getMessage());
+        return ResponseEntity.badRequest().body("Error de validación: " + ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex, WebRequest request) {
         logger.error("[GlobalExceptionHandler] Excepción no controlada:", ex);

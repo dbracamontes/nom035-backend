@@ -20,6 +20,8 @@ DROP TABLE IF EXISTS `role_privilege`;
 DROP TABLE IF EXISTS `password_reset_token`;
 DROP TABLE IF EXISTS `document_type`;
 DROP TABLE IF EXISTS `employee_docs`;
+DROP TABLE IF EXISTS `medica_leben_company_work_photos`;
+DROP TABLE IF EXISTS `medica_leben_company_docs`;
 DROP TABLE IF EXISTS `matrix_option_answer`;
 DROP TABLE IF EXISTS `consultoria_draft`;
 
@@ -36,6 +38,47 @@ CREATE TABLE company (
     PRIMARY KEY (id),
     UNIQUE KEY uq_company_name (name),
     UNIQUE KEY uq_company_tax_id (tax_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE medica_leben_company_docs (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    acta_constitutiva_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    asamblea_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    constancia_situacion_fiscal_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    poder_notarial_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    identificacion_representante_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    comprobante_domicilio_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    estado_cuenta_bancaria_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    comprobante_ema_eba_status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    acta_constitutiva VARCHAR(255) NULL,
+    asamblea VARCHAR(255) NULL,
+    constancia_situacion_fiscal VARCHAR(255) NULL,
+    poder_notarial VARCHAR(255) NULL,
+    identificacion_representante VARCHAR(255) NULL,
+    comprobante_domicilio VARCHAR(255) NULL,
+    estado_cuenta_bancaria VARCHAR(255) NULL,
+    comprobante_ema_eba VARCHAR(255) NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+    updated_at DATETIME NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT fk_medica_docs_company FOREIGN KEY (company_id)
+        REFERENCES company(id) ON DELETE CASCADE,
+    UNIQUE KEY uq_medica_docs_company (company_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE medica_leben_company_work_photos (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    company_docs_id BIGINT NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    url VARCHAR(500) NOT NULL,
+    description VARCHAR(255) NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id),
+    CONSTRAINT fk_medica_photo_docs FOREIGN KEY (company_docs_id)
+        REFERENCES medica_leben_company_docs(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========== EMPLOYEE ==========

@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Controller para operaciones de companies.
@@ -205,32 +206,41 @@ public class CompanyController {
 
         return mlDocsRepository.findByCompany(company)
                 .map(docs -> ResponseEntity.ok(toDocsResponse(companyId, docs)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.ok(new MedicaLebenCompanyDocsResponse()));
     }
 
     @PostMapping(path = "/{companyId}/medica-leben/docs", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MedicaLebenCompanyDocs> uploadMedicaLebenDocs(
             @PathVariable Long companyId,
-            @RequestPart(name = "acta_constitutiva", required = false) MultipartFile actaConstitutiva,
-            @RequestPart(name = "constancia_situacion_fiscal", required = false) MultipartFile constanciaSituacionFiscal,
-            @RequestPart(name = "poder_notarial", required = false) MultipartFile poderNotarial,
-            @RequestPart(name = "identificacion_representante", required = false) MultipartFile identificacionRepresentante,
-            @RequestPart(name = "comprobante_domicilio", required = false) MultipartFile comprobanteDomicilio,
-            @RequestPart(name = "estado_cuenta_bancaria", required = false) MultipartFile estadoCuentaBancaria,
-            @RequestPart(name = "comprobante_ema_eba", required = false) MultipartFile comprobanteEmaEba
+            @RequestParam(name = "acta_constitutiva", required = false) MultipartFile actaConstitutiva,
+            @RequestParam(name = "asamblea", required = false) MultipartFile asamblea,
+            @RequestParam(name = "constancia_situacion_fiscal", required = false) MultipartFile constanciaSituacionFiscal,
+            @RequestParam(name = "poder_notarial", required = false) MultipartFile poderNotarial,
+            @RequestParam(name = "identificacion_representante", required = false) MultipartFile identificacionRepresentante,
+            @RequestParam(name = "comprobante_domicilio", required = false) MultipartFile comprobanteDomicilio,
+            @RequestParam(name = "estado_cuenta_bancaria", required = false) MultipartFile estadoCuentaBancaria,
+            @RequestParam(name = "comprobante_ema_eba", required = false) MultipartFile comprobanteEmaEba,
+            @RequestParam(name = "actaConstitutiva", required = false) MultipartFile legacyActaConstitutiva,
+            @RequestParam(name = "constanciaSituacionFiscal", required = false) MultipartFile legacyConstanciaSituacionFiscal,
+            @RequestParam(name = "poderNotarial", required = false) MultipartFile legacyPoderNotarial,
+            @RequestParam(name = "identificacionRepresentante", required = false) MultipartFile legacyIdentificacionRepresentante,
+            @RequestParam(name = "comprobanteDomicilio", required = false) MultipartFile legacyComprobanteDomicilio,
+            @RequestParam(name = "estadoCuentaBancaria", required = false) MultipartFile legacyEstadoCuentaBancaria,
+            @RequestParam(name = "comprobanteEmaEba", required = false) MultipartFile legacyComprobanteEmaEba
     ) throws Exception {
         Company company = companyService.getCompanyById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         MedicaLebenCompanyDocs docs = mlStorageService.uploadDocs(
                 company,
-                actaConstitutiva,
-                constanciaSituacionFiscal,
-                poderNotarial,
-                identificacionRepresentante,
-                comprobanteDomicilio,
-                estadoCuentaBancaria,
-                comprobanteEmaEba
+                actaConstitutiva != null && !actaConstitutiva.isEmpty() ? actaConstitutiva : legacyActaConstitutiva,
+                asamblea,
+                constanciaSituacionFiscal != null && !constanciaSituacionFiscal.isEmpty() ? constanciaSituacionFiscal : legacyConstanciaSituacionFiscal,
+                poderNotarial != null && !poderNotarial.isEmpty() ? poderNotarial : legacyPoderNotarial,
+                identificacionRepresentante != null && !identificacionRepresentante.isEmpty() ? identificacionRepresentante : legacyIdentificacionRepresentante,
+                comprobanteDomicilio != null && !comprobanteDomicilio.isEmpty() ? comprobanteDomicilio : legacyComprobanteDomicilio,
+                estadoCuentaBancaria != null && !estadoCuentaBancaria.isEmpty() ? estadoCuentaBancaria : legacyEstadoCuentaBancaria,
+                comprobanteEmaEba != null && !comprobanteEmaEba.isEmpty() ? comprobanteEmaEba : legacyComprobanteEmaEba
         );
         return ResponseEntity.ok(docs);
     }
@@ -246,7 +256,13 @@ public class CompanyController {
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         MedicaLebenCompanyDocs docs = mlDocsRepository.findByCompany(company)
-                .orElseThrow(() -> new RuntimeException("Medica LEBEN docs not initialized for company"));
+                .orElseGet(() -> {
+                    MedicaLebenCompanyDocs created = MedicaLebenCompanyDocs.builder()
+                            .company(company)
+                            .status(MedicaLebenCompanyDocs.DocumentStatus.PENDING)
+                            .build();
+                    return mlDocsRepository.save(created);
+                });
 
         int order = (sortOrder != null) ? sortOrder : 0;
         MedicaLebenCompanyWorkPhoto saved = mlStorageService.uploadPhoto(docs, photo, description, order);
@@ -258,8 +274,10 @@ public class CompanyController {
         Company company = companyService.getCompanyById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
-        MedicaLebenCompanyDocs docs = mlDocsRepository.findByCompany(company)
-                .orElseThrow(() -> new RuntimeException("Medica LEBEN docs not initialized for company"));
+        MedicaLebenCompanyDocs docs = mlDocsRepository.findByCompany(company).orElse(null);
+        if (docs == null) {
+            return ResponseEntity.ok(List.of());
+        }
 
         List<MedicaLebenCompanyWorkPhoto> photos = mlStorageService.listPhotos(docs);
         return ResponseEntity.ok(photos);
@@ -277,6 +295,7 @@ public class CompanyController {
             String snake;
             switch (normalized) {
                 case "actaConstitutiva", "acta_constitutiva" -> snake = "acta_constitutiva";
+                case "asamblea" -> snake = "asamblea";
                 case "constanciaSituacionFiscal", "constancia_situacion_fiscal" -> snake = "constancia_situacion_fiscal";
                 case "poderNotarial", "poder_notarial" -> snake = "poder_notarial";
                 case "identificacionRepresentante", "identificacion_representante" -> snake = "identificacion_representante";
@@ -333,8 +352,19 @@ public class CompanyController {
         dto.setId(docs.getId());
         dto.setCompanyId(companyId);
 
-        // Use stored filenames directly from entity fields
+        String aggregateStatus = resolveCompanyBundleStatus(docs);
+        dto.setStatus(aggregateStatus);
+        dto.setActaConstitutivaStatus(docs.getActaConstitutivaStatus() != null ? docs.getActaConstitutivaStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setAsambleaStatus(docs.getAsambleaStatus() != null ? docs.getAsambleaStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setConstanciaSituacionFiscalStatus(docs.getConstanciaSituacionFiscalStatus() != null ? docs.getConstanciaSituacionFiscalStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setPoderNotarialStatus(docs.getPoderNotarialStatus() != null ? docs.getPoderNotarialStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setIdentificacionRepresentanteStatus(docs.getIdentificacionRepresentanteStatus() != null ? docs.getIdentificacionRepresentanteStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setComprobanteDomicilioStatus(docs.getComprobanteDomicilioStatus() != null ? docs.getComprobanteDomicilioStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setEstadoCuentaBancariaStatus(docs.getEstadoCuentaBancariaStatus() != null ? docs.getEstadoCuentaBancariaStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+        dto.setComprobanteEmaEbaStatus(docs.getComprobanteEmaEbaStatus() != null ? docs.getComprobanteEmaEbaStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name());
+
         dto.setActaConstitutiva(buildUrl(companyId, docs.getActaConstitutiva()));
+        dto.setAsamblea(buildUrl(companyId, docs.getAsamblea()));
         dto.setConstanciaSituacionFiscal(buildUrl(companyId, docs.getConstanciaSituacionFiscal()));
         dto.setPoderNotarial(buildUrl(companyId, docs.getPoderNotarial()));
         dto.setIdentificacionRepresentante(buildUrl(companyId, docs.getIdentificacionRepresentante()));
@@ -343,6 +373,54 @@ public class CompanyController {
         dto.setComprobanteEmaEba(buildUrl(companyId, docs.getComprobanteEmaEba()));
 
         return dto;
+    }
+
+    private String resolveCompanyBundleStatus(MedicaLebenCompanyDocs docs) {
+        if (docs == null) {
+            return MedicaLebenCompanyDocs.DocumentStatus.PENDING.name();
+        }
+
+        boolean hasFieldStatus = false;
+        boolean hasRejected = false;
+        boolean hasApproved = false;
+        boolean hasPending = false;
+
+        for (MedicaLebenCompanyDocs.DocumentStatus status : List.of(
+                docs.getActaConstitutivaStatus(),
+                docs.getAsambleaStatus(),
+                docs.getConstanciaSituacionFiscalStatus(),
+                docs.getPoderNotarialStatus(),
+                docs.getIdentificacionRepresentanteStatus(),
+                docs.getComprobanteDomicilioStatus(),
+                docs.getEstadoCuentaBancariaStatus(),
+                docs.getComprobanteEmaEbaStatus())) {
+            if (status == null) {
+                continue;
+            }
+            hasFieldStatus = true;
+            switch (status) {
+                case REJECTED -> hasRejected = true;
+                case APPROVED -> hasApproved = true;
+                case PENDING -> hasPending = true;
+            }
+        }
+
+        if (!hasFieldStatus) {
+            return docs.getStatus() != null ? docs.getStatus().name() : MedicaLebenCompanyDocs.DocumentStatus.PENDING.name();
+        }
+        if (hasRejected) {
+            return MedicaLebenCompanyDocs.DocumentStatus.REJECTED.name();
+        }
+        if (hasPending && !hasApproved) {
+            return MedicaLebenCompanyDocs.DocumentStatus.PENDING.name();
+        }
+        if (hasApproved && !hasPending) {
+            return MedicaLebenCompanyDocs.DocumentStatus.APPROVED.name();
+        }
+        if (hasApproved && hasPending) {
+            return MedicaLebenCompanyDocs.DocumentStatus.PENDING.name();
+        }
+        return MedicaLebenCompanyDocs.DocumentStatus.PENDING.name();
     }
 
     private String buildUrl(Long companyId, String filename) {
@@ -359,7 +437,17 @@ public class CompanyController {
     public static class MedicaLebenCompanyDocsResponse {
         private Long id;
         private Long companyId;
+        private String status;
+        private String actaConstitutivaStatus;
+        private String asambleaStatus;
+        private String constanciaSituacionFiscalStatus;
+        private String poderNotarialStatus;
+        private String identificacionRepresentanteStatus;
+        private String comprobanteDomicilioStatus;
+        private String estadoCuentaBancariaStatus;
+        private String comprobanteEmaEbaStatus;
         private String actaConstitutiva;
+        private String asamblea;
         private String constanciaSituacionFiscal;
         private String poderNotarial;
         private String identificacionRepresentante;
@@ -373,8 +461,38 @@ public class CompanyController {
         public Long getCompanyId() { return companyId; }
         public void setCompanyId(Long companyId) { this.companyId = companyId; }
 
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+
+        public String getActaConstitutivaStatus() { return actaConstitutivaStatus; }
+        public void setActaConstitutivaStatus(String actaConstitutivaStatus) { this.actaConstitutivaStatus = actaConstitutivaStatus; }
+
+        public String getAsambleaStatus() { return asambleaStatus; }
+        public void setAsambleaStatus(String asambleaStatus) { this.asambleaStatus = asambleaStatus; }
+
+        public String getConstanciaSituacionFiscalStatus() { return constanciaSituacionFiscalStatus; }
+        public void setConstanciaSituacionFiscalStatus(String constanciaSituacionFiscalStatus) { this.constanciaSituacionFiscalStatus = constanciaSituacionFiscalStatus; }
+
+        public String getPoderNotarialStatus() { return poderNotarialStatus; }
+        public void setPoderNotarialStatus(String poderNotarialStatus) { this.poderNotarialStatus = poderNotarialStatus; }
+
+        public String getIdentificacionRepresentanteStatus() { return identificacionRepresentanteStatus; }
+        public void setIdentificacionRepresentanteStatus(String identificacionRepresentanteStatus) { this.identificacionRepresentanteStatus = identificacionRepresentanteStatus; }
+
+        public String getComprobanteDomicilioStatus() { return comprobanteDomicilioStatus; }
+        public void setComprobanteDomicilioStatus(String comprobanteDomicilioStatus) { this.comprobanteDomicilioStatus = comprobanteDomicilioStatus; }
+
+        public String getEstadoCuentaBancariaStatus() { return estadoCuentaBancariaStatus; }
+        public void setEstadoCuentaBancariaStatus(String estadoCuentaBancariaStatus) { this.estadoCuentaBancariaStatus = estadoCuentaBancariaStatus; }
+
+        public String getComprobanteEmaEbaStatus() { return comprobanteEmaEbaStatus; }
+        public void setComprobanteEmaEbaStatus(String comprobanteEmaEbaStatus) { this.comprobanteEmaEbaStatus = comprobanteEmaEbaStatus; }
+
         public String getActaConstitutiva() { return actaConstitutiva; }
         public void setActaConstitutiva(String actaConstitutiva) { this.actaConstitutiva = actaConstitutiva; }
+
+        public String getAsamblea() { return asamblea; }
+        public void setAsamblea(String asamblea) { this.asamblea = asamblea; }
 
         public String getConstanciaSituacionFiscal() { return constanciaSituacionFiscal; }
         public void setConstanciaSituacionFiscal(String constanciaSituacionFiscal) { this.constanciaSituacionFiscal = constanciaSituacionFiscal; }
