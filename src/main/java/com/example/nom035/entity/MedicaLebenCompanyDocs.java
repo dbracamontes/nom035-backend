@@ -14,6 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MedicaLebenCompanyDocs {
+    public enum DocumentStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +28,47 @@ public class MedicaLebenCompanyDocs {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 16)
+    private DocumentStatus status = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "acta_constitutiva_status", nullable = false, length = 16)
+    private DocumentStatus actaConstitutivaStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "asamblea_status", nullable = false, length = 16)
+    private DocumentStatus asambleaStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "constancia_situacion_fiscal_status", nullable = false, length = 16)
+    private DocumentStatus constanciaSituacionFiscalStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "poder_notarial_status", nullable = false, length = 16)
+    private DocumentStatus poderNotarialStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "identificacion_representante_status", nullable = false, length = 16)
+    private DocumentStatus identificacionRepresentanteStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comprobante_domicilio_status", nullable = false, length = 16)
+    private DocumentStatus comprobanteDomicilioStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado_cuenta_bancaria_status", nullable = false, length = 16)
+    private DocumentStatus estadoCuentaBancariaStatus = DocumentStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comprobante_ema_eba_status", nullable = false, length = 16)
+    private DocumentStatus comprobanteEmaEbaStatus = DocumentStatus.PENDING;
+
     @Column(name = "acta_constitutiva")
     private String actaConstitutiva;
+
+    @Column(name = "asamblea")
+    private String asamblea;
 
     @Column(name = "constancia_situacion_fiscal")
     private String constanciaSituacionFiscal;

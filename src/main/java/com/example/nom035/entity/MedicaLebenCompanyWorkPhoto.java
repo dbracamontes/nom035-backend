@@ -13,6 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class MedicaLebenCompanyWorkPhoto {
+    public enum PhotoStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +26,10 @@ public class MedicaLebenCompanyWorkPhoto {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "company_docs_id", nullable = false)
     private MedicaLebenCompanyDocs companyDocs;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 16)
+    private PhotoStatus status = PhotoStatus.PENDING;
 
     @Column(nullable = false)
     private String url;

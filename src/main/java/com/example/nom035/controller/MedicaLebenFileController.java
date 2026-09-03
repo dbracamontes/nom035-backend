@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/api/medica-leben")
@@ -29,8 +31,13 @@ public class MedicaLebenFileController {
      * Matches medica.leben.upload.base-path in application.properties.
      * Example default: /uploads/medica-leben
      */
-    @Value("${medica.leben.upload.base-path:/uploads/medica-leben}")
+    @Value("${medica.leben.upload.base-path:uploads/medica-leben}")
     private String basePath;
+
+    private File resolveBaseDirectory() {
+        Path configured = Paths.get(basePath);
+        return configured.isAbsolute() ? configured.toFile() : Paths.get(System.getProperty("user.dir"), basePath).toFile();
+    }
 
     /**
      * Serve a specific document for a company.
@@ -45,7 +52,7 @@ public class MedicaLebenFileController {
     ) {
         // Build path: {basePath}/company-{id}/docs/{filename} without String.format flags
         File file = new File(
-                basePath,
+                resolveBaseDirectory(),
                 "company-" + companyId + File.separator + "docs" + File.separator + filename
         );
 
@@ -89,7 +96,7 @@ public class MedicaLebenFileController {
     ) {
         // Build path: {basePath}/company-{id}/photos/{filename}
         File file = new File(
-                basePath,
+                resolveBaseDirectory(),
                 "company-" + companyId + File.separator + "photos" + File.separator + filename
         );
 
@@ -130,7 +137,7 @@ public class MedicaLebenFileController {
             @PathVariable("filename") String filename
     ) {
         File file = new File(
-                basePath,
+                resolveBaseDirectory(),
                 "company-" + companyId + File.separator + "photos" + File.separator + filename
         );
 

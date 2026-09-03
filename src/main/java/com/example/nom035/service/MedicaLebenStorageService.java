@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,19 +31,31 @@ public class MedicaLebenStorageService {
     @Value("${medica.leben.upload.base-path}")
     private String basePath;
 
+    public void setBasePathForTesting(String basePath) {
+        this.basePath = basePath;
+    }
+
+    private Path resolveBaseDirectory() {
+        String effectiveBasePath = (basePath == null || basePath.isBlank())
+                ? "uploads/medica-leben"
+                : basePath.trim();
+        Path configured = Path.of(effectiveBasePath);
+        return configured.isAbsolute() ? configured : Path.of(System.getProperty("user.dir"), effectiveBasePath);
+    }
+
     private String resolveCompanyFolderName(Company company) {
-        String taxId = company.getTaxId();
-        if (taxId != null && !taxId.isBlank()) {
-            // sanitize taxId to be safe for filesystem paths
-            return taxId.replaceAll("[^a-zA-Z0-9_-]", "_");
+        if (company == null || company.getId() == null) {
+            throw new IllegalArgumentException("Company y company.id son requeridos para guardar documentos.");
         }
-        // fallback when there is no taxId
+        // Use a stable path format that matches the public file-controller lookup.
+        // This keeps uploads consistent in production and avoids files being written to
+        // a taxId-based directory that can never be served back by /api/medica-leben/companies/{id}/...
         return "company-" + company.getId();
     }
 
     private Path resolveCompanyDir(Company company) {
         String folderName = resolveCompanyFolderName(company);
-        return Path.of(basePath, folderName);
+        return resolveBaseDirectory().resolve(folderName);
     }
 
     private Path resolveDocsDir(Company company) {
@@ -85,6 +99,7 @@ public class MedicaLebenStorageService {
     @Transactional
     public MedicaLebenCompanyDocs uploadDocs(Company company,
                                              MultipartFile actaConstitutiva,
+                                             MultipartFile asamblea,
                                              MultipartFile constanciaSituacionFiscal,
                                              MultipartFile poderNotarial,
                                              MultipartFile identificacionRepresentante,
@@ -92,9 +107,45 @@ public class MedicaLebenStorageService {
                                              MultipartFile estadoCuentaBancaria,
                                              MultipartFile comprobanteEmaEba) throws IOException {
 
+        List<MultipartFile> incomingFiles = Arrays.asList(
+                actaConstitutiva,
+                asamblea,
+                constanciaSituacionFiscal,
+                poderNotarial,
+                identificacionRepresentante,
+                comprobanteDomicilio,
+                estadoCuentaBancaria,
+                comprobanteEmaEba
+        );
+
+        boolean hasAnyRealFile = incomingFiles.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(file -> file.getSize() > 0 && !file.isEmpty());
+
+        if (!hasAnyRealFile) {
+            throw new IllegalArgumentException("No se seleccionó ningún documento para guardar.");
+        }
+
         MedicaLebenCompanyDocs docs = docsRepository
                 .findByCompany(company)
-                .orElseGet(() -> MedicaLebenCompanyDocs.builder().company(company).build());
+                .orElseGet(() -> MedicaLebenCompanyDocs.builder()
+                        .company(company)
+                        .status(MedicaLebenCompanyDocs.DocumentStatus.PENDING)
+                        .build());
+
+        docs.setStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setActaConstitutivaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setAsambleaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setConstanciaSituacionFiscalStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setPoderNotarialStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setIdentificacionRepresentanteStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setComprobanteDomicilioStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setEstadoCuentaBancariaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        docs.setComprobanteEmaEbaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+
+        // Re-uploading any company document should always restart review from Pending.
+        // A stale approved/rejected aggregate or field state must never survive a fresh upload.
+        docs.setStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
 
         Path docsDir = resolveDocsDir(company);
 
@@ -102,36 +153,49 @@ public class MedicaLebenStorageService {
             String filename = "acta_constitutiva_" + actaConstitutiva.getOriginalFilename();
             storeFile(actaConstitutiva, docsDir, filename);
             docs.setActaConstitutiva(buildDocsUrl(company, filename));
+            docs.setActaConstitutivaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        }
+        if (asamblea != null && !asamblea.isEmpty()) {
+            String filename = "asamblea_" + asamblea.getOriginalFilename();
+            storeFile(asamblea, docsDir, filename);
+            docs.setAsamblea(buildDocsUrl(company, filename));
+            docs.setAsambleaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (constanciaSituacionFiscal != null && !constanciaSituacionFiscal.isEmpty()) {
             String filename = "constancia_situacion_fiscal_" + constanciaSituacionFiscal.getOriginalFilename();
             storeFile(constanciaSituacionFiscal, docsDir, filename);
             docs.setConstanciaSituacionFiscal(buildDocsUrl(company, filename));
+            docs.setConstanciaSituacionFiscalStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (poderNotarial != null && !poderNotarial.isEmpty()) {
             String filename = "poder_notarial_" + poderNotarial.getOriginalFilename();
             storeFile(poderNotarial, docsDir, filename);
             docs.setPoderNotarial(buildDocsUrl(company, filename));
+            docs.setPoderNotarialStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (identificacionRepresentante != null && !identificacionRepresentante.isEmpty()) {
             String filename = "identificacion_representante_" + identificacionRepresentante.getOriginalFilename();
             storeFile(identificacionRepresentante, docsDir, filename);
             docs.setIdentificacionRepresentante(buildDocsUrl(company, filename));
+            docs.setIdentificacionRepresentanteStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (comprobanteDomicilio != null && !comprobanteDomicilio.isEmpty()) {
             String filename = "comprobante_domicilio_" + comprobanteDomicilio.getOriginalFilename();
             storeFile(comprobanteDomicilio, docsDir, filename);
             docs.setComprobanteDomicilio(buildDocsUrl(company, filename));
+            docs.setComprobanteDomicilioStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (estadoCuentaBancaria != null && !estadoCuentaBancaria.isEmpty()) {
             String filename = "estado_cuenta_bancaria_" + estadoCuentaBancaria.getOriginalFilename();
             storeFile(estadoCuentaBancaria, docsDir, filename);
             docs.setEstadoCuentaBancaria(buildDocsUrl(company, filename));
+            docs.setEstadoCuentaBancariaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
         if (comprobanteEmaEba != null && !comprobanteEmaEba.isEmpty()) {
             String filename = "comprobante_ema_eba_" + comprobanteEmaEba.getOriginalFilename();
             storeFile(comprobanteEmaEba, docsDir, filename);
             docs.setComprobanteEmaEba(buildDocsUrl(company, filename));
+            docs.setComprobanteEmaEbaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
 
         MedicaLebenCompanyDocs savedDocs = docsRepository.save(docs);
@@ -159,6 +223,7 @@ public class MedicaLebenStorageService {
 
         MedicaLebenCompanyWorkPhoto entity = MedicaLebenCompanyWorkPhoto.builder()
                 .companyDocs(docs)
+                .status(MedicaLebenCompanyWorkPhoto.PhotoStatus.PENDING)
                 .url(url)
                 .description(description)
                 .sortOrder(sortOrder)
@@ -184,30 +249,42 @@ public class MedicaLebenStorageService {
             case "acta_constitutiva" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getActaConstitutiva());
                 docs.setActaConstitutiva(null);
+                docs.setActaConstitutivaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+            }
+            case "asamblea" -> {
+                deletePhysicalFileIfExists(docsDir, docs.getAsamblea());
+                docs.setAsamblea(null);
+                docs.setAsambleaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "constancia_situacion_fiscal" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getConstanciaSituacionFiscal());
                 docs.setConstanciaSituacionFiscal(null);
+                docs.setConstanciaSituacionFiscalStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "poder_notarial" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getPoderNotarial());
                 docs.setPoderNotarial(null);
+                docs.setPoderNotarialStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "identificacion_representante" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getIdentificacionRepresentante());
                 docs.setIdentificacionRepresentante(null);
+                docs.setIdentificacionRepresentanteStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "comprobante_domicilio" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getComprobanteDomicilio());
                 docs.setComprobanteDomicilio(null);
+                docs.setComprobanteDomicilioStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "estado_cuenta_bancaria" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getEstadoCuentaBancaria());
                 docs.setEstadoCuentaBancaria(null);
+                docs.setEstadoCuentaBancariaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             case "comprobante_ema_eba" -> {
                 deletePhysicalFileIfExists(docsDir, docs.getComprobanteEmaEba());
                 docs.setComprobanteEmaEba(null);
+                docs.setComprobanteEmaEbaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
             }
             default -> throw new IllegalArgumentException("Unknown document field: " + fieldName);
         }

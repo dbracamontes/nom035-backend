@@ -5,6 +5,9 @@ import java.util.List;
 public class DocumentCenterItemDto {
     private Long id;
     private Long employeeId;
+    private Long companyId;
+    private Long companyDocId;
+    private String documentKey;
     private String title;
     private String division;
     private String module;
@@ -27,6 +30,12 @@ public class DocumentCenterItemDto {
     public void setId(Long id) { this.id = id; }
     public Long getEmployeeId() { return employeeId; }
     public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+    public Long getCompanyId() { return companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
+    public Long getCompanyDocId() { return companyDocId; }
+    public void setCompanyDocId(Long companyDocId) { this.companyDocId = companyDocId; }
+    public String getDocumentKey() { return documentKey; }
+    public void setDocumentKey(String documentKey) { this.documentKey = documentKey; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getDivision() { return division; }
