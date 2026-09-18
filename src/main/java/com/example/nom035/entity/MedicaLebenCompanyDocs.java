@@ -30,38 +30,47 @@ public class MedicaLebenCompanyDocs {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus status = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "acta_constitutiva_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus actaConstitutivaStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "asamblea_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus asambleaStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "constancia_situacion_fiscal_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus constanciaSituacionFiscalStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "poder_notarial_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus poderNotarialStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "identificacion_representante_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus identificacionRepresentanteStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "comprobante_domicilio_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus comprobanteDomicilioStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado_cuenta_bancaria_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus estadoCuentaBancariaStatus = DocumentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "comprobante_ema_eba_status", nullable = false, length = 16)
+    @Builder.Default
     private DocumentStatus comprobanteEmaEbaStatus = DocumentStatus.PENDING;
 
     @Column(name = "acta_constitutiva")

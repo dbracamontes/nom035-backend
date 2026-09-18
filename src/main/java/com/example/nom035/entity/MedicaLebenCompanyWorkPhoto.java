@@ -29,6 +29,7 @@ public class MedicaLebenCompanyWorkPhoto {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
+    @Builder.Default
     private PhotoStatus status = PhotoStatus.PENDING;
 
     @Column(nullable = false)

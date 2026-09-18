@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,14 +28,35 @@ import java.util.stream.Collectors;
 @Secured("ROLE_ADMIN")
 public class DocumentCenterController {
 
-    private static final List<String> WORK_PHOTO_TITLES = List.of(
-        "I.- Fotos del área en donde se encuentran realizando las actividades los trabajadores.",
-        "II.- Fotos de las salidas de emergencia.",
-        "III.- Fotos del área de comida.",
-        "IV.- Fotos de las instalaciones de la empresa (entrada).",
-        "IV.- Fotos de las instalaciones de la empresa (salida).",
-        "IV.- Fotos de las instalaciones de la empresa (escaleras).",
-        "V.- Foto de los equipos de seguridad con que cuentan.");
+    // Keyed by the exact photo description saved from the Médica LEBEN work-area photo form,
+    // so the title always reflects which requirement the photo belongs to, not upload order.
+    private static final Map<String, String> WORK_PHOTO_TITLES_BY_DESCRIPTION = new LinkedHashMap<>();
+    static {
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos del área en donde se encuentran realizando las actividades los trabajadores.",
+                "I.- Fotos del área en donde se encuentran realizando las actividades los trabajadores.");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos de las salidas de emergencia.",
+                "II.- Fotos de las salidas de emergencia.");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos del área de comida.",
+                "III.- Fotos del área de comida.");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos de las instalaciones de la empresa (entrada).",
+                "IV.- Fotos de las instalaciones de la empresa (entrada).");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos de las instalaciones de la empresa (salida).",
+                "IV.- Fotos de las instalaciones de la empresa (salida).");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos de las instalaciones de la empresa (escaleras).",
+                "IV.- Fotos de las instalaciones de la empresa (escaleras).");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Fotos de las instalaciones de la empresa (entrada, salida, escaleras).",
+                "IV.- Fotos de las instalaciones de la empresa (entrada, salida, escaleras).");
+        WORK_PHOTO_TITLES_BY_DESCRIPTION.put(
+                "Foto de los equipos de seguridad con que cuentan.",
+                "V.- Foto de los equipos de seguridad con que cuentan.");
+    }
 
     private final EmployeeDocsRepository employeeDocsRepository;
     private final MedicaLebenCompanyDocsRepository medicaLebenCompanyDocsRepository;
@@ -68,23 +91,26 @@ public class DocumentCenterController {
     @PutMapping("/documents-center/{documentId}/decision")
     public ResponseEntity<DocumentCenterItemDto> decideDocument(@PathVariable Long documentId,
                                                                @RequestParam(defaultValue = "PENDING") String decision,
-                                                               @RequestParam(required = false) String message) {
-        Optional<EmployeeDocs> employeeDocs = employeeDocsRepository.findById(documentId);
-        if (employeeDocs.isPresent()) {
-            EmployeeDocs document = employeeDocs.get();
-            DocumentStatus nextStatus = parseDecision(decision);
-            document.setStatus(nextStatus);
-            if (nextStatus == DocumentStatus.REJECTED) {
-                document.setDeactivatedDate(LocalDateTime.now());
-            } else {
-                document.setDeactivatedDate(null);
+                                                               @RequestParam(required = false) String message,
+                                                               @RequestParam(required = false) String source) {
+        if (!"PHOTO".equalsIgnoreCase(String.valueOf(source))) {
+            Optional<EmployeeDocs> employeeDocs = employeeDocsRepository.findById(documentId);
+            if (employeeDocs.isPresent()) {
+                EmployeeDocs document = employeeDocs.get();
+                DocumentStatus nextStatus = parseDecision(decision);
+                document.setStatus(nextStatus);
+                if (nextStatus == DocumentStatus.REJECTED) {
+                    document.setDeactivatedDate(LocalDateTime.now());
+                } else {
+                    document.setDeactivatedDate(null);
+                }
+                EmployeeDocs saved = employeeDocsRepository.save(document);
+                return ResponseEntity.ok(toDocumentCenterItem(saved));
             }
-            EmployeeDocs saved = employeeDocsRepository.save(document);
-            return ResponseEntity.ok(toDocumentCenterItem(saved));
         }
 
         Optional<MedicaLebenCompanyWorkPhoto> workPhoto = medicaLebenCompanyWorkPhotoRepository.findById(documentId);
-        if (workPhoto.isPresent()) {
+        if (workPhoto.isPresent() && (!"EMPLOYEE_DOC".equalsIgnoreCase(String.valueOf(source)) || "PHOTO".equalsIgnoreCase(String.valueOf(source)))) {
             MedicaLebenCompanyWorkPhoto photo = workPhoto.get();
             MedicaLebenCompanyWorkPhoto.PhotoStatus nextStatus = parsePhotoDecision(decision);
             photo.setStatus(nextStatus);
@@ -282,9 +308,10 @@ public class DocumentCenterController {
         return items;
     }
 
-    private String resolveWorkPhotoTitle(int order) {
-        if (order >= 1 && order <= WORK_PHOTO_TITLES.size()) {
-            return WORK_PHOTO_TITLES.get(order - 1);
+    private String resolveWorkPhotoTitle(String description, int order) {
+        String canonicalTitle = description != null ? WORK_PHOTO_TITLES_BY_DESCRIPTION.get(description.trim()) : null;
+        if (canonicalTitle != null) {
+            return canonicalTitle;
         }
         return order > 1 ? "Foto del área de trabajo " + order : "Foto del área de trabajo";
     }
@@ -295,7 +322,7 @@ public class DocumentCenterController {
         dto.setCompanyId(company.getId());
         dto.setCompanyDocId(photo.getCompanyDocs() != null ? photo.getCompanyDocs().getId() : null);
         dto.setDocumentKey("foto_area_trabajo_" + order);
-        dto.setTitle(resolveWorkPhotoTitle(order));
+        dto.setTitle(resolveWorkPhotoTitle(photo.getDescription(), order));
         dto.setDivision(company.getName());
         dto.setModule("Médica LEBEN");
         dto.setCategory("Fotos del área de trabajo");

@@ -13,16 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import javax.imageio.ImageIO;
 
 @Service
 @RequiredArgsConstructor
 public class MedicaLebenStorageService {
+
+    private static final int STANDARD_PHOTO_WIDTH = 1200;
+    private static final int STANDARD_PHOTO_HEIGHT = 800;
 
     private final MedicaLebenCompanyDocsRepository docsRepository;
     private final MedicaLebenCompanyWorkPhotoRepository photoRepository;
@@ -133,19 +141,8 @@ public class MedicaLebenStorageService {
                         .status(MedicaLebenCompanyDocs.DocumentStatus.PENDING)
                         .build());
 
-        docs.setStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setActaConstitutivaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setAsambleaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setConstanciaSituacionFiscalStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setPoderNotarialStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setIdentificacionRepresentanteStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setComprobanteDomicilioStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setEstadoCuentaBancariaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-        docs.setComprobanteEmaEbaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
-
-        // Re-uploading any company document should always restart review from Pending.
-        // A stale approved/rejected aggregate or field state must never survive a fresh upload.
-        docs.setStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
+        // Only the fields receiving a new file should restart their review status.
+        // Existing statuses for the other requirements must remain unchanged.
 
         Path docsDir = resolveDocsDir(company);
 
@@ -198,6 +195,7 @@ public class MedicaLebenStorageService {
             docs.setComprobanteEmaEbaStatus(MedicaLebenCompanyDocs.DocumentStatus.PENDING);
         }
 
+        docs.setStatus(resolveAggregateStatus(docs));
         MedicaLebenCompanyDocs savedDocs = docsRepository.save(docs);
 
         // Marca a nivel company que ya tiene documentos Médica LEBEN
@@ -215,8 +213,8 @@ public class MedicaLebenStorageService {
                                                    String description,
                                                    int sortOrder) throws IOException {
         Path photosDir = resolvePhotosDir(docs.getCompany());
-        String filename = "foto_" + System.currentTimeMillis() + "_" + photo.getOriginalFilename();
-        storeFile(photo, photosDir, filename);
+        String filename = "foto_" + System.currentTimeMillis() + ".jpg";
+        storeStandardizedPhoto(photo, photosDir, filename);
 
         // Store only the filename (document name) in the DB, just like docs
         String url = buildPhotoUrl(docs.getCompany(), filename);
@@ -232,9 +230,88 @@ public class MedicaLebenStorageService {
         return photoRepository.save(entity);
     }
 
+    private void storeStandardizedPhoto(MultipartFile photo, Path targetDir, String targetFilename) throws IOException {
+        BufferedImage source = ImageIO.read(photo.getInputStream());
+        if (source == null) {
+            throw new IllegalArgumentException("La fotografía no tiene un formato de imagen válido.");
+        }
+
+        double scale = Math.min(
+                (double) STANDARD_PHOTO_WIDTH / source.getWidth(),
+                (double) STANDARD_PHOTO_HEIGHT / source.getHeight());
+        int renderedWidth = Math.max(1, (int) Math.round(source.getWidth() * scale));
+        int renderedHeight = Math.max(1, (int) Math.round(source.getHeight() * scale));
+
+        BufferedImage canvas = new BufferedImage(
+                STANDARD_PHOTO_WIDTH,
+                STANDARD_PHOTO_HEIGHT,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = canvas.createGraphics();
+        try {
+            graphics.setColor(Color.WHITE);
+            graphics.fillRect(0, 0, STANDARD_PHOTO_WIDTH, STANDARD_PHOTO_HEIGHT);
+            graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            int x = (STANDARD_PHOTO_WIDTH - renderedWidth) / 2;
+            int y = (STANDARD_PHOTO_HEIGHT - renderedHeight) / 2;
+            graphics.drawImage(source, x, y, renderedWidth, renderedHeight, null);
+        } finally {
+            graphics.dispose();
+        }
+
+        Files.createDirectories(targetDir);
+        Path target = targetDir.resolve(targetFilename);
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            if (!ImageIO.write(canvas, "jpg", output)) {
+                throw new IOException("No se pudo codificar la fotografía estandarizada.");
+            }
+            Files.write(target, output.toByteArray());
+        }
+    }
+
     public List<MedicaLebenCompanyWorkPhoto> listPhotos(MedicaLebenCompanyDocs docs) {
         // workPhotos already store just the document name in url field
         return photoRepository.findByCompanyDocsOrderBySortOrderAsc(docs);
+    }
+
+    private MedicaLebenCompanyDocs.DocumentStatus resolveAggregateStatus(MedicaLebenCompanyDocs docs) {
+        boolean hasRejected = false;
+        boolean hasPending = false;
+        boolean hasApproved = false;
+        boolean hasAnyStatus = false;
+
+        for (MedicaLebenCompanyDocs.DocumentStatus status : List.of(
+                docs.getActaConstitutivaStatus(),
+                docs.getAsambleaStatus(),
+                docs.getConstanciaSituacionFiscalStatus(),
+                docs.getPoderNotarialStatus(),
+                docs.getIdentificacionRepresentanteStatus(),
+                docs.getComprobanteDomicilioStatus(),
+                docs.getEstadoCuentaBancariaStatus(),
+                docs.getComprobanteEmaEbaStatus())) {
+            if (status == null) {
+                continue;
+            }
+            hasAnyStatus = true;
+            if (status == MedicaLebenCompanyDocs.DocumentStatus.REJECTED) {
+                hasRejected = true;
+            } else if (status == MedicaLebenCompanyDocs.DocumentStatus.PENDING) {
+                hasPending = true;
+            } else if (status == MedicaLebenCompanyDocs.DocumentStatus.APPROVED) {
+                hasApproved = true;
+            }
+        }
+
+        if (hasRejected) {
+            return MedicaLebenCompanyDocs.DocumentStatus.REJECTED;
+        }
+        if (hasPending) {
+            return MedicaLebenCompanyDocs.DocumentStatus.PENDING;
+        }
+        if (hasApproved || hasAnyStatus) {
+            return MedicaLebenCompanyDocs.DocumentStatus.APPROVED;
+        }
+        return MedicaLebenCompanyDocs.DocumentStatus.PENDING;
     }
 
     @Transactional
@@ -289,6 +366,7 @@ public class MedicaLebenStorageService {
             default -> throw new IllegalArgumentException("Unknown document field: " + fieldName);
         }
 
+        docs.setStatus(resolveAggregateStatus(docs));
         return docsRepository.save(docs);
     }
 
