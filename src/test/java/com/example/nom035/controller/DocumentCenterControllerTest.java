@@ -88,7 +88,7 @@ class DocumentCenterControllerTest {
         when(employeeDocsRepository.findById(1L)).thenReturn(Optional.of(doc));
         when(employeeDocsRepository.save(any(EmployeeDocs.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(1L, "APPROVED", "Documento aprobado correctamente.");
+        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(1L, "APPROVED", "Documento aprobado correctamente.", null);
 
         assertNotNull(response);
         assertEquals(200, response.getStatusCode().value());
@@ -112,7 +112,7 @@ class DocumentCenterControllerTest {
         when(medicaLebenCompanyDocsRepository.findById(99L)).thenReturn(Optional.of(docs));
         when(medicaLebenCompanyDocsRepository.save(any(MedicaLebenCompanyDocs.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(99001L, null, "");
+        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(99001L, null, "", null);
 
         assertNotNull(response);
         assertEquals(200, response.getStatusCode().value());
@@ -136,7 +136,7 @@ class DocumentCenterControllerTest {
         when(medicaLebenCompanyDocsRepository.findById(99L)).thenReturn(Optional.of(docs));
         when(medicaLebenCompanyDocsRepository.save(any(MedicaLebenCompanyDocs.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(99001L, "REJECTED", "Documento rechazado.");
+        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(99001L, "REJECTED", "Documento rechazado.", null);
 
         assertNotNull(response);
         assertEquals(200, response.getStatusCode().value());
@@ -172,7 +172,7 @@ class DocumentCenterControllerTest {
     }
 
     @Test
-    void uploadDocsShouldResetAllFieldStatusesToPendingOnResubmission() throws Exception {
+    void uploadDocsShouldOnlyResetUploadedFieldsToPendingOnResubmission() throws Exception {
         Company company = new Company();
         company.setId(25L);
         company.setName("Acme S.A.");
@@ -219,15 +219,44 @@ class DocumentCenterControllerTest {
                 null
         );
 
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, saved.getStatus());
         assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getActaConstitutivaStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getAsambleaStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getConstanciaSituacionFiscalStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getPoderNotarialStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getIdentificacionRepresentanteStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getComprobanteDomicilioStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getEstadoCuentaBancariaStatus());
-        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, saved.getComprobanteEmaEbaStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, saved.getAsambleaStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.APPROVED, saved.getConstanciaSituacionFiscalStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, saved.getPoderNotarialStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.APPROVED, saved.getIdentificacionRepresentanteStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, saved.getComprobanteDomicilioStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.APPROVED, saved.getEstadoCuentaBancariaStatus());
+        assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, saved.getComprobanteEmaEbaStatus());
+    }
+
+    @Test
+    void photoDecisionShouldUsePhotoRepositoryWhenIdAlsoExistsAsEmployeeDocument() {
+        EmployeeDocs employeeDoc = new EmployeeDocs();
+        employeeDoc.setId(1L);
+        employeeDoc.setStatus(EmployeeDocs.DocumentStatus.PENDING);
+
+        Company company = new Company();
+        company.setId(25L);
+        company.setName("Acme S.A.");
+        MedicaLebenCompanyDocs docs = new MedicaLebenCompanyDocs();
+        docs.setId(99L);
+        docs.setCompany(company);
+        MedicaLebenCompanyWorkPhoto photo = new MedicaLebenCompanyWorkPhoto();
+        photo.setId(1L);
+        photo.setCompanyDocs(docs);
+        photo.setStatus(MedicaLebenCompanyWorkPhoto.PhotoStatus.PENDING);
+        photo.setSortOrder(1);
+        photo.setUrl("foto.jpg");
+
+        when(companyWorkPhotoRepository.findById(1L)).thenReturn(Optional.of(photo));
+        when(companyWorkPhotoRepository.save(any(MedicaLebenCompanyWorkPhoto.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ResponseEntity<DocumentCenterItemDto> response = controller.decideDocument(1L, "APPROVED", "ok", "PHOTO");
+
+        assertEquals("Aprobado", response.getBody().getStatus());
+        assertEquals(MedicaLebenCompanyWorkPhoto.PhotoStatus.APPROVED, photo.getStatus());
+        assertEquals(EmployeeDocs.DocumentStatus.PENDING, employeeDoc.getStatus());
     }
 
     @Test
@@ -248,7 +277,7 @@ class DocumentCenterControllerTest {
         when(medicaLebenCompanyDocsRepository.findById(99L)).thenReturn(Optional.of(docs));
         when(medicaLebenCompanyDocsRepository.save(any(MedicaLebenCompanyDocs.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        controller.decideDocument(99001L, "REJECTED", "Documento rechazado.");
+        controller.decideDocument(99001L, "REJECTED", "Documento rechazado.", null);
 
         assertEquals(MedicaLebenCompanyDocs.DocumentStatus.REJECTED, docs.getActaConstitutivaStatus());
         assertEquals(MedicaLebenCompanyDocs.DocumentStatus.PENDING, docs.getAsambleaStatus());
@@ -340,7 +369,8 @@ class DocumentCenterControllerTest {
         photo.setId(7L);
         photo.setCompanyDocs(docs);
         photo.setUrl("foto_area_trabajo_1.jpg");
-        photo.setDescription("Área de trabajo");
+        // Uploaded first (sortOrder 1) but belongs to requirement V, proving title depends on description, not upload order.
+        photo.setDescription("Foto de los equipos de seguridad con que cuentan.");
         photo.setSortOrder(1);
         photo.setStatus(MedicaLebenCompanyWorkPhoto.PhotoStatus.PENDING);
 
@@ -354,7 +384,7 @@ class DocumentCenterControllerTest {
         assertNotNull(response);
         assertEquals(200, response.getStatusCode().value());
         assertEquals(1, response.getBody().stream().filter(item -> "PHOTO".equals(item.getSource())).count());
-        assertEquals("I.- Fotos del área en donde se encuentran realizando las actividades los trabajadores.", response.getBody().get(0).getTitle());
+        assertEquals("V.- Foto de los equipos de seguridad con que cuentan.", response.getBody().get(0).getTitle());
         assertEquals("Acme S.A.", response.getBody().get(0).getOwner());
     }
 
