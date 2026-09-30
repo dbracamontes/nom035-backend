@@ -183,7 +183,7 @@ public class DocumentTemplateCatalogService {
     }
 
     private static final Pattern FIELD_PATTERN = Pattern.compile("\\[sg\\.Text\\(\"([^\"]+)\"\\),\\s*sg\\.Input\\(key=\"([^\"]+)\"");
-    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{([\\p{L}\\p{N}_]+)}}|\\$\\{([\\p{L}\\p{N}_]+)}");
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{([\\p{L}\\p{N}_ ]+)}}|\\$\\{([\\p{L}\\p{N}_ ]+)}");
     private static final Map<String, String> FIELD_LABEL_OVERRIDES = Map.of(
         "VID", "VIGENCIA CONTRATO INICIA EL DIA",
         "VIM", "VIGENCIA CONTRATO INICIA EL MES",
@@ -194,7 +194,9 @@ public class DocumentTemplateCatalogService {
         "APODERADO_LEGAL", "APODERADO LEGAL DE"
     );
     private static final List<DocumentTemplateFieldDto> FALLBACK_PROPUESTA_FIELDS = List.of(
-        new DocumentTemplateFieldDto("EN_CONTRAPOSICION_A", "En contraposición a", true),
+        new DocumentTemplateFieldDto("LA_PATRONAL", "La patronal", true),
+        new DocumentTemplateFieldDto("SINDICATO", "Sindicato", true),
+        new DocumentTemplateFieldDto("SEDE", "Sede", true),
         new DocumentTemplateFieldDto("CONSEDE_EN", "Con sede en", true),
         new DocumentTemplateFieldDto("SE_DIRIGE_A", "Se dirige a", true),
         new DocumentTemplateFieldDto("NUM_TRAB", "Número de trabajadores", true),
