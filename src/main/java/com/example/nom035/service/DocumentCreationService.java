@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class DocumentCreationService {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentCreationService.class);
-    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{([\\p{L}\\p{N}_]+)}}|\\$\\{([\\p{L}\\p{N}_]+)}");
+    private static final Pattern TOKEN_PATTERN = Pattern.compile("\\{\\{([\\p{L}\\p{N}_ ]+)}}|\\$\\{([\\p{L}\\p{N}_ ]+)}");
 
     private final DocumentJobRepository documentJobRepository;
     private final DocumentTemplateCatalogService documentTemplateCatalogService;

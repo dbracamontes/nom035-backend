@@ -43,6 +43,18 @@ public class Company {
     @Column(length = 255)
     private String domicilio;
 
+    @Column(length = 100)
+    private String ciudad;
+
+    @Column(name = "codigo_postal", length = 20)
+    private String codigoPostal;
+
+    @Column(length = 30)
+    private String telefono;
+
+    @Column(name = "correo_electronico", length = 254)
+    private String correoElectronico;
+
     @Column(length = 150)
     private String sindicato;
 
