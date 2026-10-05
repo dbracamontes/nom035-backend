@@ -1,18 +1,29 @@
 package com.example.nom035.service;
 
 import com.example.nom035.entity.Company;
+import com.example.nom035.entity.Employee;
 import com.example.nom035.repository.CompanyRepository;
+import com.example.nom035.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
 
-    public CompanyService(CompanyRepository companyRepository) {
+    private final EmployeeRepository employeeRepository;
+    private final UserCleanupService userCleanupService;
+
+    public CompanyService(CompanyRepository companyRepository,
+                          EmployeeRepository employeeRepository,
+                          UserCleanupService userCleanupService) {
         this.companyRepository = companyRepository;
+        this.employeeRepository = employeeRepository;
+        this.userCleanupService = userCleanupService;
     }
 
     public List<Company> getAllCompanies() {
@@ -46,7 +57,13 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
+    @Transactional
     public void deleteCompany(Long id) {
+        List<Long> employeeIds = employeeRepository.findByCompanyId(id).stream()
+                .map(Employee::getId)
+                .collect(Collectors.toList());
+        userCleanupService.deleteUsersForEmployees(employeeIds);
+        userCleanupService.deleteUsersForCompany(id);
         companyRepository.deleteById(id);
     }
 }

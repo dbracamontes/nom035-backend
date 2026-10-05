@@ -56,6 +56,9 @@ public class UserService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmployeeService employeeService;
+
     private static final int TEMP_PASSWORD_LENGTH = 12;
     private static final String UPPERCASE = "ABCDEFGHJKLMNPQRSTUVWXYZ";
     private static final String LOWERCASE = "abcdefghijkmnopqrstuvwxyz";
@@ -92,7 +95,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            return;
+        }
+
+        User account = user.get();
+        Long employeeId = account.getEmployeeId();
+        passwordResetTokenRepository.deleteByUserIn(List.of(account));
+        if (employeeId != null) {
+            employeeService.deleteEmployee(employeeId);
+        }
         userRepository.deleteById(id);
     }
 

@@ -26,6 +26,8 @@ public class DocumentCenterItemDto {
     private String downloadUrl;
     private String previewUrl;
 
+    // Globally unique identifier: ids are only unique within each source table.
+    public String getUid() { return (source != null ? source : "DOC") + "-" + id; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Long getEmployeeId() { return employeeId; }
