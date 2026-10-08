@@ -17,13 +17,16 @@ public class CompanyService {
 
     private final EmployeeRepository employeeRepository;
     private final UserCleanupService userCleanupService;
+    private final DataCleanupService dataCleanupService;
 
     public CompanyService(CompanyRepository companyRepository,
                           EmployeeRepository employeeRepository,
-                          UserCleanupService userCleanupService) {
+                          UserCleanupService userCleanupService,
+                          DataCleanupService dataCleanupService) {
         this.companyRepository = companyRepository;
         this.employeeRepository = employeeRepository;
         this.userCleanupService = userCleanupService;
+        this.dataCleanupService = dataCleanupService;
     }
 
     public List<Company> getAllCompanies() {
@@ -64,6 +67,8 @@ public class CompanyService {
                 .collect(Collectors.toList());
         userCleanupService.deleteUsersForEmployees(employeeIds);
         userCleanupService.deleteUsersForCompany(id);
+        dataCleanupService.deleteEmployeeDependencies(employeeIds);
+        dataCleanupService.deleteCompanyDependencies(id);
         companyRepository.deleteById(id);
     }
 }
