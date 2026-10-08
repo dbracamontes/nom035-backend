@@ -12,10 +12,14 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
     private final UserCleanupService userCleanupService;
+    private final DataCleanupService dataCleanupService;
 
-    public EmployeeService(EmployeeRepository employeeRepository, UserCleanupService userCleanupService) {
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           UserCleanupService userCleanupService,
+                           DataCleanupService dataCleanupService) {
         this.employeeRepository = employeeRepository;
         this.userCleanupService = userCleanupService;
+        this.dataCleanupService = dataCleanupService;
     }
 
     public List<Employee> getAllEmployees() {
@@ -37,6 +41,7 @@ public class EmployeeService {
     @Transactional
     public void deleteEmployee(Long id) {
         userCleanupService.deleteUsersForEmployees(List.of(id));
+        dataCleanupService.deleteEmployeeDependencies(List.of(id));
         employeeRepository.deleteById(id);
     }
 }
