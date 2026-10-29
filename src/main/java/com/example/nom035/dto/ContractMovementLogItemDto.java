@@ -1,6 +1,5 @@
 package com.example.nom035.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ContractMovementLogItemDto {
@@ -10,9 +9,6 @@ public class ContractMovementLogItemDto {
     private String templateType;
     private String clientName;
     private String status;
-    private LocalDate contractDate;
-    private LocalDate vigenciaStartDate;
-    private LocalDate vigenciaEndDate;
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;
 
@@ -54,30 +50,6 @@ public class ContractMovementLogItemDto {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDate getContractDate() {
-        return contractDate;
-    }
-
-    public void setContractDate(LocalDate contractDate) {
-        this.contractDate = contractDate;
-    }
-
-    public LocalDate getVigenciaStartDate() {
-        return vigenciaStartDate;
-    }
-
-    public void setVigenciaStartDate(LocalDate vigenciaStartDate) {
-        this.vigenciaStartDate = vigenciaStartDate;
-    }
-
-    public LocalDate getVigenciaEndDate() {
-        return vigenciaEndDate;
-    }
-
-    public void setVigenciaEndDate(LocalDate vigenciaEndDate) {
-        this.vigenciaEndDate = vigenciaEndDate;
     }
 
     public LocalDateTime getCreatedAt() {

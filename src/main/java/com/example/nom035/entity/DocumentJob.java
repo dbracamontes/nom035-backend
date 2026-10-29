@@ -3,6 +3,8 @@ package com.example.nom035.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "doc_jobs")
@@ -79,8 +81,10 @@ public class DocumentJob {
     private LocalDate vigenciaStartDate;
     private LocalDate vigenciaEndDate;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     private LocalDateTime completedAt;
 
     public Long getId() {

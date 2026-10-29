@@ -28,7 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/docgen")
-@Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+@Secured({"ROLE_ADMIN"})
 public class DocumentCreationController {
 
     private final DocumentTemplateCatalogService documentTemplateCatalogService;
@@ -68,9 +68,27 @@ public class DocumentCreationController {
             contractRequest.setFields(request.getFields());
             job = contractGenerationService.generate(contractRequest);
         } else {
-            job = documentCreationService.generateManual(request.getTemplateType(), request.getFields());
+            DocumentCreationService.DocumentJobMetadata metadata = new DocumentCreationService.DocumentJobMetadata(
+                "DOCUMENT_GENERATION",
+                request.getTemplateType(),
+                null,
+                null,
+                resolveCurrentUsername(),
+                null,
+                null,
+                null
+            );
+            job = documentCreationService.generateManual(request.getTemplateType(), request.getFields(), metadata);
         }
         return ResponseEntity.ok(new DocumentGenerateResponseDto(job.getId(), job.getStatus().name(), request.getTemplateType()));
+    }
+
+    private String resolveCurrentUsername() {
+        org.springframework.security.core.Authentication authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equalsIgnoreCase(String.valueOf(authentication.getPrincipal()))) {
+            return null;
+        }
+        return authentication.getName();
     }
 
     private boolean isContractTemplate(String templateType) {

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DocumentJobRepository extends JpaRepository<DocumentJob, Long> {
-	List<DocumentJob> findTop200BySourceModuleOrderByCreatedAtDesc(String sourceModule);
+	List<DocumentJob> findTop200ByOrderByCreatedAtDesc();
 }
