@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contracts")
-@Secured({"ROLE_ADMIN", "ROLE_COMPANY"})
+@Secured({"ROLE_ADMIN"})
 public class ContractGenerationController {
 
     private final ContractGenerationService contractGenerationService;

@@ -14,6 +14,8 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -50,7 +52,19 @@ public class DocumentCreationService {
     }
 
     public DocumentJob generateManual(String templateType, Map<String, String> inputFields) {
-        return generateManual(templateType, inputFields, DocumentJobMetadata.empty());
+        return generateManual(templateType, inputFields, defaultMetadata(templateType));
+    }
+
+    private DocumentJobMetadata defaultMetadata(String templateType) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof org.springframework.security.authentication.AnonymousAuthenticationToken)) {
+            String authName = authentication.getName();
+            if (authName != null && !authName.isBlank() && !"anonymousUser".equalsIgnoreCase(authName)) {
+                username = authName.trim();
+            }
+        }
+        return new DocumentJobMetadata("DOCUMENT_GENERATION", templateType, null, null, username, null, null, null);
     }
 
     public DocumentJob generateManual(String templateType,

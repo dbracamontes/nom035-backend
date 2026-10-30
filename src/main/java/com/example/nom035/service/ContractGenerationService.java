@@ -361,23 +361,22 @@ public class ContractGenerationService {
     }
 
     public List<ContractMovementLogItemDto> getMovementLog() {
-        List<DocumentJob> jobs = documentJobRepository
-            .findTop200BySourceModuleOrderByCreatedAtDesc(SOURCE_MODULE_CONTRACT_GENERATION);
+        List<DocumentJob> jobs = documentJobRepository.findTop200ByOrderByCreatedAtDesc();
 
-        return jobs.stream().map(job -> {
-            ContractMovementLogItemDto dto = new ContractMovementLogItemDto();
-            dto.setJobId(job.getId());
-            dto.setCreatedByUser(job.getCreatedByUser());
-            dto.setTemplateType(job.getTemplateType());
-            dto.setClientName(job.getClientName() != null ? job.getClientName() : job.getCiudadano());
-            dto.setStatus(job.getStatus() != null ? job.getStatus().name() : null);
-            dto.setContractDate(job.getContractDate());
-            dto.setVigenciaStartDate(job.getVigenciaStartDate());
-            dto.setVigenciaEndDate(job.getVigenciaEndDate());
-            dto.setCreatedAt(job.getCreatedAt());
-            dto.setCompletedAt(job.getCompletedAt());
-            return dto;
-        }).toList();
+        return jobs.stream()
+            .filter(job -> job.getTemplateType() != null || job.getOutputDocxPath() != null || job.getSourceModule() != null)
+            .map(job -> {
+                ContractMovementLogItemDto dto = new ContractMovementLogItemDto();
+                dto.setJobId(job.getId());
+                dto.setCreatedByUser(job.getCreatedByUser());
+                dto.setTemplateType(job.getTemplateType());
+                dto.setClientName(job.getClientName() != null ? job.getClientName() : job.getCiudadano());
+                dto.setStatus(job.getStatus() != null ? job.getStatus().name() : null);
+                dto.setCreatedAt(job.getCreatedAt());
+                dto.setCompletedAt(job.getCompletedAt());
+                return dto;
+            })
+            .toList();
     }
 
     private String resolveCurrentUsername() {
